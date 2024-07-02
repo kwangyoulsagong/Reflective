@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Container } from 'react-bootstrap';
 import ButtonGroup from './components/Button/ButtonGroup';
 import InputGroup from './components/Input/InputGroup';
+import CardGroup from './components/Card/CardGroup';
 
 
 function App() {
@@ -15,6 +16,8 @@ function App() {
         <ButtonGroup/>
         {/* 인풋 스타일 적용 */}
         <InputGroup/>
+        {/* 카드 컴포넌트 스타일  */}
+        <CardGroup/>
       </Container>
     </div>
   );
