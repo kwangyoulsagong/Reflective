@@ -1,38 +1,97 @@
-.App {
-  text-align: center;
+:root {
+  /* 색상 */
+  --color-primary: #0047AB;
+  --color-secondary: #FFD700;
+  --color-success: #28a745;
+  --color-error: #dc3545;
+  --color-warning: #ffc107;
+  --color-light: #f8f9fa;
+  --color-dark: #343a40;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* 타이포 그래피 */
+  --font-family-base: 'Noto Sans', Arial, sans-serif;
+  --font-size-h1: 32px;
+  --font-size-h2: 24px;
+  --font-size-h3: 18px;
+  --font-size-body: 16px;
+  --font-size-caption: 12px;
+  --line-height-heading: 1.5;
+  --line-height-body: 1.75;
+  --letter-spacing-heading: 0.5px;
+  --letter-spacing-body: 0.25px;
+  /* 스페이싱 */
+  --spacing-small: 8px;
+  --spacing-medium: 16px;
+  --spacing-large: 24px;
+  --grid-columns: 12;
+  --grid-gutter-width: 16px;
+  --grid-margin-width: 24px;
+
+  --border-radius: 4px;
+}
+/* 헤딩 스타일 */
+h1 {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-h1);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-heading);
+  color: var(--color-dark);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h2 {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-heading);
+  color: var(--color-dark);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+h3 {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-heading);
+  color: var(--color-dark);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+p {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-body);
+  color: var(--color-dark);
+}
+
+.caption {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-body);
+  color: var(--color-dark);
+}
+/* 스페이싱 */
+.container {
+  padding-left: var(--grid-margin-width);
+  padding-right: var(--grid-margin-width);
+}
+
+.row {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-left: calc(-1 * var(--grid-gutter-width) / 2);
+  margin-right: calc(-1 * var(--grid-gutter-width) / 2);
+}
+
+.col {
+  flex: 1;
+  padding-left: calc(var(--grid-gutter-width) / 2);
+  padding-right: calc(var(--grid-gutter-width) / 2);
+}
+.container {
+  margin-top: 50px;
+  text-align: center;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  gap: 20px;
 }
