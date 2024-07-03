@@ -1,5 +1,6 @@
 @import '../../App.css';
 @import '../Button/Button.css';
+/* 카드 레이아웃 */
 .card {
   width: 300px;
   border: 1px solid var(--color-border);
