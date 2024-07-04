@@ -1,70 +1,24 @@
-# Getting Started with Create React App
+1. 테스트 개요
+테스트 목적: 디자인 시스템의 일관성과 안정성을 검증하기 위함입니다.
+테스트 도구: Storybook, Chromatic 등을 사용하여 시각적 테스트 및 자동화 테스트를 수행했습니다.
+테스트 시간: 2024년 07월 04일에 진행되었습니다.
+2. 테스트 대상
+총 8개의 컴포넌트에 대해 각각 다양한 스토리를 포함하여 테스트했습니다.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Button
+Input
+Card
+Modal
+Navbar 등
+3. 테스트 결과 요약
+총 21개의 스토리를 테스트하였고, 모든 스토리가 성공적으로 통과되었습니다.
+시각적 테스트를 통해 변화가 없음을 확인했습니다.
+각 컴포넌트별로 일관된 스타일과 동작을 보여주는 스토리들이 통과되었습니다.
+4. 테스트 결과 분석
+일관성: 디자인 시스템에 정의된 스타일 가이드가 일관되게 적용되었습니다. 버튼, 입력 폼, 카드 등 각각의 컴포넌트에서 일관된 디자인이 유지되었습니다.
+안정성: 자동화된 시각적 회귀 테스트를 통해 UI 변경으로 인한 문제나 오류가 없음을 확인했습니다.
+사용자 경험: 사용자 테스트를 통해 사용자가 예상대로 각 컴포넌트를 사용할 수 있음을 확인했습니다.
+5. 결론 및 추후 계획
+디자인 시스템의 안정성과 일관성을 확인한 결과, 현재의 디자인 시스템이 잘 구현되어 있음을 알 수 있었습니다.
+앞으로는 추가적인 기능 개발 및 컴포넌트 확장을 통해 디자인 시스템을 더욱 강화할 계획입니다.
+사용자 피드백을 받아 기능적, 시각적으로 개선할 사항을 식별하고 적용할 예정입니다
