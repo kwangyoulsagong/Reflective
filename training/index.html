@@ -14,10 +14,19 @@
         <section class="today-todo">
             <button id="today-open" class="today-add">추가</button>
             <div id="open-modal" class="modal">
-                안녕
+                <div class="modal-content">
+                    <span id="close-modal" class="close-button">&times;</span>
+                    <form id="todo-form">
+                        <label for="todo-title">제목</label>
+                        <input type="text"  class="todo-title" name="title" required>
+                        <label for="todo-content">내용</label>
+                        <textarea class="todo-content" name="content" rows="4" required></textarea>
+                        <button type="submit" class="submit-button">추가</button>
+                    </form>
+                </div>
             </div>
+            <div id="todo-list" class="todo-list"></div>
         </section>
-        <section class="yearly-todo"></section>
     </main>
     <footer></footer>
 </body>
