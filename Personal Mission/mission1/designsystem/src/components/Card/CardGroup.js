@@ -1,6 +1,16 @@
 import React from "react";
 import Card from "./Card";
 function CardGroup(){
+  async function fetchData(){
+    try{
+      let response=await fetch("https")
+      let data=await response.json()
+      console.log(data)
+    }
+    catch(error){
+      console.error("error")
+    }
+  }
     return(
         // props 전달
         <>
