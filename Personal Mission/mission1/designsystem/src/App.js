@@ -7,6 +7,7 @@ import InputGroup from './components/Input/InputGroup';
 import CardGroup from './components/Card/CardGroup';
 import { useState } from 'react';
 import Modal from './components/Modal/Modal';
+import Navbar from './components/Navbar/Navbar';
 
 
 function App() {
@@ -22,6 +23,8 @@ function App() {
   }
   return (
     <div className="App">
+      {/* 네비게이션바 컴포넌트 */}
+      <Navbar/>
       {/* 코드 가독성을 위한 컨테이너 그룹화 진행 */}
       <Container className='container'>
         {/* 컨테이너로 버튼 색상 관리 컨테이너 */}
