@@ -27,7 +27,7 @@ const router=express.Router()
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Post'
+ *               $ref: '#/components/schemas/PostDetail'
  *       404:
  *         description: 포스트를 찾지 못함
  */
