@@ -1,13 +1,11 @@
 //라이브러리 가져오기
 const express=require("express")
 const app=express()
-
+const authRouter=require("./router/auth")
 // 포트번호
-app.set('port', process.env.PORT || 3000);
-// get 메소드
-app.get('/', (req, res) => {
-    res.send('Hello, Express')
-})
+app.set('port', process.env.PORT || 8000);
+// authRoutes
+app.use("/api/v1/auth/",authRouter)
 
 // 서버 실행
 app.listen(app.get('port'), () => {
