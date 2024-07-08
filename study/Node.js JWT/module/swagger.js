@@ -1,18 +1,34 @@
 const swaggerUi = require('swagger-ui-express');
 const swaggereJsdoc = require('swagger-jsdoc');
-
+const userSchemas = require("../components/auth")
 const options = {
-    swaggerDefinition: {
-        info: {
-            title: 'Test API',
-            version: '1.0.0',
-            description: 'Test API with express',
+    definition: {
+      openapi: "3.0.0",
+      info: {
+        title: "JWT Test API",
+        version: "1.0.0",
+        description: "JWT test API with express",
+      },
+      servers: [
+        {
+          url: "http://localhost:8000",
         },
-        host: 'localhost:8000',
-        basePath: '/'
+      ],
+      components: {
+        securitySchemes: {
+            bearerAuth: {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+            },
+        },
+        schemas: {
+          ...userSchemas,
+        },
+      },
     },
-    apis: ['../router/*.js', './swagger/*']
-};
+    apis: ["./router/*.js"],
+  };
 
 const specs = swaggereJsdoc(options);
 

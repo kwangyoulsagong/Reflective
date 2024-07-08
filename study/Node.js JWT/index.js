@@ -2,9 +2,15 @@
 require('dotenv').config();
 const express=require("express")
 const app=express()
+const { swaggerUi, specs } = require('./module/swagger')
 const authRouter=require("./router/auth")
+app.use(express.json());
 // 포트번호
 app.set('port', process.env.PORT || 8000);
+
+// 스웨거
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
 // authRoutes
 app.use("/api/v1/auth/",authRouter)
 
