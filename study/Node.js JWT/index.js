@@ -1,4 +1,5 @@
 //라이브러리 가져오기
+require('dotenv').config();
 const express=require("express")
 const app=express()
 const authRouter=require("./router/auth")
