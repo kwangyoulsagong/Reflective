@@ -1,9 +1,13 @@
 import React, { useState } from "react";
+import { useName } from "../Provider/name";
 
 const NameInput=({onCLose}:any)=>{
+    const {setName}=useName()
     const [input, setInput]=useState<string>("")
     const handleSubmit=()=>{
-        console.log(input)
+        setName(input)
+        setInput("")
+        onCLose()
     }
     return(
      <div className="fixed flex inset-0 items-center justify-center bg-gray-800 opacity-95">

@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from "react";
 import useInterval from "./useInterval";
+import { useName } from "../Provider/name";
 // 리액트 메모를 사용하여 불필요한 렌더링 최소화
 const View=React.memo(()=>{
     const [date,setDate]=useState<Date>(new Date())
-
+    const {name}=useName()
     //메모리 누수 해결
     useInterval(()=>{
         setDate(new Date())
@@ -15,7 +16,7 @@ const View=React.memo(()=>{
     },[])
     return(
         <div className="flex flex-col items-center">
-             <h1 className="text-xl mb-3">안녕하세요,</h1>
+             <h1 className="text-xl mb-3">안녕하세요, {name ? name : "???"} 님</h1>
              <p className="text-lg">{formatDate(date)}</p>
         </div>
     )
