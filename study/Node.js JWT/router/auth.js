@@ -122,4 +122,5 @@ function verifyTokenMiddleware(req, res, next) {
  */
 router.post("/refresh",authController.refresh)
 
+
 module.exports=router
