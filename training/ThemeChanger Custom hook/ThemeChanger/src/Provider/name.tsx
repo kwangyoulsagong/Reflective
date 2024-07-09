@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode} from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 //Context 타입 정의
 interface nameContextType{
@@ -20,7 +21,7 @@ const useName=()=>{
 
 //Provider 컴폰너트
 const NameProvider=({children}: {children:ReactNode})=>{
-    const [name,setName]=useState<string>("")
+    const [name,setName]=useLocalStorage("name","")
     return(
         <nameContext.Provider value={{name, setName}}>
             {children}

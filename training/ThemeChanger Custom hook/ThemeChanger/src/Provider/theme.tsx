@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 // 테마 관리를 위한 Context 타입 정의
 interface ThemeContextType {
@@ -26,7 +27,7 @@ const useTheme = () => {
 
 // ThemeProvider 컴포넌트 정의
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<string>("bg-gray-100");
+  const [theme, setTheme] = useLocalStorage("theme","bg-gray-100")
 
   // 테마 변경 함수
   const changeTheme = (newTheme: string) => {

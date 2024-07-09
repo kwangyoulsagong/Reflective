@@ -4,6 +4,7 @@ import View from "./view"
 import { NameProvider } from "../Provider/name"
 import { Modal, initialState, ActionType } from "../hooks/modal"
 import Theme from "./theme"
+import Todo from "./todo"
 const Main=()=>{
     //클릭 스테이트가 4개라 복잡성을 위해 리듀서 이용 
     const [state, dispatch]=useReducer(Modal, initialState)
@@ -28,6 +29,7 @@ const Main=()=>{
            {state.isModalOpen&& <NameInput onCLose={handleModalClose} />}
            <View/>
            {state.isThemeOpen&&<Theme onCLose={handleThemeCLose}/>}
+           <Todo/>
            </NameProvider>
         </div>
     )

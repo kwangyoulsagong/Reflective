@@ -1,8 +1,10 @@
 import React from "react";
 import { useTheme } from "../Provider/theme";
+import { useThemeStore } from "../Provider/themeStore";
 
 const Theme = ({ onCLose }: any) => {
-  const { setTheme } = useTheme();
+//   const { setTheme } = useTheme();
+    const {setTheme}=useThemeStore()
 
   // 테마 변경 함수
   const handleTheme = (value: string) => {
