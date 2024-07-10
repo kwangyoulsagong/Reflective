@@ -1,9 +1,12 @@
 import Button from "./button"
 
-const TodoInput = ()=>{
+interface ButtonProps{
+    onClose:()=>void,
+}
+const TodoInput = ({onClose}:ButtonProps)=>{
     return(
         <div className="fixed inset-0 flex items-center justify-center bg-slate-900 opacity-85">
-            <Button/>
+            <Button onClick={onClose}>닫기</Button>
             <div className="flex flex-col bg-white p-6 rounded gap-2">
                 <section>
                     <input className="border rounded border-slate-400  w-80 p-2 outline-none" placeholder="할 일 제목 작성" ></input>
