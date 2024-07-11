@@ -1,6 +1,7 @@
 import { useState } from "react"
 import TodoInput from "../components/TodoInput"
 import Button from "../components/button"
+import TodoList from "../components/TodoList"
 const Todo=()=>{
     //투 두 입력창 모달 상태 정의
     const [showModal, setShowModal]=useState<Boolean>(false)
@@ -19,6 +20,7 @@ const Todo=()=>{
         <div className="">
             <Button onClick={handleClick}>할 일 작성</Button>
             {showModal&&<TodoInput onClose={handleClose} />}
+            <TodoList/>
         </div>
     )
 }
