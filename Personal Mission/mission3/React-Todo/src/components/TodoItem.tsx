@@ -18,10 +18,10 @@ const TodoItem=({todo}:any)=>{
         운동: "bg-yellow-100 text-yellow-800",
       };
     return(
-        // todo 체크시 색상 흐리게
+        // todo 체크시 색상 흐리게, 텍스트 줄 그음 표시
         <div className={`flex flex-col items-center justify-center p-4 rounded-lg shadow-md w-40 h-60 overflow-hidden gap-2 ${
             todo.completed ? "bg-gray-200 opacity-75" : "bg-white"
-          }`}>
+          } ${todo.completed ? "opacity-50 line-through" : ""}`}>
                 <h3 className="font-bold text-xl mb-2  w-full text-left">{todo.title}</h3>
                 <p className="text-gray-700 mb-4 overflow-hidden text-ellipsis w-full h-20">{todo.content}</p>
                 <span className={`text-sm ${categoryClasses[todo.category]} py-1 px-2 rounded`}>{todo.category}</span>

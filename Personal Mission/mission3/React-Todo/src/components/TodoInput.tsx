@@ -48,7 +48,7 @@ const TodoInput = ({onClose}:ButtonProps)=>{
     },[state.title,state.content,state.category])
 
     return(
-        <div className="fixed inset-0 flex items-center justify-center bg-slate-900 opacity-85">
+        <div className="fixed z-50 inset-0 flex items-center justify-center bg-slate-900 opacity-95">
           
             <div className="relative flex flex-col bg-white p-3 md:p-10 lg:p-12 rounded gap-2 ">
             <div className="absolute top-2 right-2 bg-red-100 text-red-800 rounded-md p-1 ">
