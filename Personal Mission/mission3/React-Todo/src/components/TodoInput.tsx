@@ -34,7 +34,8 @@ const TodoInput = ({onClose}:ButtonProps)=>{
         addTodo({
             title:state.title,
             content:state.content,
-            category:state.category
+            category:state.category,
+            completed:false
         })
         onClose()
     }

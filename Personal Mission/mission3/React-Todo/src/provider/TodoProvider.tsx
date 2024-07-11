@@ -6,13 +6,15 @@ interface TodoItem{
     id:number
     title:string,
     content:string,
-    category:string
+    category:string,
+    completed:boolean
 }
 // 인터페이스 정의
 interface TodoState{
     todos: TodoItem[],
     addTodo: (todo: Omit<TodoItem, "id">) => void;
     deleteTodo:(id:number)=>void
+    completeTodo:(id:number)=>void
 }
 
 // 상태 관리 함수
@@ -34,7 +36,13 @@ persist((set)=>({
    //삭제
    deleteTodo:(id)=>set((state)=>({
     todos: state.todos.filter((todo)=>todo.id !==id)
-   }))
+   })),
+   //완료 상태
+   completeTodo: (id)=>
+    set((state)=>({
+        todos:state.todos.map((todo)=>
+        todo.id===id? {...todo, completed:!todo.completed}:todo)
+    }))
 
 }),{
     name: 'todo-storage',
