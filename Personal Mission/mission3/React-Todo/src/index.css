@@ -12,8 +12,10 @@
     --secondary-color: #fecaca;
     --secondary-text-color: #333333;
     --input-border-color:#94a3b8;
-    --bg-color-completed: #d3d3d3;
-    --text-color-completed: #a9a9a9;
+    --form-color-uncompleted:  #d1d5db;
+    --text-color-uncompleted: #6b7280;
+    --form-color-completed:#3b82f6;
+    --text-color-completed:#ffffff;
     --category-color-업무: #bfdbfe;
     --category-text-color-업무: #1e3a8a;
     --category-color-개인: #fecaca;
@@ -22,6 +24,14 @@
     --category-text-color-자유: #06835f;
     --category-color-운동: #fef08a;
     --category-text-color-운동: #b9ad3c;
+
+    /* 간격 여백 */
+    --padding-sm:0.5rem;
+    --padding-md:2.5rem;
+    --padding-lg:3rem;
+
+    /* 폰트 굵기 */
+    --bold-lg:font-weight: 700
   }
   
   body {
