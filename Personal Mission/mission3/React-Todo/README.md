@@ -1,10 +1,12 @@
 # React + TypeScript + Vite
 이 프로젝트는 React, TypeScript, Vite를 사용하여 시작할 수 있습니다. 아래는 프로젝트 설정 방법입니다.
 ## 프로젝트 생성
+<code>
 // npm 6.x
 npm create vite@latest [프로젝트 명] --template react-ts
 // npm 7+, extra double-dash is needed:
 npm create vite@latest [프로젝트 명] -- --template react-ts
+</code>
 
 ## 프로젝트 실행
 해당 레포지터리 이동 후 npm install 후 npm run dev
