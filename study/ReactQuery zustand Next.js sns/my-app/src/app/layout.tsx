@@ -3,8 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ReactNode } from "react";
 
-const inter = Inter({ subsets: ["latin"] });
-
 type Props={children:ReactNode}
 export const metadata: Metadata = {
   title: "my-sns",
@@ -16,7 +14,7 @@ export default function RootLayout({
 }: Props) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className="bg-[var(--primary-bg-color)]">{children}</body>
     </html>
   );
 }
