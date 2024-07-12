@@ -5,7 +5,7 @@ import View from './containers/View'
 function App() {
 
   return (
-       <div className=" flex justify-center min-h-screen items-center inset-0 bg-gray-100">
+       <div className=" flex justify-center min-h-screen items-center inset-0 bg-[var(--primary-bg-color)]">
           {/* 메인 화면 컨테이너 */}
           <View/>
       </div>

@@ -12,10 +12,10 @@ const TodoItem=({todo}:any)=>{
         completeTodo(todo.id);
       };
      const categoryClasses: Record<string, string> = {
-        업무: "bg-blue-100 text-blue-800",
-        개인: "bg-red-100 text-red-800",
-        자유: "bg-green-100 text-green-800",
-        운동: "bg-yellow-100 text-yellow-800",
+      업무: "bg-[var(--category-color-업무)] text-[var(--category-text-color-업무)]",
+      개인: "bg-[var(--category-color-개인)] text-[var(--category-text-color-개인)]",
+      자유: "bg-[var(--category-color-자유)] text-[var(--category-text-color-자유)]",
+      운동: "bg-[var(--category-color-운동)] text-[var(--category-text-color-운동)]"
       };
     return(
         // todo 체크시 색상 흐리게, 텍스트 줄 그음 표시

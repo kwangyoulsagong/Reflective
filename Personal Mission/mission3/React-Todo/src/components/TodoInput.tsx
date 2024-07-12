@@ -48,20 +48,20 @@ const TodoInput = ({onClose}:ButtonProps)=>{
     },[state.title,state.content,state.category])
 
     return(
-        <div className="fixed z-50 inset-0 flex items-center justify-center bg-slate-900 opacity-95">
+        <div className="fixed z-50 inset-0 flex items-center justify-center bg-[var(--secondary-bg-color)] opacity-95">
           
             <div className="relative flex flex-col bg-white p-3 md:p-10 lg:p-12 rounded gap-2 ">
-            <div className="absolute top-2 right-2 bg-red-100 text-red-800 rounded-md p-1 ">
+            <div className="absolute top-2 right-2 bg-[var(--secondary-color)] text-[var(--category-text-color-개인)] rounded-md p-1 ">
                 <Button onClick={onClose} >닫기</Button>
             </div>
                 <section>
-                    <input className="border rounded border-slate-400 w-60 md:w-80 p-2 outline-none" value={state.title} onChange={handleTitleChange} placeholder="할 일 제목 작성" ></input>
+                    <input className="border rounded border-[var(--input-border-color)] w-60 md:w-80 p-2 outline-none" value={state.title} onChange={handleTitleChange} placeholder="할 일 제목 작성" ></input>
                 </section>
                 <section>
-                    <textarea className="border rounded border-slate-400 w-80 h-40 outline-none p-2 " value={state.content} onChange={handleContentChange} placeholder="할 일 설명 작성" maxLength={40}></textarea>
+                    <textarea className="border rounded border-[var(--input-border-color)] w-80 h-40 outline-none p-2 " value={state.content} onChange={handleContentChange} placeholder="할 일 설명 작성" maxLength={40}></textarea>
                 </section>
                 <section>
-                    <select className=" border rounded border-slate-400 w-80 p-2 outline-none" value={state.category} onChange={handleSelectChange} >
+                    <select className=" border rounded border-[var(--input-border-color)] w-80 p-2 outline-none" value={state.category} onChange={handleSelectChange} >
                         <option value="">카테고리 선택</option>
                         <option value="업무">업무</option>
                         <option value="개인">개인</option>
