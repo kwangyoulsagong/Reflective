@@ -1,7 +1,20 @@
 import { useTodoStore } from "../provider/TodoProvider";
 import Button from "./button";
 
-const TodoItem=({todo}:any)=>{
+// 인터페이스 정의
+interface Todo {
+  id: number;
+  title: string;
+  content: string;
+  category: string;
+  completed:boolean
+
+}
+interface todoType{
+  todo:Todo
+}
+
+const TodoItem=({todo}:todoType)=>{
     const {deleteTodo,completeTodo}=useTodoStore()
     // 투두 카드 삭제
     const handleDelete=()=>{
