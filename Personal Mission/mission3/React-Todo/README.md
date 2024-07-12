@@ -13,6 +13,7 @@ npm create vite@latest [프로젝트 명] -- --template react-ts
 
 # 프로젝트 구조 설정
 ## 켄터이너/프레젠테이셔널
+<code>
 src/
 ├── components/
 │ ├── Button.tsx
@@ -27,6 +28,7 @@ src/
 └── reducer/
 └── TodoReducer.tsx
 
+</code>
 
 # To-Do List 사용 설명서
 
