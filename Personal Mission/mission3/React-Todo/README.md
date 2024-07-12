@@ -15,17 +15,17 @@ npm create vite@latest [프로젝트 명] -- --template react-ts
 ## 켄터이너/프레젠테이셔널
 src/
 ├── components/
-│   ├── Button.tsx
-│   ├── TodoInput.tsx
-│   ├── TodoItem.tsx
-│   └── TodoList.tsx
+│ ├── Button.tsx
+│ ├── TodoInput.tsx
+│ ├── TodoItem.tsx
+│ └── TodoList.tsx
 ├── containers/
-│   ├── Todo.tsx
-│   └── View.tsx
+│ ├── Todo.tsx
+│ └── View.tsx
 ├── provider/
-│   └── TodoProvider.tsx
+│ └── TodoProvider.tsx
 └── reducer/
-    └── TodoReducer.tsx
+└── TodoReducer.tsx
 
 
 # To-Do List 사용 설명서
