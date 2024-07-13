@@ -7,7 +7,8 @@ export async function GET(req: Request) {
     return NextResponse.json(uid);
   }
 
-  export async function POST(req: Request) {
-
+export async function POST(req: Request) {
+  const requestBody=await req.json()
+    const {email,password}=requestBody
     return new Response();
 }
