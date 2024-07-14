@@ -1,8 +1,9 @@
 "use client"
 
-import { useState,useReducer } from "react"
+import { useReducer } from "react"
 import { ActionType, authReducer, initialState } from "../_reducers/authReducer"
-import { useMutation,useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
+import useLoginMutation from "../_hooks/api/useLoginMutation"
 
 // 인터페이스 정의
 interface LoginBody{
@@ -14,7 +15,6 @@ export default function LoginInput(){
 
     // 리듀서 정의
     const [state,dispatch]=useReducer(authReducer,initialState)
-    const queryClient = useQueryClient();
     // 이메일 상태 업데이트 함수
     const handleEmail=(e:React.ChangeEvent<HTMLInputElement>)=>{
         dispatch({type:ActionType.SET_EMAIL, payload:e.target.value})
@@ -33,24 +33,8 @@ export default function LoginInput(){
         }
         mutation.mutate(body)
     }
-    // useMutation 훅을 사용하여 mutation 함수 정의
-    const mutation = useMutation({
-        mutationFn: async (body: LoginBody): Promise<Response> => {
-          const response = await fetch("/api/auth", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-          });
-      
-          if (!response.ok) {
-            throw new Error('네트워크 에러');
-          }
-          return response;
-        }
-      });
-
+    // useLoginMutation 훅을 사용하여 mutation 함수 정의
+    const mutation = useLoginMutation()
 
     return(
         <div className="flex flex-col gap-2">
