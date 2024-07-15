@@ -23,12 +23,14 @@ export default function AddPost() {
 
         const postBody = {
             postId: state.postId,
+            nickname:localStorage.getItem("nickname"),
             title: state.title,
             content: state.content
         };
         // 제출 로직 구현
         mutation.mutate(postBody)
     };
+    // usePostMutation 훅을 사용하여 mutation 함수 정의
     const mutation=usePostMutation()
     // 모달 닫기
     const handlePrevious=()=>{
