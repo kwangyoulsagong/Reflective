@@ -2,7 +2,6 @@
 
 import { useReducer } from "react"
 import { ActionType, authReducer, initialState } from "../_reducers/authReducer"
-import { useMutation } from "@tanstack/react-query"
 import useLoginMutation from "../_hooks/api/useLoginMutation"
 
 // 인터페이스 정의
