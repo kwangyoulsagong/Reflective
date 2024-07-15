@@ -24,6 +24,7 @@ export default function AddPost() {
         const postBody = {
             postId: state.postId,
             nickname:localStorage.getItem("nickname"),
+            imageUrl:"",
             title: state.title,
             content: state.content
         };

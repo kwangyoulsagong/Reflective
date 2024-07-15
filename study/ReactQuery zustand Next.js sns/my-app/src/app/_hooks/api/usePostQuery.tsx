@@ -4,6 +4,7 @@ interface Post{
     postId:string,
     nickname:string,
     title:string,
+    imageUrl:string
     content:string
 }
 

@@ -18,6 +18,7 @@ export default function Home() {
                         postId={post.postId}
                         nickname={post.nickname}
                         title={post.title}
+                        imageUrl={post.imageUrl}
                         content={post.content}
                     />
                 ))}
