@@ -3,6 +3,7 @@ import express,{ Express,Request,Response } from "express";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import userRouter from "./router/userRouter"
+const { swaggerUi, specs } = require('./module/swagger.js');
 const cors = require('cors');
 //express 이용
 const app:Express=express();
@@ -10,6 +11,7 @@ app.use(express.json()); // JSON 바디 파서 추가
 dotenv.config();
 app.use(cors());
 const port = process.env.PORT;
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 app.use('/api/v1/auth',userRouter)
 
 mongoose.connect(process.env.MONGODB_URI!);

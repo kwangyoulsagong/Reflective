@@ -8,6 +8,7 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const userRouter_1 = __importDefault(require("./router/userRouter"));
+const { swaggerUi, specs } = require('./module/swagger.js');
 const cors = require('cors');
 //express 이용
 const app = (0, express_1.default)();
@@ -15,6 +16,7 @@ app.use(express_1.default.json()); // JSON 바디 파서 추가
 dotenv_1.default.config();
 app.use(cors());
 const port = process.env.PORT;
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/api/v1/auth', userRouter_1.default);
 mongoose_1.default.connect(process.env.MONGODB_URI);
 var db = mongoose_1.default.connection;
