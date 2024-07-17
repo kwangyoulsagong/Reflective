@@ -18,6 +18,7 @@ class UserService {
     Register(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = new userModel_1.default(data);
+            //유저 저장
             return yield user.save();
         });
     }
