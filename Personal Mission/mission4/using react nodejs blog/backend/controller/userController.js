@@ -28,5 +28,19 @@ class UserController {
             }
         });
     }
+    Login(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { email, password } = req.body;
+            console.log(email, password);
+            try {
+                const user = yield userService_1.default.Login(email, password);
+                res.status(201).json(user);
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({ error: error.message });
+            }
+        });
+    }
 }
 exports.default = new UserController;

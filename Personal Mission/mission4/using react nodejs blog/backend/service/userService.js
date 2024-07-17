@@ -14,11 +14,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const userModel_1 = __importDefault(require("../model/userModel"));
 class UserService {
-    //회원가입 서비스 
+    // 회원가입 서비스
     Register(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = new userModel_1.default(data);
             return yield user.save();
+        });
+    }
+    // 로그인 서비스
+    Login(email, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // 이메일로 사용자를 찾습니다.
+            const user = yield userModel_1.default.findOne({ email });
+            if (!user) {
+                throw new Error('유저 정보 없음');
+            }
+            // 비밀번호 검증
+            if (user.password !== password) {
+                throw new Error('비밀번호 다시 입력');
+            }
+            return user;
         });
     }
 }

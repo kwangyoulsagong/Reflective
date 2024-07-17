@@ -14,5 +14,17 @@ class UserController{
             res.status(500).json({ error: error.message });
         }
     }
+    public async Login(req:Request, res:Response): Promise<void>{
+        const {email,password}=req.body
+        console.log(email,password)
+        try{
+            const user=await userService.Login(email,password);
+            res.status(201).json(user);
+        }
+        catch(error:any){
+            console.log(error)
+            res.status(500).json({ error: error.message });
+        }
+    }
 }
 export default new UserController
