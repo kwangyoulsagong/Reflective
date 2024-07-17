@@ -3,10 +3,12 @@ import express,{ Express,Request,Response } from "express";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import userRouter from "./router/userRouter"
+const cors = require('cors');
 //express 이용
 const app:Express=express();
+app.use(express.json()); // JSON 바디 파서 추가
 dotenv.config();
-
+app.use(cors());
 const port = process.env.PORT;
 app.use('/api/v1/auth',userRouter)
 

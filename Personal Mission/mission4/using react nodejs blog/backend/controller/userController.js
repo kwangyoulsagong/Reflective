@@ -19,9 +19,11 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const user = yield userService_1.default.Register(req.body);
+                console.log(user);
                 res.status(201).json(user);
             }
             catch (error) {
+                console.error(error);
                 res.status(500).json({ error: error.message });
             }
         });
