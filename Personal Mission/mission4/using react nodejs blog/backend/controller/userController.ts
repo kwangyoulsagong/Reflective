@@ -16,14 +16,17 @@ class UserController{
     }
     public async Login(req:Request, res:Response): Promise<void>{
         const {email,password}=req.body
-        console.log(email,password)
         try{
-            const user=await userService.Login(email,password);
-            res.status(201).json(user);
+            const result=await userService.Login(email,password);
+            if (result) {
+                res.json(result);
+            } else {
+                res.status(401).json({ message: "인증 권한 없음" });
+            };
         }
         catch(error:any){
             console.log(error)
-            res.status(500).json({ error: error.message });
+            res.status(401).json({ error: error.message });
         }
     }
 }

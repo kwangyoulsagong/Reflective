@@ -33,12 +33,18 @@ class UserController {
             const { email, password } = req.body;
             console.log(email, password);
             try {
-                const user = yield userService_1.default.Login(email, password);
-                res.status(201).json(user);
+                const result = yield userService_1.default.Login(email, password);
+                if (result) {
+                    res.json(result);
+                }
+                else {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                }
+                ;
             }
             catch (error) {
                 console.log(error);
-                res.status(500).json({ error: error.message });
+                res.status(401).json({ error: error.message });
             }
         });
     }

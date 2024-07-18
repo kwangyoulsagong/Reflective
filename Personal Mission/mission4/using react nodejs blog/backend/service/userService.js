@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const userModel_1 = __importDefault(require("../model/userModel"));
+const jwt_1 = require("../authorization/jwt");
 class UserService {
     // 회원가입 서비스
     Register(data) {
@@ -35,7 +36,9 @@ class UserService {
             if (!isMatch) {
                 throw new Error('비밀번호 다시 입력');
             }
-            return user;
+            const accessToken = (0, jwt_1.generateToken)({ user_id: user.user_id.toString() });
+            const refreshToken = (0, jwt_1.generateRefreshToken)({ user_id: user.user_id.toString() });
+            return { nickname: user.nickname, accessToken, refreshToken };
         });
     }
 }
