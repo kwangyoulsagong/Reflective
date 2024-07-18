@@ -31,7 +31,8 @@ class UserService {
                 throw new Error('유저 정보 없음');
             }
             // 비밀번호 검증
-            if (user.password !== password) {
+            const isMatch = yield user.comparePassword(password);
+            if (!isMatch) {
                 throw new Error('비밀번호 다시 입력');
             }
             return user;
