@@ -7,7 +7,7 @@ exports.generateToken = generateToken;
 exports.generateRefreshToken = generateRefreshToken;
 exports.verifyToken = verifyToken;
 exports.verifyRefreshToken = verifyRefreshToken;
-// jwt 라이브러리를 불러와줍니다.
+exports.verifyTokenMiddleware = verifyTokenMiddleware;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -26,6 +26,8 @@ function generateRefreshToken(payload) {
 // 토큰 검증 함수
 function verifyToken(token) {
     try {
+        console.log(token);
+        console.log(secretKey);
         return jsonwebtoken_1.default.verify(token, secretKey);
     }
     catch (error) {
@@ -40,4 +42,20 @@ function verifyRefreshToken(token) {
     catch (error) {
         return null;
     }
+}
+function verifyTokenMiddleware(req, res, next) {
+    var _a;
+    const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split('Bearer ')[1]; // header에서 access token을 가져옵니다.
+    if (!token) {
+        res.status(403).json({ message: '토큰이 없습니다.' });
+        return;
+    }
+    const decoded = verifyToken(token);
+    console.log(decoded);
+    if (!decoded) {
+        res.status(401).json({ message: '인증 권한이 없음' });
+        return;
+    }
+    req.user = decoded;
+    next();
 }

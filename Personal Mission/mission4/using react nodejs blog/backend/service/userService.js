@@ -14,19 +14,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const userModel_1 = __importDefault(require("../model/userModel"));
 const jwt_1 = require("../authorization/jwt");
+const profileModel_1 = __importDefault(require("../model/profileModel"));
 class UserService {
     // 회원가입 서비스
     Register(data) {
         return __awaiter(this, void 0, void 0, function* () {
+            // 유저 중복 검증
+            const existingUser = yield userModel_1.default.findOne({ email: data.email });
+            if (existingUser) {
+                throw new Error('이미 사용중인 이메일입니다.');
+            }
             const user = new userModel_1.default(data);
-            //유저 저장
-            return yield user.save();
+            yield user.save();
+            // 회원 가입 성고시 프로필 추가
+            const profileData = {
+                user_id: user.user_id,
+                image_url: null,
+            };
+            const profile = new profileModel_1.default(profileData);
+            yield profile.save();
+            return user;
         });
     }
     // 로그인 서비스
     Login(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            // 이메일로 사용자를 찾습니다.
+            // 이메일로 사용자 검증
             const user = yield userModel_1.default.findOne({ email });
             if (!user) {
                 throw new Error('유저 정보 없음');

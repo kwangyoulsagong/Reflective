@@ -1,5 +1,6 @@
 import User, { IUser } from "../model/userModel";
 import {generateToken,generateRefreshToken} from "../authorization/jwt"
+import Profile from "../model/profileModel";
 interface ILoginResponse {
     nickname: string;
     accessToken: string;
@@ -8,14 +9,29 @@ interface ILoginResponse {
 class UserService {
     // 회원가입 서비스
     public async Register(data: IUser): Promise<IUser> {
+        // 유저 중복 검증
+        const existingUser=await User.findOne({email:data.email})
+        if(existingUser){
+            throw new Error('이미 사용중인 이메일입니다.')
+        }
         const user = new User(data);
-        //유저 저장
-        return await user.save();
+        
+        await user.save()
+
+        // 회원 가입 성고시 프로필 추가
+        const profileData = {
+            user_id: user.user_id, 
+            image_url: null,
+        };
+
+        const profile = new Profile(profileData);
+        await profile.save();
+        return user;
     }
 
     // 로그인 서비스
     public async Login(email: string, password: string): Promise<ILoginResponse | null> {
-        // 이메일로 사용자를 찾습니다.
+        // 이메일로 사용자 검증
         const user = await User.findOne({ email });
 
         if (!user) {

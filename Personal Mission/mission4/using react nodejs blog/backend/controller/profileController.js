@@ -12,29 +12,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const profileModel_1 = __importDefault(require("../model/profileModel"));
-const userModel_1 = __importDefault(require("../model/userModel"));
-class ProfileService {
-    //프로필 조회
-    GetProfile(user_id) {
+const profileService_1 = __importDefault(require("../service/profileService"));
+class ProfileController {
+    GetProfile(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(user_id);
-            const profile = yield profileModel_1.default.findOne({ user_id: user_id });
-            console.log(profile);
-            if (!profile) {
-                throw new Error('프로필을 찾을 수 없습니다.');
+            try {
+                if (!req.user) {
+                    res.status(401).json({ message: '인증 권한 없음' });
+                    return;
+                }
+                const userId = req.user.user_id;
+                const result = yield profileService_1.default.GetProfile(userId);
+                console.log(result);
+                if (result) {
+                    res.json(result);
+                }
+                else {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                }
+                ;
             }
-            const user = yield userModel_1.default.findOne({ user_id: user_id });
-            if (!user) {
-                throw new Error('유저를 찾을 수 없습니다.');
+            catch (error) {
+                console.log(error);
+                res.status(401).json({ error: error.message });
             }
-            return {
-                nickname: user.nickname,
-                email: user.email,
-                phone_number: user.phone_number,
-                image_url: profile.image_url,
-            };
         });
     }
 }
-exports.default = new ProfileService();
+exports.default = new ProfileController;
