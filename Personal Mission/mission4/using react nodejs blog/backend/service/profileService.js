@@ -36,5 +36,18 @@ class ProfileService {
             };
         });
     }
+    // 프로필 이미지 업데이트
+    UpdateProfileImage(user_id, img) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // 회원 프로필 찾기
+            const profile = yield profileModel_1.default.findOne({ user_id: user_id });
+            if (!profile) {
+                throw new Error('프로필을 찾을 수 없습니다.');
+            }
+            // 이미지 업데이트
+            profile.image_url = img;
+            return yield profile.save();
+        });
+    }
 }
 exports.default = new ProfileService();

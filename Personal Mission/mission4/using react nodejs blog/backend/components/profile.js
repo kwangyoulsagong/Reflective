@@ -3,15 +3,15 @@ module.exports = {
     UserProfile: {
         type: "object",
         properties: {
-            id: {
-                type: "integer",
-                example: 1,
-            },
-            username: {
+            profile_id: {
                 type: "string",
-                example: "user1",
+                example: "123453fe",
             },
-            email: {
+            user_id: {
+                type: "string",
+                example: "123214324fe5",
+            },
+            image_url: {
                 type: "string",
                 example: "user1@example.com",
             },

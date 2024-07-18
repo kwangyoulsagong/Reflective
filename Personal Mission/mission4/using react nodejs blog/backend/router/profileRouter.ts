@@ -29,5 +29,43 @@ const router:Router=Router()
  */
 router.get("/mine",verifyTokenMiddleware,profileController.GetProfile)
 
+/**
+ * @swagger
+ * /api/v1/profile/image:
+ *   put:
+ *     summary: 프로필 이미지 업데이트
+ *     description: 유저 프로필 이미지 업데이트
+ *     tags:
+ *       - Auth
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image_url:
+ *                 type: string
+ *                 example: "http://example.com/new-image.jpg"
+ *     responses:
+ *       200:
+ *         description: 유저 프로필 업데이트 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserProfile'
+ *       403:
+ *         description: 토큰이 없음
+ *       404:
+ *         description: 유저가 없음
+ *       401:
+ *         description: 인증 권한이 없음
+ */
+
+
+router.put("/image",verifyTokenMiddleware,profileController.UpdateProfileImage)
+
 
 export default router

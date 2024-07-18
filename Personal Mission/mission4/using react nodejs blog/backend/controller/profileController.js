@@ -38,5 +38,30 @@ class ProfileController {
             }
         });
     }
+    UpdateProfileImage(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { image_url } = req.body;
+                console.log(image_url);
+                if (!req.user) {
+                    res.status(401).json({ message: '인증 권한 없음' });
+                    return;
+                }
+                const userId = req.user.user_id;
+                const result = yield profileService_1.default.UpdateProfileImage(userId, image_url);
+                if (result) {
+                    res.json(result);
+                }
+                else {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                }
+                ;
+            }
+            catch (error) {
+                console.log(error);
+                res.status(401).json({ error: error.message });
+            }
+        });
+    }
 }
 exports.default = new ProfileController;
