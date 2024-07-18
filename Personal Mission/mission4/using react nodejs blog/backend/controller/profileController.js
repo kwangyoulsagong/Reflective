@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const profileService_1 = __importDefault(require("../service/profileService"));
 class ProfileController {
+    // 프로필 조회
     GetProfile(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -23,7 +24,6 @@ class ProfileController {
                 }
                 const userId = req.user.user_id;
                 const result = yield profileService_1.default.GetProfile(userId);
-                console.log(result);
                 if (result) {
                     res.json(result);
                 }
@@ -33,16 +33,15 @@ class ProfileController {
                 ;
             }
             catch (error) {
-                console.log(error);
                 res.status(401).json({ error: error.message });
             }
         });
     }
+    // 프로필 이미지 업데이트
     UpdateProfileImage(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { image_url } = req.body;
-                console.log(image_url);
                 if (!req.user) {
                     res.status(401).json({ message: '인증 권한 없음' });
                     return;
@@ -50,7 +49,7 @@ class ProfileController {
                 const userId = req.user.user_id;
                 const result = yield profileService_1.default.UpdateProfileImage(userId, image_url);
                 if (result) {
-                    res.json(result);
+                    res.status(200).json({ message: "프로필 이미지가 변경되었습니다." });
                 }
                 else {
                     res.status(401).json({ message: "인증 권한 없음" });
@@ -58,7 +57,30 @@ class ProfileController {
                 ;
             }
             catch (error) {
-                console.log(error);
+                res.status(401).json({ error: error.message });
+            }
+        });
+    }
+    // 프로필 업데이트
+    UpdateProfile(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const data = req.body;
+                if (!req.user) {
+                    res.status(401).json({ message: '인증 권한 없음' });
+                    return;
+                }
+                const userId = req.user.user_id;
+                const result = yield profileService_1.default.UpdateProfile(userId, data);
+                if (result) {
+                    res.status(200).json({ message: "프로필이 변경되었습니다." });
+                }
+                else {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                }
+                ;
+            }
+            catch (error) {
                 res.status(401).json({ error: error.message });
             }
         });

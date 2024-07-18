@@ -1,20 +1,26 @@
 module.exports = {
+    UserProfileImage: {
+        type: "object",
+        properties: {
+            image_url: {
+                type: "string",
+                example:"http://example.com/new-image.jpg"
+            },
+        },
+        required: ["image_url"],
+    },
     UserProfile: {
         type: "object",
         properties: {
-            profile_id: {
-                type: "string",
-                example: "123453fe",
-            },
-            user_id: {
-                type: "string",
-                example: "123214324fe5",
-            },
-            image_url: {
-                type: "string",
-                example: "user1@example.com",
-            },
+          nickname: {
+              type: "string",
+              example: "amazeball"
+          },
+          phone_number:{
+              type: "string",
+              example: "010-1234-5678"
+          }
         },
-        required: ["id", "username", "email"],
-    },
+        required: ["nickname", "phone_number"],
+      },
   };

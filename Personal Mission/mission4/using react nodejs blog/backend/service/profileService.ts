@@ -46,5 +46,17 @@ class ProfileService{
         profile.image_url=img
         return await profile.save() 
     }
+
+    // 프로필 정보 업데이트
+    public async UpdateProfile(user_id:string, data:IUser):Promise<IUser|null>{
+        const profile=await User.findOne({user_id:user_id})
+
+        if(!profile){
+            throw new Error('프로필을 찾을 수 없습니다.');
+        }
+        profile.nickname=data.nickname
+        profile.phone_number=data.phone_number
+        return await profile.save()
+    }
 }
 export default new ProfileService()

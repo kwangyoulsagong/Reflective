@@ -49,5 +49,17 @@ class ProfileService {
             return yield profile.save();
         });
     }
+    // 프로필 정보 업데이트
+    UpdateProfile(user_id, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const profile = yield userModel_1.default.findOne({ user_id: user_id });
+            if (!profile) {
+                throw new Error('프로필을 찾을 수 없습니다.');
+            }
+            profile.nickname = data.nickname;
+            profile.phone_number = data.phone_number;
+            return yield profile.save();
+        });
+    }
 }
 exports.default = new ProfileService();
