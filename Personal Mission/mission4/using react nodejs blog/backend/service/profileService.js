@@ -40,25 +40,21 @@ class ProfileService {
     UpdateProfileImage(user_id, img) {
         return __awaiter(this, void 0, void 0, function* () {
             // 회원 프로필 찾기
-            const profile = yield profileModel_1.default.findOne({ user_id: user_id });
+            const profile = yield profileModel_1.default.findOneAndUpdate({ user_id: user_id }, { image_url: img, updated_date: Date.now() }, { new: true });
             if (!profile) {
                 throw new Error('프로필을 찾을 수 없습니다.');
             }
-            // 이미지 업데이트
-            profile.image_url = img;
-            return yield profile.save();
+            return yield profile;
         });
     }
     // 프로필 정보 업데이트
     UpdateProfile(user_id, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const profile = yield userModel_1.default.findOne({ user_id: user_id });
+            const profile = yield userModel_1.default.findOneAndUpdate({ user_id: user_id }, { nickname: data.nickname, phone_number: data.phone_number, updated_date: Date.now() }, { new: true });
             if (!profile) {
                 throw new Error('프로필을 찾을 수 없습니다.');
             }
-            profile.nickname = data.nickname;
-            profile.phone_number = data.phone_number;
-            return yield profile.save();
+            return yield profile;
         });
     }
 }

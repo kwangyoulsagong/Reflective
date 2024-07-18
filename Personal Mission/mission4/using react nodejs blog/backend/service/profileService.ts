@@ -36,27 +36,22 @@ class ProfileService{
     // 프로필 이미지 업데이트
     public async UpdateProfileImage( user_id:string, img:string):Promise<IProfile|null>{
         // 회원 프로필 찾기
-        const profile = await Profile.findOne({user_id:user_id})
+        const profile = await Profile.findOneAndUpdate({user_id:user_id},{image_url:img,updated_date:Date.now()},{new:true})
 
         if (!profile) {
             throw new Error('프로필을 찾을 수 없습니다.');
         }
-
-        // 이미지 업데이트
-        profile.image_url=img
-        return await profile.save() 
+        return await profile
     }
 
     // 프로필 정보 업데이트
     public async UpdateProfile(user_id:string, data:IUser):Promise<IUser|null>{
-        const profile=await User.findOne({user_id:user_id})
+        const profile=await User.findOneAndUpdate({user_id:user_id},{nickname:data.nickname,phone_number:data.phone_number,updated_date:Date.now()},{new:true})
 
         if(!profile){
             throw new Error('프로필을 찾을 수 없습니다.');
         }
-        profile.nickname=data.nickname
-        profile.phone_number=data.phone_number
-        return await profile.save()
+        return await profile
     }
 }
 export default new ProfileService()
