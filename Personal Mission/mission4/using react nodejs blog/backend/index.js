@@ -9,6 +9,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const userRouter_1 = __importDefault(require("./router/userRouter"));
 const profileRouter_1 = __importDefault(require("./router/profileRouter"));
+const postRouter_1 = __importDefault(require("./router/postRouter"));
 const { swaggerUi, specs } = require('./module/swagger.js');
 const cors = require('cors');
 //express 이용
@@ -20,6 +21,7 @@ const port = process.env.PORT;
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/api/v1/auth', userRouter_1.default);
 app.use('/api/v1/profile', profileRouter_1.default);
+app.use('/api/v1/post', postRouter_1.default);
 mongoose_1.default.connect(process.env.MONGODB_URI);
 var db = mongoose_1.default.connection;
 // 4. 연결 실패
