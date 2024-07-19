@@ -16,6 +16,7 @@ const postSchema:Schema<IPost>=new Schema({
     user_id:{type: Schema.Types.ObjectId, required: true, ref:"User"},
     title:{type: String, required:true },
     contents:{type:Schema.Types.Mixed, required:true},
+    like_count:{type:Number, default:0},
     created_date:{type: Date, required:true, default:Date.now() },
     updated_date:{type: Date, required:true, default:Date.now() }
 })

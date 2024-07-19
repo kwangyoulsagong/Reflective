@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import userRouter from "./router/userRouter"
 import profileRouter from "./router/profileRouter"
+import postRouter from "./router/postRouter"
 const { swaggerUi, specs } = require('./module/swagger.js');
 const cors = require('cors');
 //express 이용
@@ -15,6 +16,7 @@ const port = process.env.PORT;
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 app.use('/api/v1/auth',userRouter)
 app.use('/api/v1/profile',profileRouter)
+app.use('/api/v1/post', postRouter)
 
 mongoose.connect(process.env.MONGODB_URI!);
 var db = mongoose.connection;
