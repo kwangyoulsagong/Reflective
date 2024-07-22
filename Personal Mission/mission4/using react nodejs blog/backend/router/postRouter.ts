@@ -54,5 +54,35 @@ router.post("/",verifyTokenMiddleware,postController.savePost)
  */
 
 router.get("/",postController.getRecentPost)
+/**
+ * @swagger
+ * /api/v1/post/{post_id}:
+ *   get:
+ *     summary: 상세 게시물 조회
+ *     description: 상세 게시물 조회
+ *     tags:
+ *       - Post
+ *     parameters:
+ *       - in: path
+ *         name: post_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 조회할 게시물의 ID
+ *     responses:
+ *       200:
+ *         description: 상세 게시물 조회 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *              $ref: '#/components/schemas/Post'
+ *       403:
+ *         description: 토큰이 없음
+ *       404:
+ *         description: 유저가 없음
+ *       401:
+ *         description: 인증 권한이 없음
+ */
+router.get("/:post_id",postController.getPostDetail)
 
 export default router

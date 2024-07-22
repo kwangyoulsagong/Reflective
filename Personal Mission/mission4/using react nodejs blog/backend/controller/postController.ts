@@ -45,5 +45,22 @@ class PostController{
         }
     }
     
+    // 상세 게시물 조회
+    public async getPostDetail(req:Request, res:Response): Promise<void>{
+        const {post_id}=req.params
+        console.log(post_id)
+        try{
+            const posts = await postService.getPostDetail(post_id)
+            if(posts){
+                res.json(posts)
+            }
+            else{
+                res.status(404).json({message: "게시물 없음"})
+            }
+        }
+        catch(error){
+            res.status(500).json({message: "게시물 조회 에러",error})
+        }
+    }
 }
 export default new PostController

@@ -50,5 +50,24 @@ class PostController {
             }
         });
     }
+    // 상세 게시물 조회
+    getPostDetail(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { post_id } = req.params;
+            console.log(post_id);
+            try {
+                const posts = yield postService_1.default.getPostDetail(post_id);
+                if (posts) {
+                    res.json(posts);
+                }
+                else {
+                    res.status(404).json({ message: "게시물 없음" });
+                }
+            }
+            catch (error) {
+                res.status(500).json({ message: "게시물 조회 에러", error });
+            }
+        });
+    }
 }
 exports.default = new PostController;

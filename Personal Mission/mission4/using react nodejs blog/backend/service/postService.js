@@ -64,5 +64,25 @@ class PostService {
             }
         });
     }
+    // 상세 게시물 조회
+    getPostDetail(post_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const post = yield postModel_1.default.findOne({ post_id }).exec();
+                if (post) {
+                    const user = yield userModel_1.default.findOne({ user_id: post.user_id }).exec();
+                    if (user) {
+                        return (Object.assign(Object.assign({}, post.toObject()), { nickname: user.nickname }));
+                    }
+                    return post.toObject();
+                }
+                return null;
+            }
+            catch (error) {
+                console.error("게시물 조회 에러", error);
+                return null;
+            }
+        });
+    }
 }
 exports.default = new PostService;

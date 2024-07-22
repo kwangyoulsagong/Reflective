@@ -50,6 +50,24 @@ class PostService{
             return null
         }
     }
+    // 상세 게시물 조회
+    public async getPostDetail(post_id:string):Promise<object|null>{
+        try{
+            const post=await Post.findOne({post_id}).exec()
+            if(post){
+                const user = await User.findOne({user_id:post.user_id}).exec()
+                if(user){
+                    return({...post.toObject(),nickname:user.nickname})
+                }
+                return post.toObject()
+            }
+            return null
+        }
+        catch(error){
+            console.error("게시물 조회 에러",error)
+            return null
+        }
+    }
 }
 
 
