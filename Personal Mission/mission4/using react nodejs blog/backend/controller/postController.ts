@@ -1,5 +1,6 @@
-import { Request,Response } from "express";
+import e, { Request,Response } from "express";
 import postService from "../service/postService";
+import profileService from "../service/profileService";
 interface DecodedToken {
     user_id: string;
     iat: number;
@@ -9,7 +10,8 @@ interface AuthRequest extends Request {
     user?: DecodedToken;
 }
 class PostController{
-    public async savePost(req:AuthRequest, res:Response){
+    // 게시물 저장
+    public async savePost(req:AuthRequest, res:Response): Promise<void>{
        try{
             const data=req.body
             if (!req.user) {
@@ -27,5 +29,21 @@ class PostController{
        }
 
     }
+    // 최근 게시물 조회
+    public async getRecentPost(req:Request,res:Response): Promise<void>{
+        try{
+            const posts= await postService.getRecentPost();
+            if(posts){
+                res.json(posts)
+            }
+            else{
+                res.status(404).json({message: "게시물 없음"})
+            }
+        }
+        catch(error){
+            res.status(500).json({message: "게시물 조회 에러",error})
+        }
+    }
+    
 }
 export default new PostController

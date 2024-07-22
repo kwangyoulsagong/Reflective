@@ -34,4 +34,27 @@ const router = (0, express_1.Router)();
  *         description: 인증 권한이 없음
  */
 router.post("/", jwt_1.verifyTokenMiddleware, postController_1.default.savePost);
+/**
+ * @swagger
+ * /api/v1/post:
+ *   get:
+ *     summary: 최근 게시물 조회
+ *     description: 최근 게시물 조회
+ *     tags:
+ *       - Auth
+ *     responses:
+ *       200:
+ *         description: 최근 게시물 조회 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *              $ref: '#/components/schemas/RecentPost'
+ *       403:
+ *         description: 토큰이 없음
+ *       404:
+ *         description: 유저가 없음
+ *       401:
+ *         description: 인증 권한이 없음
+ */
+router.get("/", postController_1.default.getRecentPost);
 exports.default = router;

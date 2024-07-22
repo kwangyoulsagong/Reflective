@@ -6,7 +6,7 @@ export interface IPost extends Document{
     user_id: mongoose.Types.ObjectId,
     title: string,
     contents:any,
-    like_count:Number,
+    like_count:number,
     created_date:Date,
     updated_date:Date
 }

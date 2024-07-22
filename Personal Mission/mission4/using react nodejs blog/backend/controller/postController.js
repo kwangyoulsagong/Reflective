@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const postService_1 = __importDefault(require("../service/postService"));
 class PostController {
+    // 게시물 저장
     savePost(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -29,6 +30,23 @@ class PostController {
             }
             catch (error) {
                 res.status(500).json({ error: error.message });
+            }
+        });
+    }
+    // 최근 게시물 조회
+    getRecentPost(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const posts = yield postService_1.default.getRecentPost();
+                if (posts) {
+                    res.json(posts);
+                }
+                else {
+                    res.status(404).json({ message: "게시물 없음" });
+                }
+            }
+            catch (error) {
+                res.status(500).json({ message: "게시물 조회 에러", error });
             }
         });
     }
