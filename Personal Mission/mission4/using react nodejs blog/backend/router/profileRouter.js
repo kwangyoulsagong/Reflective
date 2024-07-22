@@ -14,7 +14,7 @@ const router = (0, express_1.Router)();
  *     summary: 프로필 조회
  *     description: 유저 프로필 조회
  *     tags:
- *       - Auth
+ *       - Profile
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -39,7 +39,7 @@ router.get("/mine", jwt_1.verifyTokenMiddleware, profileController_1.default.Get
  *     summary: 프로필 이미지 업데이트
  *     description: 유저 프로필 이미지 업데이트
  *     tags:
- *       - Auth
+ *       - Profile
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -66,7 +66,7 @@ router.put("/image", jwt_1.verifyTokenMiddleware, profileController_1.default.Up
  *     summary: 프로필 업데이트
  *     description: 유저 프로필 업데이트
  *     tags:
- *       - Auth
+ *       - Profile
  *     security:
  *       - bearerAuth: []
  *     requestBody:

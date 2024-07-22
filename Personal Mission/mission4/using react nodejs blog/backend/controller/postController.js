@@ -69,5 +69,28 @@ class PostController {
             }
         });
     }
+    updatePost(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { post_id } = req.params;
+            const data = req.body;
+            try {
+                if (!req.user) {
+                    res.status(401).json({ message: '인증 권한 없음' });
+                    return;
+                }
+                const userId = req.user.user_id;
+                const updatedPost = yield postService_1.default.updatePost(post_id, userId, data);
+                if (updatedPost) {
+                    res.status(200).json({ message: "게시물이 수정 되었습니다." });
+                }
+                else {
+                    res.status(404).json({ message: "게시물 없음" });
+                }
+            }
+            catch (error) {
+                res.status(500).json({ message: "게시물 수정 에러", error: error.message });
+            }
+        });
+    }
 }
 exports.default = new PostController;

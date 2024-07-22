@@ -84,5 +84,16 @@ class PostService {
             }
         });
     }
+    // 상세 게시물 수정
+    updatePost(post_id, user_id, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const updateData = Object.assign(Object.assign({}, data), { updated_date: new Date() });
+            const update = yield postModel_1.default.findOneAndUpdate({ post_id, user_id }, { $set: data }, { new: true }).exec();
+            if (update) {
+                return update;
+            }
+            return null;
+        });
+    }
 }
 exports.default = new PostService;

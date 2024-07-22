@@ -68,6 +68,22 @@ class PostService{
             return null
         }
     }
+
+    // 상세 게시물 수정
+    public async updatePost(post_id:string,user_id:string, data:IPost):Promise<IPost|null>{
+        const updateData = {
+            ...data,
+            updated_date: new Date(),
+        };
+        const update=await Post.findOneAndUpdate({ post_id, user_id },
+            { $set: data },
+            { new: true }).exec()
+        if(update){
+            return update
+        }
+        return null
+        
+    }
 }
 
 

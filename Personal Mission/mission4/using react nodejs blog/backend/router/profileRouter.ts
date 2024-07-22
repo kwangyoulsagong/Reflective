@@ -10,7 +10,7 @@ const router:Router=Router()
  *     summary: 프로필 조회
  *     description: 유저 프로필 조회
  *     tags:
- *       - Auth
+ *       - Profile
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -36,7 +36,7 @@ router.get("/mine",verifyTokenMiddleware,profileController.GetProfile)
  *     summary: 프로필 이미지 업데이트
  *     description: 유저 프로필 이미지 업데이트
  *     tags:
- *       - Auth
+ *       - Profile
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -67,7 +67,7 @@ router.put("/image",verifyTokenMiddleware,profileController.UpdateProfileImage)
  *     summary: 프로필 업데이트
  *     description: 유저 프로필 업데이트
  *     tags:
- *       - Auth
+ *       - Profile
  *     security:
  *       - bearerAuth: []
  *     requestBody:

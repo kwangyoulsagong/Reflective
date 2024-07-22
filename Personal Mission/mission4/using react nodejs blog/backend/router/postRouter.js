@@ -14,7 +14,7 @@ const router = (0, express_1.Router)();
  *     summary: 유저 게시물 작성
  *     description: 유저 게시물 작성
  *     tags:
- *       - Auth
+ *       - Post
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -41,7 +41,7 @@ router.post("/", jwt_1.verifyTokenMiddleware, postController_1.default.savePost)
  *     summary: 최근 게시물 조회
  *     description: 최근 게시물 조회
  *     tags:
- *       - Auth
+ *       - Post
  *     responses:
  *       200:
  *         description: 최근 게시물 조회 성공
@@ -87,4 +87,74 @@ router.get("/", postController_1.default.getRecentPost);
  *         description: 인증 권한이 없음
  */
 router.get("/:post_id", postController_1.default.getPostDetail);
+/**
+ * @swagger
+ * /api/v1/post/{post_id}:
+ *   put:
+ *     summary: 게시물 수정
+ *     description: 사용자가 자신의 게시물을 수정합니다.
+ *     tags:
+ *       - Post
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: post_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 수정할 게시물의 ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Post'
+ *     responses:
+ *       200:
+ *         description: 게시물 수정 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 게시물 수정 성공
+ *                 post:
+ *                   $ref: '#/components/schemas/Post'
+ *       401:
+ *         description: 인증 권한 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 인증 권한 없음
+ *       404:
+ *         description: 게시물 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 게시물 없음
+ *       500:
+ *         description: 서버 에러
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 게시물 수정 에러
+ *                 error:
+ *                   type: string
+ */
+router.put("/:post_id", jwt_1.verifyTokenMiddleware, postController_1.default.updatePost);
 exports.default = router;
