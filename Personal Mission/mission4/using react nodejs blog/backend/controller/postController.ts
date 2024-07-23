@@ -1,6 +1,6 @@
-import e, { Request,Response } from "express";
+import  { Request,Response } from "express";
 import postService from "../service/postService";
-import profileService from "../service/profileService";
+
 interface DecodedToken {
     user_id: string;
     iat: number;
