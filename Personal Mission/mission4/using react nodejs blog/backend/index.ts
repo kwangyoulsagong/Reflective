@@ -6,6 +6,7 @@ import userRouter from "./router/userRouter"
 import profileRouter from "./router/profileRouter"
 import postRouter from "./router/postRouter"
 import commentRouter from "./router/commentRouter"
+import likeRouter from "./router/likeRouter"
 const { swaggerUi, specs } = require('./module/swagger.js');
 const cors = require('cors');
 //express 이용
@@ -19,6 +20,7 @@ app.use('/api/v1/auth',userRouter)
 app.use('/api/v1/profile',profileRouter)
 app.use('/api/v1/post', postRouter)
 app.use('/api/v1/comments', commentRouter)
+app.use('/api/v1/like',likeRouter)
 
 mongoose.connect(process.env.MONGODB_URI!);
 var db = mongoose.connection;

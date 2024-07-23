@@ -11,11 +11,11 @@ export interface ILike extends Document{
 }
 
 // 좋아요 스키마 정의
-const likeSchema:Schema=new Schema({
-    like_id:{type:Schema.Types.ObjectId, required: true, auto: true},
+const likeSchema:Schema<ILike>=new Schema({
+    like_id:{type: Schema.Types.ObjectId, required: true, auto: true},
     post_id:{type: Schema.Types.ObjectId, required:true, ref:"Post" },
     user_id:{type: Schema.Types.ObjectId, required: true, ref:"User"},
-    is_liked:{type:Boolean, default:false},
+    is_liked:{type: Boolean, default:false},
     created_date:{type: Date, required:true, default:Date.now() },
     updated_date:{type: Date, required:true, default:Date.now() }
 })

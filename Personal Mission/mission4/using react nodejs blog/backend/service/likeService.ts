@@ -7,9 +7,10 @@ class LikeService{
     // 좋아요 확인 여부 서비스
     public async IsLike(post_id:string, user_id:string, is_liked:boolean):Promise<ILike | null>{
         try {
+            console.log(post_id, user_id, is_liked)
             // 기존의 좋아요 기록을 찾음
-            const existingLike = await Like.findOne({ post_id, user_id }).exec();
-
+            const existingLike = await Like.findOne({ post_id:post_id, user_id: user_id }).exec();
+            console.log(existingLike)
             if (is_liked) {
                 if (!existingLike) {
                     // 좋아요 추가
