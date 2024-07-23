@@ -11,9 +11,12 @@ class PostService{
             like_count:data.like_count
         }
         const post= new Post(body)
-        return await post.save()
-
+        if(post){
+            return await post.save()
+        }
+        return null
     }
+    
     // 게시물 조회 
     public async getRecentPost():Promise<IPost[]|null>{
         try{
