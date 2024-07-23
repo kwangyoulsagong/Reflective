@@ -69,6 +69,7 @@ class PostController {
             }
         });
     }
+    // 상세 게시물 수정
     updatePost(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { post_id } = req.params;
@@ -89,6 +90,29 @@ class PostController {
             }
             catch (error) {
                 res.status(500).json({ message: "게시물 수정 에러", error: error.message });
+            }
+        });
+    }
+    // 상세 게시물 삭제
+    deletePost(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { post_id } = req.params;
+            try {
+                if (!req.user) {
+                    res.status(401).json({ message: '인증 권한 없음' });
+                    return;
+                }
+                const userId = req.user.user_id;
+                const deletePost = yield postService_1.default.deletePost(post_id, userId);
+                if (deletePost) {
+                    res.status(200).json({ message: "게시물이 삭제 되었습니다." });
+                }
+                else {
+                    res.status(404).json({ message: "게시물 없음" });
+                }
+            }
+            catch (error) {
+                res.status(500).json({ message: "게시물 삭제 에러", error: error.message });
             }
         });
     }

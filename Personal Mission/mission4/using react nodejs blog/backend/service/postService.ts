@@ -76,13 +76,22 @@ class PostService{
             updated_date: new Date(),
         };
         const update=await Post.findOneAndUpdate({ post_id, user_id },
-            { $set: data },
+            { $set: updateData },
             { new: true }).exec()
         if(update){
             return update
         }
         return null
         
+    }
+
+    // 상세 게시물 삭제
+    public async deletePost(post_id:string,user_id:string):Promise<IPost|null>{
+        const deletePost= await Post.findOneAndDelete({post_id,user_id})
+        if(deletePost){
+            return deletePost
+        }
+        return null
     }
 }
 

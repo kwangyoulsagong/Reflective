@@ -157,4 +157,66 @@ router.get("/:post_id", postController_1.default.getPostDetail);
  *                   type: string
  */
 router.put("/:post_id", jwt_1.verifyTokenMiddleware, postController_1.default.updatePost);
+/**
+ * @swagger
+ * /api/v1/post/{post_id}:
+ *   delete:
+ *     summary: 게시물 삭제
+ *     description: 사용자가 자신의 게시물을 삭제합니다.
+ *     tags:
+ *       - Post
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: post_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 삭제할 게시물의 ID
+ *     responses:
+ *       200:
+ *         description: 게시물 삭제 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 게시물 삭제 성공
+ *       401:
+ *         description: 인증 권한 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 인증 권한 없음
+ *       404:
+ *         description: 게시물 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 게시물 없음
+ *       500:
+ *         description: 서버 에러
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 게시물 삭제 에러
+ *                 error:
+ *                   type: string
+ */
+router.delete("/:post_id", jwt_1.verifyTokenMiddleware, postController_1.default.deletePost);
 exports.default = router;

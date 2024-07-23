@@ -88,9 +88,19 @@ class PostService {
     updatePost(post_id, user_id, data) {
         return __awaiter(this, void 0, void 0, function* () {
             const updateData = Object.assign(Object.assign({}, data), { updated_date: new Date() });
-            const update = yield postModel_1.default.findOneAndUpdate({ post_id, user_id }, { $set: data }, { new: true }).exec();
+            const update = yield postModel_1.default.findOneAndUpdate({ post_id, user_id }, { $set: updateData }, { new: true }).exec();
             if (update) {
                 return update;
+            }
+            return null;
+        });
+    }
+    // 상세 게시물 삭제
+    deletePost(post_id, user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const deletePost = yield postModel_1.default.findOneAndDelete({ post_id, user_id });
+            if (deletePost) {
+                return deletePost;
             }
             return null;
         });
