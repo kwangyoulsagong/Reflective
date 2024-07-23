@@ -20,7 +20,6 @@ class LikeService {
     IsLike(post_id, user_id, is_liked) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log(post_id, user_id, is_liked);
                 // 기존의 좋아요 기록을 찾음
                 const existingLike = yield likeModel_1.default.findOne({ post_id: post_id, user_id: user_id }).exec();
                 console.log(existingLike);
@@ -50,7 +49,7 @@ class LikeService {
                         existingLike.updated_date = new Date();
                         yield existingLike.save();
                         // 게시물의 좋아요 수 감소
-                        yield postModel_1.default.findOneAndUpdate({ post_id: post_id }, { $inc: { like_count: 1 } }).exec();
+                        yield postModel_1.default.findOneAndUpdate({ post_id: post_id }, { $inc: { like_count: -1 } }).exec();
                         return existingLike;
                     }
                 }

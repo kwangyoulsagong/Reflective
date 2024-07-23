@@ -11,28 +11,30 @@ interface AuthRequest extends Request {
 }
 
 // 좋아요 컨트롤러
-class LikeController{
-
+class LikeController {
+    // 좋아요 확인 여부
     public async toggleLike(req: AuthRequest, res: Response): Promise<void> {
         try {
             const { post_id } = req.params;
-            const {is_liked}  = req.body;
-          
+            const { is_liked } = req.body;
+            
             if (!req.user) {
                 res.status(401).json({ message: '인증 권한 없음' });
                 return;
             }
-            const userId = req.user.user_id
+
+            const userId = req.user.user_id;
             const result = await likeService.IsLike(post_id, userId, is_liked);
-            console.log(result)
+
             if (result) {
-                res.status(200).json({ message: is_liked ? '좋아요 추가 성공' : '좋아요 제거 성공' });
+                res.status(200).json({ message: '좋아요 업데이트 성공', result });
             } else {
-                res.status(400).json({ message: '좋아요 업데이트 실패' });
+                res.status(404).json({ message: '좋아요 업데이트 실패' });
             }
         } catch (error: any) {
             res.status(500).json({ error: error.message });
         }
     }
 }
-export default new LikeController
+
+export default new LikeController();

@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const likeService_1 = __importDefault(require("../service/likeService"));
 // 좋아요 컨트롤러
 class LikeController {
+    // 좋아요 확인 여부
     toggleLike(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -26,12 +27,11 @@ class LikeController {
                 }
                 const userId = req.user.user_id;
                 const result = yield likeService_1.default.IsLike(post_id, userId, is_liked);
-                console.log(result);
                 if (result) {
-                    res.status(200).json({ message: is_liked ? '좋아요 추가 성공' : '좋아요 제거 성공' });
+                    res.status(200).json({ message: '좋아요 업데이트 성공', result });
                 }
                 else {
-                    res.status(400).json({ message: '좋아요 업데이트 실패' });
+                    res.status(404).json({ message: '좋아요 업데이트 실패' });
                 }
             }
             catch (error) {
@@ -40,4 +40,4 @@ class LikeController {
         });
     }
 }
-exports.default = new LikeController;
+exports.default = new LikeController();

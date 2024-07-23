@@ -24,14 +24,18 @@ const router = (0, express_1.Router)();
  *         schema:
  *           type: string
  *         description: 게시물 ID
- *       - in: body
- *         name: is_liked
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             is_liked:
- *               type: boolean
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               is_liked:
+ *                 type: boolean
+ *                 description: 좋아요 상태 (true 또는 false)
+ *             required:
+ *               - is_liked
  *     responses:
  *       200:
  *         description: 좋아요 업데이트 성공
