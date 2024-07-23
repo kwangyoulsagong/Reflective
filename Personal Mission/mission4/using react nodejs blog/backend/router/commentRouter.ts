@@ -68,7 +68,7 @@ router.get("/:post_id",commentController.getComment)
 
 /**
  * @swagger
- * /api/v1/comments/{post_id}:
+ * /api/v1/comments/{comment_id}:
  *   put:
  *     summary: 게시물 댓글 수정
  *     description: 사용자가 자신의 댓글을 수정합니다.
@@ -78,11 +78,11 @@ router.get("/:post_id",commentController.getComment)
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: post_id
+ *         name: comment_id
  *         required: true
  *         schema:
  *           type: string
- *         description: 수정할 댓글 게시물의 ID
+ *         description: 수정할 댓글 댓글의 ID
  *     requestBody:
  *       required: true
  *       content:
@@ -134,5 +134,7 @@ router.get("/:post_id",commentController.getComment)
  *                 error:
  *                   type: string
  */
+
+router.put("/:comment_id",verifyTokenMiddleware,commentController.updateComment)
 
 export default router
