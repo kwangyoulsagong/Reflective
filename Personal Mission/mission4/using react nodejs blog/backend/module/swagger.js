@@ -3,6 +3,7 @@ const swaggereJsdoc = require('swagger-jsdoc');
 const userSchemas = require('../components/auth')
 const profileSchemas=require('../components/profile')
 const postSchemas=require('../components/post')
+const commentSchemas=require('../components/comment')
 const options = {
     definition: {
       openapi: "3.0.0",
@@ -27,7 +28,8 @@ const options = {
         schemas: {
           ...userSchemas,
           ...profileSchemas,
-          ...postSchemas
+          ...postSchemas,
+          ...commentSchemas
         },
       },
     },

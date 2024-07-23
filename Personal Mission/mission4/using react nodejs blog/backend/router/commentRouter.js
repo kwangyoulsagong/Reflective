@@ -1,9 +1,12 @@
-import { Router } from "express";
-import commentController from "../controller/commentController";
-import { verifyTokenMiddleware } from "../authorization/jwt";
-const router:Router=Router()
-
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const commentController_1 = __importDefault(require("../controller/commentController"));
+const jwt_1 = require("../authorization/jwt");
+const router = (0, express_1.Router)();
 /**
  * @swagger
  * /api/v1/comments:
@@ -22,7 +25,7 @@ const router:Router=Router()
  *              $ref: '#/components/schemas/SaveComment'
  *     responses:
  *       200:
- *         description: 댓글 작성 성공 
+ *         description: 댓글 작성 성공
  *       403:
  *         description: 토큰이 없음
  *       404:
@@ -30,7 +33,5 @@ const router:Router=Router()
  *       401:
  *         description: 인증 권한이 없음
  */
-
-router.post("/",verifyTokenMiddleware, commentController.saveComment)
-
-export default router
+router.post("/", jwt_1.verifyTokenMiddleware, commentController_1.default.saveComment);
+exports.default = router;

@@ -25,7 +25,10 @@ class PostService {
                 like_count: data.like_count
             };
             const post = new postModel_1.default(body);
-            return yield post.save();
+            if (post) {
+                return yield post.save();
+            }
+            return null;
         });
     }
     // 게시물 조회 
