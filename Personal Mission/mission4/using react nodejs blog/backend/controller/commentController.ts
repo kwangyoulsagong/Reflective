@@ -40,7 +40,6 @@ class CommentController{
         try{
             const {post_id}=req.params
             const comments = await commentService.getComment(post_id)
-            console.log(comments)
             if(comments){
                 res.status(200).json(comments)
             }
@@ -54,7 +53,28 @@ class CommentController{
     }
 
     // 댓글 수정 컨트롤러
-    
+    public async updateComment(req:AuthRequest, res:Response): Promise<void>{
+        try{
+            const {comment_id}=req.params
+            const data=req.body
+            if (!req.user) {
+                res.status(401).json({ message: '인증 권한 없음' });
+                return;
+            }
+
+            const userId = req.user.user_id;
+            const updateComment= await commentService.updateComment(comment_id,userId,data)
+            if(updateComment){
+                res.status(200).json({message:"댓글이 수정 되었습니다."})
+            }
+            else{
+                res.status(404).json({message:"댓글 없음"})
+            }
+        }
+        catch(error:any){
+            res.status(500).json({ error: error.message });
+        }
+    }
 }
 
 export default new CommentController

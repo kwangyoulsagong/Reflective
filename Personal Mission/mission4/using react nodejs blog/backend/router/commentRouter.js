@@ -64,4 +64,72 @@ router.post("/", jwt_1.verifyTokenMiddleware, commentController_1.default.saveCo
  *         description: 인증 권한이 없음
  */
 router.get("/:post_id", commentController_1.default.getComment);
+/**
+ * @swagger
+ * /api/v1/comments/{post_id}:
+ *   put:
+ *     summary: 게시물 댓글 수정
+ *     description: 사용자가 자신의 댓글을 수정합니다.
+ *     tags:
+ *       - Comments
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: post_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 수정할 댓글 게시물의 ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/SavePost'
+ *     responses:
+ *       200:
+ *         description: 댓글 수정 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 댓글 수정 성공
+ *
+ *       401:
+ *         description: 인증 권한 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 인증 권한 없음
+ *       404:
+ *         description: 게시물 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 댓글 없음
+ *       500:
+ *         description: 서버 에러
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 댓글 수정 에러
+ *                 error:
+ *                   type: string
+ */
 exports.default = router;
