@@ -34,6 +34,23 @@ class CommentController{
             res.status(500).json({ error: error.message });
         }
     }
+
+    // 댓글 조회 컨트롤러
+    public async getComment(req:Request, res:Response): Promise<void>{
+        const {post_id}=req.params
+        try{
+            const comments = await commentService.getComment(post_id)
+            if(comments){
+                res.status(200).json(comments)
+            }
+            else{
+                res.status(404).json({message:"댓글이 없습니다."})
+            }
+        }
+        catch(error:any){
+            res.status(500).json({ error: error.message });
+        }
+    }
 }
 
 export default new CommentController

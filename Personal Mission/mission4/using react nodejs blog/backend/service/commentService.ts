@@ -42,7 +42,7 @@ class CommentService{
             )
             return commentsUserData
         }
-        catch(error:any){
+        catch(error){
             console.error("댓글 조회 에러", error);
             return null;
         }
