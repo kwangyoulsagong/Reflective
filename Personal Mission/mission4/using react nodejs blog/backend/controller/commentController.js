@@ -78,5 +78,28 @@ class CommentController {
             }
         });
     }
+    // 댓글 삭제
+    deleteComment(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { comment_id } = req.params;
+            try {
+                if (!req.user) {
+                    res.status(401).json({ message: '인증 권한 없음' });
+                    return;
+                }
+                const userId = req.user.user_id;
+                const deleteComment = yield commentService_1.default.deleteComment(comment_id, userId);
+                if (deleteComment) {
+                    res.status(200).json({ message: "댓글이 삭제 되었습니다." });
+                }
+                else {
+                    res.status(404).json({ message: "댓글 없음" });
+                }
+            }
+            catch (error) {
+                res.status(500).json({ message: "댓글 삭제 에러", error: error.message });
+            }
+        });
+    }
 }
 exports.default = new CommentController;

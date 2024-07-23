@@ -86,7 +86,7 @@ router.get("/:post_id", commentController_1.default.getComment);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/SavePost'
+ *             $ref: '#/components/schemas/SaveComment'
  *     responses:
  *       200:
  *         description: 댓글 수정 성공
@@ -133,4 +133,66 @@ router.get("/:post_id", commentController_1.default.getComment);
  *                   type: string
  */
 router.put("/:comment_id", jwt_1.verifyTokenMiddleware, commentController_1.default.updateComment);
+/**
+ * @swagger
+ * /api/v1/comments/{comment_id}:
+ *   delete:
+ *     summary: 댓글 삭제
+ *     description: 사용자가 자신의 댓글을 삭제합니다.
+ *     tags:
+ *       - Comments
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: comment_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 삭제할 댓글의 ID
+ *     responses:
+ *       200:
+ *         description: 댓글 삭제 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 댓글 삭제 성공
+ *       401:
+ *         description: 인증 권한 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 인증 권한 없음
+ *       404:
+ *         description: 댓글 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 댓글 없음
+ *       500:
+ *         description: 서버 에러
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 댓글 삭제 에러
+ *                 error:
+ *                   type: string
+ */
+router.delete("/:comment_id", jwt_1.verifyTokenMiddleware, commentController_1.default.deleteComment);
 exports.default = router;

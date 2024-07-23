@@ -69,5 +69,15 @@ class CommentService {
             }
         });
     }
+    // 댓글 삭제
+    deleteComment(comment_id, user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const deleteComment = yield commentModel_1.default.findOneAndDelete({ comment_id, user_id });
+            if (deleteComment) {
+                return deleteComment;
+            }
+            return null;
+        });
+    }
 }
 exports.default = new CommentService;

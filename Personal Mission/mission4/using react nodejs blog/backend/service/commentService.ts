@@ -69,6 +69,15 @@ class CommentService{
             return null
         }
     }
+
+    // 댓글 삭제
+    public async deleteComment(comment_id:string,user_id:string):Promise<IComment|null>{
+        const deleteComment= await Comment.findOneAndDelete({comment_id,user_id})
+        if(deleteComment){
+            return deleteComment
+        }
+        return null
+    }
 }
 
 export default new CommentService
