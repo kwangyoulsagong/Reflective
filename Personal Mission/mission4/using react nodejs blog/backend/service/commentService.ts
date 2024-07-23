@@ -48,6 +48,27 @@ class CommentService{
         }
 
     }
+
+    // 댓글 수정 서비스
+    public async updateComment(comment_id:string,user_id:string,data:IComment):Promise<IComment | null>{
+        try{
+            const updateData={
+                ...data,
+                updated_date: new Date()
+            }
+            const update=await Comment.findOneAndUpdate({comment_id:comment_id, user_id:user_id},
+                {$set:updateData}, 
+                {new:true}).exec()
+            if(update){
+                return update
+            }
+            return null
+        }
+        catch(error){
+            console.error("댓글 수정 에러", error)
+            return null
+        }
+    }
 }
 
 export default new CommentService

@@ -37,9 +37,10 @@ class CommentController{
 
     // 댓글 조회 컨트롤러
     public async getComment(req:Request, res:Response): Promise<void>{
-        const {post_id}=req.params
         try{
+            const {post_id}=req.params
             const comments = await commentService.getComment(post_id)
+            console.log(comments)
             if(comments){
                 res.status(200).json(comments)
             }
@@ -51,6 +52,9 @@ class CommentController{
             res.status(500).json({ error: error.message });
         }
     }
+
+    // 댓글 수정 컨트롤러
+    
 }
 
 export default new CommentController

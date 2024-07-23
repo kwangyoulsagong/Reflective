@@ -36,5 +36,24 @@ class CommentController {
             }
         });
     }
+    // 댓글 조회 컨트롤러
+    getComment(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { post_id } = req.params;
+                const comments = yield commentService_1.default.getComment(post_id);
+                console.log(comments);
+                if (comments) {
+                    res.status(200).json(comments);
+                }
+                else {
+                    res.status(404).json({ message: "댓글이 없습니다." });
+                }
+            }
+            catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });
+    }
 }
 exports.default = new CommentController;
