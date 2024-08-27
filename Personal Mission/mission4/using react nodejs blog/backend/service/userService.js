@@ -22,7 +22,7 @@ class UserService {
             // 유저 중복 검증
             const existingUser = yield userModel_1.default.findOne({ email: data.email });
             if (existingUser) {
-                throw new Error('이미 사용중인 이메일입니다.');
+                throw new Error("이미 사용중인 이메일입니다.");
             }
             const user = new userModel_1.default(data);
             yield user.save();
@@ -42,16 +42,23 @@ class UserService {
             // 이메일로 사용자 검증
             const user = yield userModel_1.default.findOne({ email });
             if (!user) {
-                throw new Error('유저 정보 없음');
+                throw new Error("유저 정보 없음");
             }
             // 비밀번호 검증
             const isMatch = yield user.comparePassword(password);
             if (!isMatch) {
-                throw new Error('비밀번호 다시 입력');
+                throw new Error("비밀번호 다시 입력");
             }
             const accessToken = (0, jwt_1.generateToken)({ user_id: user.user_id.toString() });
-            const refreshToken = (0, jwt_1.generateRefreshToken)({ user_id: user.user_id.toString() });
-            return { nickname: user.nickname, accessToken, refreshToken };
+            const refreshToken = (0, jwt_1.generateRefreshToken)({
+                user_id: user.user_id.toString(),
+            });
+            return {
+                user_id: user.user_id.toString(),
+                nickname: user.nickname,
+                accessToken,
+                refreshToken,
+            };
         });
     }
 }
