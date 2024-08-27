@@ -17,7 +17,7 @@ const useSignUpMutation = () => {
           }
         );
         alert("회원가입이 성공적으로 이루어졌습니다.");
-        navigate("/login");
+        navigate("/");
         return response.data;
       } catch (error) {
         console.log(error);
