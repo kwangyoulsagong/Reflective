@@ -4,6 +4,7 @@ import Profile from "../model/profileModel";
 interface ILoginResponse {
   user_id: string;
   nickname: string;
+  email: string;
   accessToken: string;
   refreshToken: string;
 }
@@ -55,6 +56,7 @@ class UserService {
     return {
       user_id: user.user_id.toString(),
       nickname: user.nickname,
+      email: user.email,
       accessToken,
       refreshToken,
     };

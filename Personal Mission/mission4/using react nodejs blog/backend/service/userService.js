@@ -56,6 +56,7 @@ class UserService {
             return {
                 user_id: user.user_id.toString(),
                 nickname: user.nickname,
+                email: user.email,
                 accessToken,
                 refreshToken,
             };
