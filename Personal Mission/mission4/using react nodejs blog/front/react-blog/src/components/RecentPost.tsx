@@ -2,6 +2,7 @@ import sample5 from "../assets/sample5.svg";
 import sample6 from "../assets/sample6.svg";
 import sample7 from "../assets/sample7.svg";
 import time from "../assets/time.svg";
+import heart from "../assets/heart.png";
 const posts = [
   {
     id: 1,
@@ -10,6 +11,7 @@ const posts = [
     time: "50분전",
     nickname: "hardy",
     imageUrl: sample6,
+    like_count: 12,
   },
   {
     id: 2,
@@ -18,6 +20,7 @@ const posts = [
     time: "1시간전",
     nickname: "존잘남",
     imageUrl: sample5,
+    like_count: 5,
   },
   {
     id: 3,
@@ -26,6 +29,7 @@ const posts = [
     time: "일주일 전",
     nickname: "sunya",
     imageUrl: sample7,
+    like_count: 7,
   },
   {
     id: 4,
@@ -35,6 +39,7 @@ const posts = [
     nickname: "Eodnje",
     imageUrl:
       "https://velog.velcdn.com/images/joch2712/post/67217b58-0336-44a9-84a3-58fd2fa2a1e0/image.png",
+    like_count: 30,
   },
   {
     id: 5,
@@ -44,6 +49,7 @@ const posts = [
     nickname: "Joshua",
     imageUrl:
       "https://velog.velcdn.com/images/joshuara7235/post/303eb0ec-73f6-4cbb-82c6-e0d131e21af1/image.webp",
+    like_count: 80,
   },
   {
     id: 6,
@@ -53,6 +59,7 @@ const posts = [
     nickname: "rivrdoe",
     imageUrl:
       "https://velog.velcdn.com/images/rivkode/post/2d1b6dd6-ce28-4bfd-a4eb-d731f1753ad9/image.png",
+    like_count: 219,
   },
 ];
 
@@ -74,15 +81,19 @@ const RecentPost = () => {
           />
           <h1 className="text-[20px] font-bold">{post.title}</h1>
           <div className="flex justify-between mt-4">
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center">
               <img
                 src={time}
                 alt="
             time"
               ></img>
-              <span>{post.time}</span>
+              <span className="text-[12px] w-[50px]">{post.time}</span>
             </div>
-            <span className="font-bold">{post.nickname}</span>
+            <span className="font-bold ml-24">{post.nickname}</span>
+            <div className="flex items-center gap-2">
+              <img className="w-[20px] h-[20px]" src={heart} alt="heart"></img>
+              <span>{post.like_count}</span>
+            </div>
           </div>
         </article>
       ))}
