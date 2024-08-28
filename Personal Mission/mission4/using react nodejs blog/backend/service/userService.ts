@@ -11,13 +11,16 @@ interface ILoginResponse {
 class UserService {
   // 회원가입 서비스
   public async Register(data: IUser): Promise<IUser> {
+    // 유효성 검사: 필수 필드가 비어있는지 확인
+    if (!data.email || !data.password || !data.nickname) {
+      throw new Error("모든 필드를 입력해야 합니다.");
+    }
     // 유저 중복 검증
     const existingUser = await User.findOne({ email: data.email });
     if (existingUser) {
-      throw new Error("이미 사용중인 이메일입니다.");
+      throw new Error("이미 등록된 이메일입니다");
     }
     const user = new User(data);
-
     await user.save();
 
     // 회원 가입 성고시 프로필 추가

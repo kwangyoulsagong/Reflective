@@ -22,7 +22,9 @@ class PostService {
                 user_id: user_id,
                 title: data.title,
                 contents: data.contents,
-                like_count: data.like_count
+                category: data.category,
+                thumbnail: data.thumbnail,
+                like_count: data.like_count,
             };
             const post = new postModel_1.default(body);
             if (post) {
@@ -31,31 +33,38 @@ class PostService {
             return null;
         });
     }
-    // 게시물 조회 
+    // 게시물 조회
     getRecentPost() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // 좋아요가 많은 순으로 정렬된 최신 게시물 3개를 먼저 가져옴
-                const topPost = yield postModel_1.default.find().sort({ like_count: -1, created_date: -1 }).limit(3).exec();
+                // 좋아요가 많은 순으로 정렬된 최신 게시물 4개를 먼저 가져옴
+                const topPost = yield postModel_1.default.find()
+                    .sort({ like_count: -1, created_date: -1 })
+                    .limit(4)
+                    .exec();
                 // 만약 좋아요 수가 0 개인 경우
-                const tryCatchTop = topPost.some(post => post.like_count > 0);
+                const tryCatchTop = topPost.some((post) => post.like_count > 0);
                 let recentPosts = [];
                 if (tryCatchTop) {
-                    //최신순으로 가져옴(top 3 제외)
-                    recentPosts = (yield postModel_1.default.find({ _id: { $nin: topPost.map(post => post._id) } })
+                    //최신순으로 가져옴(top 4 제외)
+                    recentPosts = (yield postModel_1.default.find({
+                        _id: { $nin: topPost.map((post) => post._id) },
+                    })
                         .sort({ created_date: -1 })
                         .exec());
                 }
                 // 좋아요 수가 0개인경우 최신수으로 가져옴
                 else {
-                    recentPosts = (yield postModel_1.default.find().sort({ created_date: -1 }).exec());
+                    recentPosts = (yield postModel_1.default.find()
+                        .sort({ created_date: -1 })
+                        .exec());
                 }
                 const posts = [...topPost, ...recentPosts];
                 // nickname 추가
                 const nicknameWithPosts = yield Promise.all(posts.map((post) => __awaiter(this, void 0, void 0, function* () {
                     const user = yield userModel_1.default.findOne({ user_id: post.user_id });
                     if (user) {
-                        return (Object.assign(Object.assign({}, post.toObject()), { nickname: user.nickname }));
+                        return Object.assign(Object.assign({}, post.toObject()), { nickname: user.nickname });
                     }
                     return post.toObject();
                 })));
@@ -75,7 +84,7 @@ class PostService {
                 if (post) {
                     const user = yield userModel_1.default.findOne({ user_id: post.user_id }).exec();
                     if (user) {
-                        return (Object.assign(Object.assign({}, post.toObject()), { nickname: user.nickname }));
+                        return Object.assign(Object.assign({}, post.toObject()), { nickname: user.nickname });
                     }
                     return post.toObject();
                 }
@@ -109,4 +118,4 @@ class PostService {
         });
     }
 }
-exports.default = new PostService;
+exports.default = new PostService();

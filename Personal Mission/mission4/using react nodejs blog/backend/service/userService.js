@@ -19,10 +19,14 @@ class UserService {
     // 회원가입 서비스
     Register(data) {
         return __awaiter(this, void 0, void 0, function* () {
+            // 유효성 검사: 필수 필드가 비어있는지 확인
+            if (!data.email || !data.password || !data.nickname) {
+                throw new Error("모든 필드를 입력해야 합니다.");
+            }
             // 유저 중복 검증
             const existingUser = yield userModel_1.default.findOne({ email: data.email });
             if (existingUser) {
-                throw new Error("이미 사용중인 이메일입니다.");
+                throw new Error("이미 등록된 이메일입니다");
             }
             const user = new userModel_1.default(data);
             yield user.save();

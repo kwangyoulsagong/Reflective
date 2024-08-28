@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const userService_1 = __importDefault(require("../service/userService"));
 class UserController {
-    // 회원가입 컨틀롤러 
+    // 회원가입 컨틀롤러
     Register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -24,7 +24,16 @@ class UserController {
             }
             catch (error) {
                 console.error(error);
-                res.status(500).json({ error: error.message });
+                // 에러 메시지에 따라 상태 코드 설정
+                if (error.message === "모든 필드를 입력해야 합니다.") {
+                    res.status(400).json({ error: error.message });
+                }
+                else if (error.message === "이미 등록된 이메일입니다.") {
+                    res.status(409).json({ error: error.message });
+                }
+                else {
+                    res.status(500).json({ error: "회원가입에 실패 하였습니다." });
+                }
             }
         });
     }
@@ -39,7 +48,6 @@ class UserController {
                 else {
                     res.status(401).json({ message: "인증 권한 없음" });
                 }
-                ;
             }
             catch (error) {
                 console.log(error);
@@ -48,4 +56,4 @@ class UserController {
         });
     }
 }
-exports.default = new UserController;
+exports.default = new UserController();
