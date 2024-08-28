@@ -1,17 +1,13 @@
-import logo from "../assets/logo.svg";
-import notification from "../assets/notification.svg";
+import MainHeader from "../components/MainHeader";
+import Search from "../components/Search";
+
 const Home = () => {
   return (
-    <div className="flex justify-center">
-      <header className="flex justify-between items-center w-full px-4">
-        <img src={logo} alt="logo" className="w-20" />
-        <nav className="flex items-center">
-          <button
-            className="w-10 h-10 bg-no-repeat bg-center bg-contain"
-            style={{ backgroundImage: `url(${notification})` }}
-          />
-        </nav>
-      </header>
+    <div className="flex justify-center items-center">
+      <div className="flex flex-col items-center justify-center w-[1920px]">
+        <MainHeader />
+        <Search />
+      </div>
     </div>
   );
 };
