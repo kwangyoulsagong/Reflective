@@ -26,8 +26,8 @@ const MainRanks = ({ data }: { data: PostType[] }) => {
                   {formatRelativeTime(data[0].created_date)}
                 </span>
               </div>
-              <span className="font-bold mr-2">{data[0].nickname}</span>
               <div className="flex items-center gap-2">
+                <span className="font-bold ">{data[0].nickname}</span>
                 <img
                   className="w-[20px] h-[20px]"
                   src={heart}
@@ -58,8 +58,8 @@ const MainRanks = ({ data }: { data: PostType[] }) => {
                   {formatRelativeTime(data[1].created_date)}
                 </span>
               </div>
-              <span className="font-bold mr-2">{data[1].nickname}</span>
               <div className="flex items-center gap-2">
+                <span className="font-bold ">{data[1].nickname}</span>
                 <img
                   className="w-[20px] h-[20px]"
                   src={heart}
@@ -96,8 +96,8 @@ const MainRanks = ({ data }: { data: PostType[] }) => {
                   {formatRelativeTime(data[2].created_date)}
                 </span>
               </div>
-              <span className="font-bold mr-2">{data[2].nickname}</span>
               <div className="flex items-center gap-2">
+                <span className="font-bold ">{data[2].nickname}</span>
                 <img
                   className="w-[20px] h-[20px]"
                   src={heart}
@@ -108,7 +108,7 @@ const MainRanks = ({ data }: { data: PostType[] }) => {
             </div>
           </div>
         </article>
-        <article className="flex w-[500px] items-center gap-3 mt-48 ">
+        <article className="flex w-[500px] items-center mr-[10px] gap-3 mt-48 ">
           <img
             className="w-[250px] h-[200px] object-cover"
             src={data[3].thumbnail}
@@ -128,8 +128,8 @@ const MainRanks = ({ data }: { data: PostType[] }) => {
                   {formatRelativeTime(data[3].created_date)}
                 </span>
               </div>
-              <span className="font-bold mr-3">{data[3].nickname}</span>
               <div className="flex items-center gap-2">
+                <span className="font-bold">{data[3].nickname}</span>
                 <img
                   className="w-[20px] h-[20px]"
                   src={heart}

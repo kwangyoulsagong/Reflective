@@ -31,8 +31,8 @@ const RecentPost = ({ data }: { data: PostType[] }) => {
                 {formatRelativeTime(post.created_date)}
               </span>
             </div>
-            <span className="font-bold ml-12">{post.nickname}</span>
             <div className="flex items-center gap-2">
+              <span className="font-bold">{post.nickname}</span>
               <img className="w-[20px] h-[20px]" src={heart} alt="heart"></img>
               <span>{post.like_count}</span>
             </div>
