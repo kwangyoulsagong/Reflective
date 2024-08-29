@@ -1,47 +1,72 @@
-import sample from "../assets/sample.svg";
-import sample2 from "../assets/sample2.svg";
-import sample3 from "../assets/sanple3.avif";
-import sample4 from "../assets/sample4.jpg";
 import time from "../assets/time.svg";
-const MainRanks = () => {
+import { PostType } from "../types/types";
+import { formatRelativeTime } from "../hooks/TimeReducer";
+import heart from "../assets/heart.png";
+const MainRanks = ({ data }: { data: PostType[] }) => {
   return (
     <section className="w-[100%] h-[auto] border 1 mt-[30px] flex flex-col">
       <div className="flex justify-between">
         <article className="flex w-[500px] items-center gap-3 ml-[50px] ">
           <img
             className="w-[250px] h-[200px] object-cover"
-            src={sample}
+            src={data[0].thumbnail}
             alt="sample"
           ></img>
           <div className="flex flex-col gap-3">
-            <span>스포츠</span>
-            <h2 className="text-[30px] font-bold">서핑을 나서다!</h2>
-            <div className="flex gap-3">
-              <img
-                src={time}
-                alt="
+            <span>{data[0].category}</span>
+            <h2 className="text-[30px] font-bold">{data[0].title}</h2>
+            <div className="flex justify-between mt-4">
+              <div className="flex gap-4 items-center">
+                <img
+                  src={time}
+                  alt="
             time"
-              ></img>
-              <span>4분전</span>
+                ></img>
+                <span className="text-[12px] w-[60px]">
+                  {formatRelativeTime(data[0].created_date)}
+                </span>
+              </div>
+              <span className="font-bold mr-2">{data[0].nickname}</span>
+              <div className="flex items-center gap-2">
+                <img
+                  className="w-[20px] h-[20px]"
+                  src={heart}
+                  alt="heart"
+                ></img>
+                <span>{data[0].like_count}</span>
+              </div>
             </div>
           </div>
         </article>
         <article className="flex w-[500px] items-center gap-3 mr-[300px] mt-32 ">
           <img
             className="w-[250px] h-[200px] object-cover"
-            src={sample2}
+            src={data[1].thumbnail}
             alt="sample"
           ></img>
           <div className="flex flex-col gap-3">
-            <span>스포츠</span>
-            <h2 className="text-[30px] font-bold">나도 조코비치가 될래</h2>
-            <div className="flex gap-3">
-              <img
-                src={time}
-                alt="
+            <span>{data[1].category}</span>
+            <h2 className="text-[30px] font-bold">{data[1].title}</h2>
+            <div className="flex justify-between mt-4">
+              <div className="flex gap-4 items-center">
+                <img
+                  src={time}
+                  alt="
             time"
-              ></img>
-              <span>50분전</span>
+                ></img>
+                <span className="text-[12px] w-[60px]">
+                  {formatRelativeTime(data[1].created_date)}
+                </span>
+              </div>
+              <span className="font-bold mr-2">{data[1].nickname}</span>
+              <div className="flex items-center gap-2">
+                <img
+                  className="w-[20px] h-[20px]"
+                  src={heart}
+                  alt="heart"
+                ></img>
+                <span>{data[1].like_count}</span>
+              </div>
             </div>
           </div>
         </article>
@@ -54,40 +79,64 @@ const MainRanks = () => {
         <article className="flex w-[500px] items-center gap-3 ml-[500px] mt-[100px]">
           <img
             className="w-[250px] h-[200px] object-cover"
-            src={sample3}
+            src={data[2].thumbnail}
             alt="sample"
           ></img>
           <div className="flex flex-col gap-3">
-            <span>힐링</span>
-            <h2 className="text-[30px] font-bold">
-              스트레스를 하이킹으로 날릴래
-            </h2>
-            <div className="flex gap-3">
-              <img
-                src={time}
-                alt="
+            <span>{data[2].category}</span>
+            <h2 className="text-[30px] font-bold">{data[2].title}</h2>
+            <div className="flex justify-between mt-4">
+              <div className="flex gap-4 items-center">
+                <img
+                  src={time}
+                  alt="
             time"
-              ></img>
-              <span>하루전</span>
+                ></img>
+                <span className="text-[12px] w-[60px]">
+                  {formatRelativeTime(data[2].created_date)}
+                </span>
+              </div>
+              <span className="font-bold mr-2">{data[2].nickname}</span>
+              <div className="flex items-center gap-2">
+                <img
+                  className="w-[20px] h-[20px]"
+                  src={heart}
+                  alt="heart"
+                ></img>
+                <span>{data[2].like_count}</span>
+              </div>
             </div>
           </div>
         </article>
-        <article className="flex w-[500px] items-center gap-3 mt-48">
+        <article className="flex w-[500px] items-center gap-3 mt-48 ">
           <img
             className="w-[250px] h-[200px] object-cover"
-            src={sample4}
+            src={data[3].thumbnail}
             alt="sample"
           ></img>
           <div className="flex flex-col gap-3">
-            <span>코딩</span>
-            <h2 className="text-[30px] font-bold">next.js 기본 부터 다지기</h2>
-            <div className="flex gap-3">
-              <img
-                src={time}
-                alt="
+            <span>{data[3].category}</span>
+            <h2 className="text-[30px] font-bold">{data[3].title}</h2>
+            <div className="flex justify-between mt-4">
+              <div className="flex gap-4 items-center">
+                <img
+                  src={time}
+                  alt="
             time"
-              ></img>
-              <span>일주일 전</span>
+                ></img>
+                <span className="text-[12px] w-[60px]">
+                  {formatRelativeTime(data[3].created_date)}
+                </span>
+              </div>
+              <span className="font-bold mr-3">{data[3].nickname}</span>
+              <div className="flex items-center gap-2">
+                <img
+                  className="w-[20px] h-[20px]"
+                  src={heart}
+                  alt="heart"
+                ></img>
+                <span>{data[3].like_count}</span>
+              </div>
             </div>
           </div>
         </article>

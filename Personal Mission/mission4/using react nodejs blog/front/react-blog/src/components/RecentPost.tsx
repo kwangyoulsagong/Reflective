@@ -1,81 +1,21 @@
-import sample5 from "../assets/sample5.svg";
-import sample6 from "../assets/sample6.svg";
-import sample7 from "../assets/sample7.svg";
 import time from "../assets/time.svg";
 import heart from "../assets/heart.png";
-const posts = [
-  {
-    id: 1,
-    title: "2024.08.13 TIL",
-    category: "회고",
-    time: "50분전",
-    nickname: "hardy",
-    imageUrl: sample6,
-    like_count: 12,
-  },
-  {
-    id: 2,
-    title: "인생샷 찍는 방법 알려드림!",
-    category: "사진",
-    time: "1시간전",
-    nickname: "존잘남",
-    imageUrl: sample5,
-    like_count: 5,
-  },
-  {
-    id: 3,
-    title: "웹사이트 커버를 더욱 이쁘게 할 수 있는 5가지 Tip",
-    category: "기술 트렌드",
-    time: "일주일 전",
-    nickname: "sunya",
-    imageUrl: sample7,
-    like_count: 7,
-  },
-  {
-    id: 4,
-    title: "LIKET - RN에서 웹뷰를 앱스럽게 개선하기",
-    category: "웹",
-    time: "2024.03.13",
-    nickname: "Eodnje",
-    imageUrl:
-      "https://velog.velcdn.com/images/joch2712/post/67217b58-0336-44a9-84a3-58fd2fa2a1e0/image.png",
-    like_count: 30,
-  },
-  {
-    id: 5,
-    title: "MSA를 찍먹해보자. - feat. Saga Pattern",
-    category: "MSA",
-    time: "50분전",
-    nickname: "Joshua",
-    imageUrl:
-      "https://velog.velcdn.com/images/joshuara7235/post/303eb0ec-73f6-4cbb-82c6-e0d131e21af1/image.webp",
-    like_count: 80,
-  },
-  {
-    id: 6,
-    title: "오픈소스 첫 기여 과정 - Spring AI",
-    category: "오픈소스",
-    time: "6일 전",
-    nickname: "rivrdoe",
-    imageUrl:
-      "https://velog.velcdn.com/images/rivkode/post/2d1b6dd6-ce28-4bfd-a4eb-d731f1753ad9/image.png",
-    like_count: 219,
-  },
-];
+import { PostType } from "../types/types";
+import { formatRelativeTime } from "../hooks/TimeReducer";
 
-const RecentPost = () => {
+const RecentPost = ({ data }: { data: PostType[] }) => {
   return (
     <section className="grid grid-cols-3 gap-32 mt-[200px]">
-      {posts.map((post, index) => (
+      {data.map((post, index) => (
         <article
-          key={post.id}
+          key={post.post_id}
           className={` w-[300px] flex flex-col gap-2 ${
             index % 3 === 0 ? "mt-64" : index % 3 === 1 ? "mt-32" : ""
           }`}
         >
           <span className="font-bold">{post.category}</span>
           <img
-            src={post.imageUrl}
+            src={post.thumbnail}
             className="w-[400px] h-[175px] object-cover"
             alt="thumbnail"
           />
@@ -87,9 +27,11 @@ const RecentPost = () => {
                 alt="
             time"
               ></img>
-              <span className="text-[12px] w-[50px]">{post.time}</span>
+              <span className="text-[12px] w-[50px]">
+                {formatRelativeTime(post.created_date)}
+              </span>
             </div>
-            <span className="font-bold ml-24">{post.nickname}</span>
+            <span className="font-bold ml-12">{post.nickname}</span>
             <div className="flex items-center gap-2">
               <img className="w-[20px] h-[20px]" src={heart} alt="heart"></img>
               <span>{post.like_count}</span>
