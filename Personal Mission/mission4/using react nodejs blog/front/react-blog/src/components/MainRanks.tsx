@@ -15,6 +15,9 @@ const MainRanks = ({ data }: { data: PostType[] }) => {
   return (
     <section className="container">
       <div className="gallery"></div>
+      <div className="message" id="message">
+        오늘의 트렌드는?
+      </div>
     </section>
   );
 };

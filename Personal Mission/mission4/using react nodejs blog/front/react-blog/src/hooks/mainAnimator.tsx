@@ -13,6 +13,7 @@ export const mainAnimator = (data: PostType[]) => {
 
   const container = document.querySelector<HTMLElement>(".container");
   const gallery = document.querySelector<HTMLElement>(".gallery");
+  const message = document.getElementById("message");
 
   if (!container || !gallery) {
     console.error("Container or gallery not found");
@@ -93,6 +94,15 @@ export const mainAnimator = (data: PostType[]) => {
       ease: "hop",
       stagger: -0.03,
       onEnter: (element) => gsap.to(element, { rotation: "+=360" }),
+      onComplete: () => {
+        if (message) {
+          gsap.to(message, {
+            opacity: 1,
+            duration: 1,
+            ease: "power1.inOut",
+          });
+        }
+      },
     });
   };
 
@@ -102,7 +112,6 @@ export const mainAnimator = (data: PostType[]) => {
     setInitialLinearLayout();
 
     // Call animateToCircularLayout after a delay or based on an event
-    // For example, use a timeout to trigger the animation after 3 seconds
     setTimeout(animateToCircularLayout, 3000);
   };
 

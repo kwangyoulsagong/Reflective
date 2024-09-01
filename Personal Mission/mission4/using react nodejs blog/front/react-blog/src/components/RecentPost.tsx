@@ -9,7 +9,7 @@ const RecentPost = ({ data }: { data: PostType[] }) => {
       {data.map((post, index) => (
         <article
           key={post.post_id}
-          className={`w-full md:w-[300px] flex flex-col gap-2 ${
+          className={`w-full h-[350px] p-2 rounded-2xl md:w-[300px] flex flex-col border 1 gap-2 ${
             index % 3 === 0
               ? "mt-32 sm:mt-64"
               : index % 3 === 1
