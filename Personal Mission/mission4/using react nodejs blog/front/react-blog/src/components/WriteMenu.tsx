@@ -1,7 +1,7 @@
 import image from "../assets/image.png";
 const WriteMenu = () => {
   return (
-    <div className="border border-primary h-[70px] flex justify-center items-center gap-3">
+    <div className="border-t-2 border-primary h-[70px] flex justify-center items-center gap-3">
       <button className="border border-primary rounded-[5px] w-[40px] h-[40px] text-[12px] text-primary">
         {`<h1>`}
       </button>
