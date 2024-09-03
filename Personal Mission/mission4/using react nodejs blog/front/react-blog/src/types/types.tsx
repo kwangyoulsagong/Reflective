@@ -18,3 +18,10 @@ export interface PostType {
   updated_date: string;
   nickname: string;
 }
+export type WriteAreaProps = {
+  inputRef: React.RefObject<HTMLTextAreaElement>;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+};
+export type WriteMenuProps = {
+  onCommand: (startTag: string, endTag: string) => void;
+};
