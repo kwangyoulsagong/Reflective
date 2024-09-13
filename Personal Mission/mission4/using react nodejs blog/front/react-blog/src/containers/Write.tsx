@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import WriteArea from "../components/WriteArea";
 import WriteMenu from "../components/WriteMenu";
 import Preview from "./Preview";
+import WriteUpload from "../components/WriteUpload";
 
 const Write = () => {
   // ref 선언
@@ -9,6 +10,7 @@ const Write = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [previewContent, setPreviewContent] = useState("");
+  const [openModal, setOpenModal] = useState<boolean>(false);
   //텍스트 스타일등 삽입 함수
   const insertText = (startTag: string, endTag: string = "") => {
     const textarea = textAreaRef.current;
@@ -33,10 +35,11 @@ const Write = () => {
       textarea.focus();
     }
   };
+
   useEffect(() => {
     const htmlContent = `
       <h1>${title}</h1>
-      ${content.replace(/\n/g, "<br>")}
+         <pre>${content}</pre>
     `;
     setPreviewContent(htmlContent);
   }, [title, content]);
@@ -46,13 +49,10 @@ const Write = () => {
     setContent(e.target.value);
   };
   const handleSubmit = () => {
-    const content = textAreaRef.current?.value || "";
-
-    const htmlContent = `
-    <h1>${title}</h1>
-    ${content.replace(/\n/g, "<br>")}
-  `;
-    console.log(htmlContent);
+    setOpenModal(true);
+  };
+  const closeModal = () => {
+    setOpenModal(false);
   };
   return (
     <div className="flex justify-center items-center h-screen">
@@ -81,6 +81,7 @@ const Write = () => {
           </button>
         </div>
       </section>
+      {openModal && <WriteUpload data={previewContent} onClose={closeModal} />}
     </div>
   );
 };

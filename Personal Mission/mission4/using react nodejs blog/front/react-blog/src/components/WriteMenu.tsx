@@ -69,9 +69,15 @@ const WriteMenu = ({ onCommand }: WriteMenuProps) => {
       <div className="flex justify-center items-center cursor-pointer rounded-[5px] w-[40px] h-[40px] text-[20px] text-[#D4D4D4]">
         <img src={image} alt="image" />
       </div>
+
       <button
         className="border border-[#D4D4D4] rounded-[5px] w-[40px] h-[40px] text-[20px] text-[#D4D4D4]"
-        onClick={() => onCommand("<pre><code>", "</code></pre>")}
+        onClick={() =>
+          onCommand(
+            "<pre><code contenteditable='true' class='language-js'>",
+            "</code></pre>"
+          )
+        }
       >{`<>`}</button>
       <button
         className="border border-[#D4D4D4] rounded-[5px] w-[40px] h-[40px] text-[18px] text-[#D4D4D4]"

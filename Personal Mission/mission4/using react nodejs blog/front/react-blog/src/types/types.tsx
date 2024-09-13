@@ -25,3 +25,7 @@ export type WriteAreaProps = {
 export type WriteMenuProps = {
   onCommand: (startTag: string, endTag: string) => void;
 };
+export type WriteUploadProps = {
+  data: string;
+  onClose: () => void;
+};
