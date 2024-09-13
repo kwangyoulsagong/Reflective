@@ -21,11 +21,20 @@ export interface PostType {
 export type WriteAreaProps = {
   inputRef: React.RefObject<HTMLTextAreaElement>;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 };
 export type WriteMenuProps = {
   onCommand: (startTag: string, endTag: string) => void;
+  insertText: (startTag: string, endTag: string) => void;
 };
 export type WriteUploadProps = {
-  data: string;
+  data: SavePostType;
   onClose: () => void;
 };
+export interface SavePostType {
+  title: string;
+  contents: string;
+  category: string;
+  thumbnail: string;
+  like_count: number;
+}
