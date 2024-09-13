@@ -31,7 +31,7 @@ const postSchema = new mongoose_1.Schema({
     title: { type: String, required: true },
     contents: { type: mongoose_1.Schema.Types.Mixed, required: true },
     like_count: { type: Number, default: 0 },
-    category: { type: String, required: true },
+    category: { type: String, default: "" },
     thumbnail: { type: String, required: true },
     created_date: { type: Date, required: true, default: Date.now() },
     updated_date: { type: Date, required: true, default: Date.now() },
