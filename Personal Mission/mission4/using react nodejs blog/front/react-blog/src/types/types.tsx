@@ -38,3 +38,13 @@ export interface SavePostType {
   thumbnail: string;
   like_count: number;
 }
+export interface post_idState {
+  post_id: string;
+  setPost_id: (post_id: string) => void;
+}
+export interface postRouterState {
+  nickname: string;
+  setNickname: (nickname: string) => void;
+  title: string;
+  setTitle: (title: string) => void;
+}

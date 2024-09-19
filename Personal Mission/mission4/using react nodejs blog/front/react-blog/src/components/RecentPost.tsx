@@ -2,12 +2,27 @@ import time from "../assets/time.svg";
 import heart from "../assets/heart.png";
 import { PostType } from "../types/types";
 import { formatRelativeTime } from "../hooks/TimeReducer";
+import { useNavigate } from "react-router-dom";
+import { usePost_idStore } from "../provider/post_idProvider";
+import { usePostRouterStore } from "../provider/postRouterProvider";
 
 const RecentPost = ({ data }: { data: PostType[] }) => {
+  const navigate = useNavigate();
+  const { setPost_id } = usePost_idStore();
+  const { setNickname, setTitle } = usePostRouterStore();
+  const handlePost = (post_id: string, nickname: string, title: string) => {
+    const hyphenatedTitle = title.replace(/\s+/g, "-");
+    navigate(`/${nickname}/${hyphenatedTitle}`);
+    // 상태관리를 통해 닉네임 포스트아이디 제목을 저장
+    setPost_id(post_id);
+    setNickname(nickname);
+    setTitle(hyphenatedTitle);
+  };
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-16 lg:gap-32 mt-[50px] md:mt-[100px] lg:mt-[200px]">
       {data.map((post, index) => (
         <article
+          onClick={() => handlePost(post.post_id, post.nickname, post.title)}
           key={post.post_id}
           className={`w-full h-[350px] p-2 rounded-2xl md:w-[300px] flex flex-col border 1 gap-2 ${
             index % 3 === 0
