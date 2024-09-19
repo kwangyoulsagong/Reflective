@@ -48,3 +48,8 @@ export interface postRouterState {
   title: string;
   setTitle: (title: string) => void;
 }
+export interface Header {
+  tag: string;
+  text: string;
+  id: string;
+}
