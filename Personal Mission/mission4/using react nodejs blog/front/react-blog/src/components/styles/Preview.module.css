@@ -1,0 +1,53 @@
+.prose {
+  font-family: Arial, sans-serif; /* Or any other font you prefer */
+}
+
+.prose header1 {
+  font-size: 1.9rem; /* Equivalent to text-4xl */
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose header2 {
+  font-size: 1.6rem; /* Equivalent to text-3xl */
+  font-weight: bold;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose header3 {
+  font-size: 1.4rem; /* Equivalent to text-2xl */
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+.prose header4 {
+  font-size: 1.2rem; /* Equivalent to text-2xl */
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose a {
+  color: pink;
+  text-decoration: underline;
+}
