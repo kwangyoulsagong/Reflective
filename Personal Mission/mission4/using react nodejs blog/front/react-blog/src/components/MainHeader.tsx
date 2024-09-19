@@ -10,7 +10,12 @@ const MainHeader = () => {
 
   return (
     <header className="mt-6 sm:mt-8 md:mt-10 flex flex-col sm:flex-row justify-between items-center w-full px-4 sm:px-8 md:px-16 gap-4 sm:gap-0">
-      <img src={logo} alt="logo" className="w-16 sm:w-18 md:w-20" />
+      <img
+        onClick={() => navigate("/home")}
+        src={logo}
+        alt="logo"
+        className="w-16 sm:w-18 md:w-20"
+      />
       <nav className="flex items-center gap-3 sm:gap-4 md:gap-5 flex-wrap sm:flex-nowrap">
         <button
           className="w-6 sm:w-7 h-6 sm:h-7 bg-no-repeat bg-center bg-contain"
