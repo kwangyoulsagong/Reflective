@@ -30,7 +30,8 @@ export const useHeaderIDs = (
 export const useToC = (
   contentRef: React.RefObject<HTMLDivElement>, // 콘텐츠가 포함된 div에 대한 참조
   contents: string | undefined, // 콘텐츠 내용
-  setCirclePosition: (pos: number) => void // 원형 네비게이션 요소의 위치를 설정하는 함수
+  setCirclePosition: (pos: number) => void, // 원형 네비게이션 요소의 위치를 설정하는 함수
+  setFilledHeight: (height: number) => void
 ) => {
   const tocRef = useRef<HTMLDivElement | null>(null); // 목차를 참조하기 위한 useRef
 
@@ -55,7 +56,12 @@ export const useToC = (
 
         a.href = `#${header.id}`; // 링크에 헤더의 ID를 기반으로 앵커 설정
         a.innerText = header.textContent || ""; // 링크 텍스트로 헤더의 내용을 설정
+        a.className =
+          "text-gray-600 hover:text-orange-500 transition-colors duration-200";
         a.dataset.type = header.nodeName; // 헤더 타입을 데이터 속성으로 저장
+
+        const indent = (parseInt(header.nodeName.slice(-1)) - 1) * 8;
+        li.style.paddingLeft = `${indent}px`;
 
         li.appendChild(a); // li에 링크 요소 추가
         ul.appendChild(li); // ul에 li 추가
@@ -81,7 +87,7 @@ export const useToC = (
         window.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [contents, contentRef, setCirclePosition]); // 의존성 배열에 contents, contentRef, setCirclePosition 포함
+  }, [contents, contentRef, setCirclePosition, setFilledHeight]); // 의존성 배열에 contents, contentRef, setCirclePosition 포함
 
   // 스크롤 시 호출되는 함수: 가장 가까운 헤더를 찾아 원형 네비게이션 위치 업데이트
   const handleScroll = () => {
@@ -116,6 +122,7 @@ export const useToC = (
           tocItem.getBoundingClientRect().top -
           tocRef.current.getBoundingClientRect().top; // 목차 항목의 상대적인 위치 계산
         setCirclePosition(liPosition); // 원형 네비게이션 위치 설정
+        setFilledHeight(liPosition + 7.5);
       }
     }
   };
