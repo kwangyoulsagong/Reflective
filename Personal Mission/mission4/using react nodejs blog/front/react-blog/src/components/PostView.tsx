@@ -3,16 +3,22 @@ import Prism from "prismjs";
 import "prismjs/themes/prism.css";
 import "prismjs/components/prism-javascript.min.js";
 import styles from "./styles/Preview.module.css";
-import usePostDetailQuery from "../hooks/api/usePostDetailQuery";
-import { usePost_idStore } from "../provider/post_idProvider";
+import unheart from "../assets/unheart.png";
+import heart from "../assets/heart.png";
 import { useHeaderIDs, useToC } from "../hooks/usePostViewUtils";
+import { getPostType } from "../types/types";
+import { formatRelativeTime } from "../hooks/TimeReducer";
+import useLike from "../hooks/useLike";
 
-const PostView = () => {
-  const { post_id } = usePost_idStore();
-  const { data, isLoading, error } = usePostDetailQuery(post_id);
+const PostView = (data: Partial<getPostType>) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [circlePosition, setCirclePosition] = useState<number>(0);
   const [filledHeight, setFilledHeight] = useState<number>(0);
+  const { isLiked, likeCount, handleLike } = useLike(
+    data?.post_id || "",
+    data?.like_count || 0,
+    false
+  );
 
   useEffect(() => {
     if (data?.contents) {
@@ -23,13 +29,27 @@ const PostView = () => {
   useHeaderIDs(contentRef, data?.contents);
   useToC(contentRef, data?.contents, setCirclePosition, setFilledHeight);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
   return (
     <div className="mt-20 w-[900px] h-auto flex flex-col items-center gap-[50px]">
       <h1 className="text-[50px] font-bold">{data?.title}</h1>
-
+      <header className="flex  gap-10  items-center">
+        <section className="flex gap-3">
+          <b>{data?.nickname}</b>
+          <span>-</span>
+          <span>{formatRelativeTime(data?.created_date || "")}</span>
+        </section>
+        <section className="flex gap-2 ">
+          <button onClick={handleLike} className="w-[30px] h-[30px]">
+            <img className="" src={isLiked ? heart : unheart}></img>
+          </button>
+          <span>{likeCount}</span>
+        </section>
+        <section>
+          <button className="w-[60px] sm:w-[80px] md:w-[100px] h-[35px] sm:h-[38px] md:h-[40px] border-[2px] sm:border-[3px] border-primary rounded-[20px] box-border text-primary text-sm sm:text-base">
+            즐겨찾기
+          </button>
+        </section>
+      </header>
       <div className="fixed right-[100px] w-[200px] flex gap-[20px]">
         <div className="w-[10px] relative flex justify-center">
           <div
@@ -47,12 +67,12 @@ const PostView = () => {
         </div>
         <div id="toc"></div>
       </div>
-      <div className={styles.previewContainer} ref={contentRef}>
+      <article className={styles.previewContainer} ref={contentRef}>
         <div
           className={styles.prose}
-          dangerouslySetInnerHTML={{ __html: data?.contents }}
+          dangerouslySetInnerHTML={{ __html: data?.contents || "" }}
         />
-      </div>
+      </article>
     </div>
   );
 };
