@@ -21,7 +21,10 @@ class LikeService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // 기존의 좋아요 기록을 찾음
-                const existingLike = yield likeModel_1.default.findOne({ post_id: post_id, user_id: user_id }).exec();
+                const existingLike = yield likeModel_1.default.findOne({
+                    post_id: post_id,
+                    user_id: user_id,
+                }).exec();
                 console.log(existingLike);
                 if (is_liked) {
                     if (!existingLike) {
@@ -61,5 +64,20 @@ class LikeService {
             }
         });
     }
+    GetLike(post_id, user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const existingLike = yield likeModel_1.default.findOne({
+                    post_id: post_id,
+                    user_id: user_id,
+                }).exec();
+                return existingLike;
+            }
+            catch (error) {
+                console.error("좋아요 조회 에러");
+                return null;
+            }
+        });
+    }
 }
-exports.default = new LikeService;
+exports.default = new LikeService();

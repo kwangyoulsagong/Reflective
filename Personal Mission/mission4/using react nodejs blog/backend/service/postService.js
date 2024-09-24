@@ -40,7 +40,7 @@ class PostService {
                 // 좋아요가 많은 순으로 정렬된 최신 게시물 4개를 먼저 가져옴
                 const topPost = yield postModel_1.default.find()
                     .sort({ like_count: -1, created_date: -1 })
-                    .limit(4)
+                    .limit(3)
                     .exec();
                 // 만약 좋아요 수가 0 개인 경우
                 const tryCatchTop = topPost.some((post) => post.like_count > 0);
