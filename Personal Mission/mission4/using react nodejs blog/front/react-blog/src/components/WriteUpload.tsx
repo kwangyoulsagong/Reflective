@@ -9,7 +9,7 @@ const WriteUpload = ({ data, onClose }: WriteUploadProps) => {
       category: data.category || "",
       thumbnail:
         data.thumbnail ||
-        "https://velog.velcdn.com/images/morethanmin/post/dc7e496c-0174-4da8-96ab-0525fcc1a0ee/image.gif",
+        "https://velog.velcdn.com/images/seorim6417/post/e3da6c1a-a61e-4303-b03a-e9b6e0980caa/image.png",
       like_count: 0,
     };
     mutate(body);

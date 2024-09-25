@@ -9,8 +9,10 @@ import { useHeaderIDs, useToC } from "../hooks/usePostViewUtils";
 import { getPostType } from "../types/types";
 import { formatRelativeTime } from "../hooks/TimeReducer";
 import useLike from "../hooks/useLike";
+import useDeletePostMutation from "../hooks/api/useDeletePostMutation";
 
 const PostView = (data: Partial<getPostType>) => {
+  const user_id = localStorage.getItem("user_id");
   const contentRef = useRef<HTMLDivElement>(null);
   const [circlePosition, setCirclePosition] = useState<number>(0);
   const [filledHeight, setFilledHeight] = useState<number>(0);
@@ -28,6 +30,11 @@ const PostView = (data: Partial<getPostType>) => {
 
   useHeaderIDs(contentRef, data?.contents);
   useToC(contentRef, data?.contents, setCirclePosition, setFilledHeight);
+
+  const handleDeletePost = async (post_id: string) => {
+    mutate(post_id);
+  };
+  const { mutate } = useDeletePostMutation();
 
   return (
     <div className="mt-20 w-[900px] h-auto flex flex-col items-center gap-[50px]">
@@ -49,6 +56,14 @@ const PostView = (data: Partial<getPostType>) => {
             즐겨찾기
           </button>
         </section>
+        {user_id == data.user_id && (
+          <section className="flex gap-3">
+            <button>수정</button>
+            <button onClick={() => handleDeletePost(data.post_id || "")}>
+              삭제
+            </button>
+          </section>
+        )}
       </header>
       <div className="fixed right-[100px] w-[200px] flex gap-[20px]">
         <div className="w-[10px] relative flex justify-center">
