@@ -65,3 +65,15 @@ export interface Header {
   text: string;
   id: string;
 }
+export interface commentState {
+  comment_id: string;
+  content: string;
+  created_date: string;
+  image_url: string;
+  nickname: string;
+  parent_comment_id: string;
+  post_id: string;
+  updated_date: string;
+  user_id: string;
+  replies: [];
+}
