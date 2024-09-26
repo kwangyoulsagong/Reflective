@@ -20,6 +20,7 @@ export interface PostType {
 }
 export type WriteAreaProps = {
   inputRef: React.RefObject<HTMLTextAreaElement>;
+  value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 };
@@ -30,6 +31,7 @@ export type WriteMenuProps = {
 export type WriteUploadProps = {
   data: SavePostType;
   onClose: () => void;
+  isEdit: boolean;
 };
 export interface SavePostType {
   title: string;

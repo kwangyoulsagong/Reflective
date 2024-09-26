@@ -4,12 +4,17 @@ import WriteMenu from "../components/WriteMenu";
 import Preview from "./Preview";
 import WriteUpload from "../components/WriteUpload";
 import { SavePostType } from "../types/types";
+import { useLocation } from "react-router-dom";
 
 const Write = () => {
   // ref 선언
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const { state } = useLocation();
+  const isEdit = state?.post ? true : false;
+
+  // 기존 데이터를 상태로 설정 (수정 모드일 경우 해당 데이터를 사용)
+  const [title, setTitle] = useState(isEdit ? state.post.title : "");
+  const [content, setContent] = useState(isEdit ? state.post.contents : "");
   const [previewContent, setPreviewContent] = useState("");
   const [data, setData] = useState<SavePostType>({
     title: "",
@@ -113,7 +118,7 @@ const Write = () => {
   useEffect(() => {
     const processedContent = content.replace(
       /(<pre><code[^>]*>)([\s\S]*?)(<\/code><\/pre>)/g,
-      (match, p1, p2, p3) => {
+      (match: string, p1: string, p2: string, p3: string) => {
         return p1 + escapeHtml(p2) + p3;
       }
     );
@@ -133,9 +138,9 @@ const Write = () => {
     setData({
       title,
       contents: htmlContent,
-      category: "",
-      thumbnail: "",
-      like_count: 0,
+      category: isEdit ? state.post.category : "",
+      thumbnail: isEdit ? state.post.thumbnail : "",
+      like_count: isEdit ? state.post.like_count : 0,
     });
 
     setOpenModal(true);
@@ -157,6 +162,7 @@ const Write = () => {
           <div className="flex-1 p-4">
             <WriteArea
               inputRef={textAreaRef}
+              value={content}
               onChange={handleContentChange}
               onKeyDown={handleKeyDown}
             />
@@ -174,7 +180,9 @@ const Write = () => {
           </button>
         </div>
       </section>
-      {openModal && <WriteUpload data={data} onClose={closeModal} />}
+      {openModal && (
+        <WriteUpload data={data} onClose={closeModal} isEdit={isEdit} />
+      )}
     </div>
   );
 };

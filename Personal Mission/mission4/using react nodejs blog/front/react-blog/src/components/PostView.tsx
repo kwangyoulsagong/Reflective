@@ -10,8 +10,10 @@ import { getPostType } from "../types/types";
 import { formatRelativeTime } from "../hooks/TimeReducer";
 import useLike from "../hooks/useLike";
 import useDeletePostMutation from "../hooks/api/useDeletePostMutation";
+import { useNavigate } from "react-router-dom";
 
 const PostView = (data: Partial<getPostType>) => {
+  const navigate = useNavigate();
   const user_id = localStorage.getItem("user_id");
   const contentRef = useRef<HTMLDivElement>(null);
   const [circlePosition, setCirclePosition] = useState<number>(0);
@@ -35,7 +37,9 @@ const PostView = (data: Partial<getPostType>) => {
     mutate(post_id);
   };
   const { mutate } = useDeletePostMutation();
-
+  const handleUpdatePost = () => {
+    navigate("/write", { state: { post: data } }); // post_id와 함께 전달
+  };
   return (
     <div className="mt-20 w-[900px] h-auto flex flex-col items-center gap-[50px]">
       <h1 className="text-[50px] font-bold">{data?.title}</h1>
@@ -58,7 +62,7 @@ const PostView = (data: Partial<getPostType>) => {
         </section>
         {user_id == data.user_id && (
           <section className="flex gap-3">
-            <button>수정</button>
+            <button onClick={handleUpdatePost}>수정</button>
             <button onClick={() => handleDeletePost(data.post_id || "")}>
               삭제
             </button>
