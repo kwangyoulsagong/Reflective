@@ -1,8 +1,8 @@
-import time from "../assets/time.svg";
-import heart from "../assets/heart.png";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Clock, Heart } from "lucide-react";
 import { PostType } from "../types/types";
 import { formatRelativeTime } from "../hooks/TimeReducer";
-import { useNavigate } from "react-router-dom";
 import { usePost_idStore } from "../provider/post_idProvider";
 import { usePostRouterStore } from "../provider/postRouterProvider";
 
@@ -10,46 +10,52 @@ const RecentPost = ({ data }: { data: PostType[] }) => {
   const navigate = useNavigate();
   const { setPost_id } = usePost_idStore();
   const { setNickname, setTitle } = usePostRouterStore();
+
   const handlePost = (post_id: string, nickname: string, title: string) => {
     const hyphenatedTitle = title.replace(/\s+/g, "-");
     navigate(`/${nickname}/${hyphenatedTitle}`);
-    // 상태관리를 통해 닉네임 포스트아이디 제목을 저장
     setPost_id(post_id);
     setNickname(nickname);
     setTitle(hyphenatedTitle);
   };
+
   return (
-    <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-16 lg:gap-32 mt-[50px] md:mt-[100px] lg:mt-[200px]">
+    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 sm:mt-24 lg:mt-32">
       {data.map((post, index) => (
         <article
-          onClick={() => handlePost(post.post_id, post.nickname, post.title)}
           key={post.post_id}
-          className={`w-full h-[350px] p-2 rounded-2xl md:w-[300px] flex flex-col border 1 gap-2 ${
-            index % 3 === 0
-              ? "mt-32 sm:mt-64"
-              : index % 3 === 1
-              ? "mt-16 sm:mt-32"
-              : ""
-          }`}
+          onClick={() => handlePost(post.post_id, post.nickname, post.title)}
+          className={`bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 cursor-pointer
+            ${
+              index % 3 === 0
+                ? "sm:mt-16 lg:mt-24"
+                : index % 3 === 1
+                ? "sm:mt-8 lg:mt-12"
+                : ""
+            }`}
         >
-          <span className="font-bold">{post.category}</span>
           <img
             src={post.thumbnail}
-            className="w-full h-[175px] object-cover"
-            alt="thumbnail"
+            className="w-full h-48 object-cover"
+            alt={post.title}
           />
-          <h1 className="text-[18px] md:text-[20px] font-bold">{post.title}</h1>
-          <div className="flex justify-between mt-4">
-            <div className="flex gap-4 items-center">
-              <img src={time} alt="time" />
-              <span className="text-[12px] w-[50px]">
-                {formatRelativeTime(post.created_date)}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold">{post.nickname}</span>
-              <img className="w-[20px] h-[20px]" src={heart} alt="heart" />
-              <span>{post.like_count}</span>
+          <div className="p-4">
+            <span className="text-sm font-semibold text-primary">
+              {post.category}
+            </span>
+            <h2 className="text-xl font-bold mt-2 mb-4 line-clamp-2">
+              {post.title}
+            </h2>
+            <div className="flex justify-between items-center text-sm text-gray-600">
+              <div className="flex items-center gap-2">
+                <Clock size={16} />
+                <span>{formatRelativeTime(post.created_date)}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-medium">{post.nickname}</span>
+                <Heart size={16} className="text-red-500" />
+                <span>{post.like_count}</span>
+              </div>
             </div>
           </div>
         </article>
