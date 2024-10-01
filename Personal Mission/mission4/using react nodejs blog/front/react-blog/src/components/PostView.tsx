@@ -11,11 +11,15 @@ import { formatRelativeTime } from "../hooks/TimeReducer";
 import useLike from "../hooks/useLike";
 import useDeletePostMutation from "../hooks/api/useDeletePostMutation";
 import { useNavigate } from "react-router-dom";
+import useSaveFavoritesMutation from "../hooks/api/useSaveFavoritesMutation";
+import useGetPostFavoritesQuery from "../hooks/api/useGetPostFavoritesQuery";
+import useDeleteFavoriteMutation from "../hooks/api/useDeleteFavoriteMutation";
 
 const PostView = (data: Partial<getPostType>) => {
   const navigate = useNavigate();
   const user_id = localStorage.getItem("user_id");
   const contentRef = useRef<HTMLDivElement>(null);
+  const [isFavorite, setIsFavorite] = useState(false);
   const [circlePosition, setCirclePosition] = useState<number>(0);
   const [filledHeight, setFilledHeight] = useState<number>(0);
   const { isLiked, likeCount, handleLike } = useLike(
@@ -32,14 +36,38 @@ const PostView = (data: Partial<getPostType>) => {
 
   useHeaderIDs(contentRef, data?.contents);
   useToC(contentRef, data?.contents, setCirclePosition, setFilledHeight);
-
+  const { data: favorite, refetch } = useGetPostFavoritesQuery(
+    data?.post_id || ""
+  );
+  const { mutate: deleteMutate } = useDeletePostMutation();
+  const { mutate: saveFavoriteMutate } = useSaveFavoritesMutation();
+  const { mutate: deleteFavoriteMutate } = useDeleteFavoriteMutation();
+  useEffect(() => {
+    if (favorite) {
+      setIsFavorite(favorite.is_favorite);
+    }
+  }, [favorite]);
   const handleDeletePost = async (post_id: string) => {
-    mutate(post_id);
+    deleteMutate(post_id);
   };
-  const { mutate } = useDeletePostMutation();
+
   const handleUpdatePost = () => {
     navigate("/write", { state: { post: data } }); // post_id와 함께 전달
   };
+
+  const handleAddFavorite = async (user_id: string) => {
+    if (isFavorite) {
+      deleteFavoriteMutate(user_id);
+      refetch();
+    } else {
+      const body = {
+        favorite_id: user_id,
+      };
+      saveFavoriteMutate(body);
+      refetch();
+    }
+  };
+
   return (
     <div className="mt-20 w-[900px] h-auto flex flex-col items-center gap-[50px]">
       <h1 className="text-[50px] font-bold">{data?.title}</h1>
@@ -56,8 +84,11 @@ const PostView = (data: Partial<getPostType>) => {
           <span>{likeCount}</span>
         </section>
         <section>
-          <button className="w-[60px] sm:w-[80px] md:w-[100px] h-[35px] sm:h-[38px] md:h-[40px] border-[2px] sm:border-[3px] border-primary rounded-[20px] box-border text-primary text-sm sm:text-base">
-            즐겨찾기
+          <button
+            onClick={() => handleAddFavorite(data?.user_id || "")}
+            className="w-[60px] sm:w-[80px] md:w-[100px] h-[35px] sm:h-[38px] md:h-[40px] border-[2px] sm:border-[3px] border-primary rounded-[20px] box-border text-primary text-sm sm:text-base"
+          >
+            {isFavorite ? "취소하기" : "즐겨찾기"}
           </button>
         </section>
         {user_id == data.user_id && (

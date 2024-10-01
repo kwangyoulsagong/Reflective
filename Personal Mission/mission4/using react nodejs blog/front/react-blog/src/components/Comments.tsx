@@ -242,7 +242,7 @@ const Comments = () => {
   );
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full max-w-3xl mx-auto">
+    <div className="flex flex-col mt-20 items-center gap-4 w-full max-w-3xl mx-auto">
       <textarea
         className="w-full p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
         placeholder="댓글을 작성해주세요..."
