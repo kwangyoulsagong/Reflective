@@ -1,6 +1,7 @@
 import Comment, { IComment } from "../model/commentModel";
 import Profile from "../model/profileModel";
 import User from "../model/userModel";
+import mongoose from "mongoose";
 
 class CommentService {
   // 댓글 저장 서비스
@@ -8,19 +9,30 @@ class CommentService {
     user_id: string,
     data: IComment
   ): Promise<IComment | null> {
+    if (!mongoose.Types.ObjectId.isValid(user_id)) {
+      console.error("유효하지 않은 user_id입니다.");
+      return null;
+    }
+
     const body = {
       ...data,
       user_id: user_id,
     };
-    const comment = new Comment(body);
-    if (comment) {
+    try {
+      const comment = new Comment(body);
       return await comment.save();
+    } catch (error) {
+      console.error("댓글 저장 에러:", error);
+      return null;
     }
-    return null;
   }
 
   // 댓글 조회 서비스
   public async getComment(post_id: string): Promise<object[] | null> {
+    if (!mongoose.Types.ObjectId.isValid(post_id)) {
+      console.error("유효하지 않은 post_id입니다.");
+      return null;
+    }
     try {
       const comments = await Comment.find({ post_id }).exec();
       if (!comments) return null;
@@ -57,6 +69,13 @@ class CommentService {
     user_id: string,
     data: IComment
   ): Promise<IComment | null> {
+    if (
+      !mongoose.Types.ObjectId.isValid(comment_id) ||
+      !mongoose.Types.ObjectId.isValid(user_id)
+    ) {
+      console.error("유효하지 않은 comment_id 또는 user_id입니다.");
+      return null;
+    }
     try {
       const updateData = {
         ...data,
@@ -82,6 +101,13 @@ class CommentService {
     comment_id: string,
     user_id: string
   ): Promise<IComment | null> {
+    if (
+      !mongoose.Types.ObjectId.isValid(comment_id) ||
+      !mongoose.Types.ObjectId.isValid(user_id)
+    ) {
+      console.error("유효하지 않은 comment_id 또는 user_id입니다.");
+      return null;
+    }
     const deleteComment = await Comment.findOneAndDelete({
       comment_id,
       user_id,
