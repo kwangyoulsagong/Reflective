@@ -1,5 +1,9 @@
-.prose {
+.prose pre {
   font-family: Arial, sans-serif; /* Or any other font you prefer */
+  width: 100%;
+  white-space: pre-wrap; /* Preserve spaces, tabs, and line breaks */
+  word-wrap: break-word; /* Prevent overflow by wrapping long words */
+  overflow-wrap: break-word; /* Same as word-wrap, supported in newer browsers */
 }
 
 .prose header1 {
