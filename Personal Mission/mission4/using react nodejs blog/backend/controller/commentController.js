@@ -20,7 +20,7 @@ class CommentController {
             try {
                 const data = req.body;
                 if (!req.user) {
-                    res.status(401).json({ message: '인증 권한 없음' });
+                    res.status(401).json({ message: "인증 권한 없음" });
                     return;
                 }
                 const userId = req.user.user_id;
@@ -61,7 +61,7 @@ class CommentController {
                 const { comment_id } = req.params;
                 const data = req.body;
                 if (!req.user) {
-                    res.status(401).json({ message: '인증 권한 없음' });
+                    res.status(401).json({ message: "인증 권한 없음" });
                     return;
                 }
                 const userId = req.user.user_id;
@@ -84,7 +84,7 @@ class CommentController {
             const { comment_id } = req.params;
             try {
                 if (!req.user) {
-                    res.status(401).json({ message: '인증 권한 없음' });
+                    res.status(401).json({ message: "인증 권한 없음" });
                     return;
                 }
                 const userId = req.user.user_id;
@@ -102,4 +102,4 @@ class CommentController {
         });
     }
 }
-exports.default = new CommentController;
+exports.default = new CommentController();

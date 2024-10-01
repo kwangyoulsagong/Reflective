@@ -38,7 +38,9 @@ class CommentService {
                     // 유저 조회
                     const user = yield userModel_1.default.findOne({ user_id: comment.user_id }).exec();
                     // 유저 프로필 이미지 조회
-                    const profile = yield profileModel_1.default.findOne({ user_id: comment.user_id }).exec();
+                    const profile = yield profileModel_1.default.findOne({
+                        user_id: comment.user_id,
+                    }).exec();
                     if (user && profile) {
                         return Object.assign(Object.assign({}, comment.toObject()), { nickname: user.nickname, image_url: profile.image_url });
                     }
@@ -72,7 +74,10 @@ class CommentService {
     // 댓글 삭제
     deleteComment(comment_id, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const deleteComment = yield commentModel_1.default.findOneAndDelete({ comment_id, user_id });
+            const deleteComment = yield commentModel_1.default.findOneAndDelete({
+                comment_id,
+                user_id,
+            });
             if (deleteComment) {
                 return deleteComment;
             }
@@ -80,4 +85,4 @@ class CommentService {
         });
     }
 }
-exports.default = new CommentService;
+exports.default = new CommentService();
