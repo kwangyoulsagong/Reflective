@@ -91,5 +91,36 @@ class FavoriteService {
             }
         });
     }
+    getFavoriteStory(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userObjectId = new mongoose_1.Types.ObjectId(user_id);
+                // 즐겨찾기한 유저 목록 가져오기
+                const favoriteUsers = yield favoriteModel_1.default.find({
+                    user_id: userObjectId,
+                    is_favorite: true,
+                }).select("favorite_user_id");
+                if (!favoriteUsers || favoriteUsers.length === 0) {
+                    console.log("즐겨찾기한 유저가 없습니다.");
+                    return null;
+                }
+                const favoriteUsersIds = favoriteUsers.map((fav) => fav.favorite_user_id);
+                // 24시간 이내에 작성된 포스트 가져오기
+                const twentyFourHoursAgo = new Date();
+                twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+                const posts = yield postModel_1.default.find({
+                    user_id: { $in: favoriteUsersIds },
+                    created_at: { $gte: twentyFourHoursAgo }, // 24시간 이내 포스트 필터링}
+                })
+                    .sort({ created_at: -1 }) // 최신순으로 정렬
+                    .exec();
+                return posts;
+            }
+            catch (error) {
+                console.error("즐겨찾기한 유저의 포스트 조회 중 오류 발생:", error);
+                return null; // 오류 발생 시 null 반환
+            }
+        });
+    }
 }
 exports.default = new FavoriteService();

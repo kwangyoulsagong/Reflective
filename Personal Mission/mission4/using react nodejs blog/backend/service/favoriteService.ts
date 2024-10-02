@@ -1,6 +1,6 @@
 import { Types } from "mongoose"; // Import Types from mongoose
 import Favorite, { IFavorite } from "../model/favoriteModel"; // Favorite 모델 import
-import Post from "../model/postModel";
+import Post, { IPost } from "../model/postModel";
 class FavoriteService {
   // 즐겨찾기 추가 메서드
   public async addFavorite(
@@ -85,6 +85,34 @@ class FavoriteService {
       return favorite; // 즐겨찾기 결과 반환 (존재하면 favorite 객체, 없으면 null)
     } catch (error) {
       console.error("즐겨찾기 조회 중 오류 발생:", error);
+      return null; // 오류 발생 시 null 반환
+    }
+  }
+  public async getFavoriteStory(user_id: string): Promise<IPost[] | null> {
+    try {
+      const userObjectId = new Types.ObjectId(user_id);
+      // 즐겨찾기한 유저 목록 가져오기
+      const favoriteUsers = await Favorite.find({
+        user_id: userObjectId,
+        is_favorite: true,
+      }).select("favorite_user_id");
+      if (!favoriteUsers || favoriteUsers.length === 0) {
+        console.log("즐겨찾기한 유저가 없습니다.");
+        return null;
+      }
+      const favoriteUsersIds = favoriteUsers.map((fav) => fav.favorite_user_id);
+      // 24시간 이내에 작성된 포스트 가져오기
+      const twentyFourHoursAgo = new Date();
+      twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+      const posts = await Post.find({
+        user_id: { $in: favoriteUsersIds },
+        created_at: { $gte: twentyFourHoursAgo }, // 24시간 이내 포스트 필터링}
+      })
+        .sort({ created_at: -1 }) // 최신순으로 정렬
+        .exec();
+      return posts;
+    } catch (error) {
+      console.error("즐겨찾기한 유저의 포스트 조회 중 오류 발생:", error);
       return null; // 오류 발생 시 null 반환
     }
   }
