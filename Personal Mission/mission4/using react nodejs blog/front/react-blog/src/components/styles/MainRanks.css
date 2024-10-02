@@ -1,55 +1,59 @@
 .container {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
+  position: relative;
   overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative; /* Make sure it's relative to position items inside it */
 }
 
 .gallery {
-  position: relative; /* Needed for absolute positioning of items inside it */
   width: 100%;
   height: 100%;
-}
-
-.container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  position: relative;
 }
 
 .item {
   position: absolute;
-  width: 175px;
-  height: 250px;
-  background: #000;
-  /* Add styles to center text or content inside the item if needed */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.item:hover {
+  transform: scale(1.05) rotate(5deg);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+  z-index: 10;
 }
 
 .item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
 }
+
+.item:hover img {
+  transform: scale(1.1);
+}
+
 .message {
   position: absolute;
-  font-size: 24px; /* Adjust as needed */
-  color: #333; /* Adjust as needed */
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
   text-align: center;
-  background-color: rgba(
-    255,
-    255,
-    255,
-    0.8
-  ); /* Optional: for better visibility */
-  padding: 10px 20px; /* Optional: for padding */
-  border-radius: 8px; /* Optional: for rounded corners */
-  font-weight: bold; /* Optional: for bold text */
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 15px 30px;
+  border-radius: 30px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .message {
+    font-size: 18px;
+    padding: 12px 24px;
+  }
 }

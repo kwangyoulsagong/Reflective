@@ -1,7 +1,4 @@
-// import time from "../assets/time.svg";
 import { PostType } from "../types/types";
-// import { formatRelativeTime } from "../hooks/TimeReducer";
-// import heart from "../assets/heart.png";
 import "./styles/MainRanks.css";
 import { useEffect } from "react";
 import { mainAnimator } from "../hooks/mainAnimator";
@@ -9,9 +6,13 @@ import { mainAnimator } from "../hooks/mainAnimator";
 const MainRanks = ({ data }: { data: PostType[] }) => {
   useEffect(() => {
     if (data) {
-      mainAnimator(data);
+      // mainAnimator 함수 호출 및 반환된 정리 함수 저장
+      const cleanup = mainAnimator(data);
+      // 컴포넌트 언마운트 시 정리 함수 실행 (이벤트 리스너 제거)
+      return cleanup;
     }
   }, [data]);
+
   return (
     <section className="container">
       <div className="gallery"></div>
