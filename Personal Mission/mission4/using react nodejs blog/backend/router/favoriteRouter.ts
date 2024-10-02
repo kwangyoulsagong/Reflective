@@ -13,4 +13,5 @@ router.get(
   verifyTokenMiddleware,
   favoriteController.getPostFavorite
 );
+router.get("/", verifyTokenMiddleware, favoriteController.getFavoriteStory);
 export default router;

@@ -100,13 +100,16 @@ class FavoriteService {
         console.log("즐겨찾기한 유저가 없습니다.");
         return null;
       }
+
       const favoriteUsersIds = favoriteUsers.map((fav) => fav.favorite_user_id);
+      console.log(favoriteUsersIds);
       // 24시간 이내에 작성된 포스트 가져오기
       const twentyFourHoursAgo = new Date();
       twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+      console.log(twentyFourHoursAgo);
       const posts = await Post.find({
         user_id: { $in: favoriteUsersIds },
-        created_at: { $gte: twentyFourHoursAgo }, // 24시간 이내 포스트 필터링}
+        created_date: { $gte: twentyFourHoursAgo }, // 24시간 이내 포스트 필터링}
       })
         .sort({ created_at: -1 }) // 최신순으로 정렬
         .exec();

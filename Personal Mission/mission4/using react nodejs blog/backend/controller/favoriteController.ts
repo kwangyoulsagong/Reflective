@@ -72,6 +72,28 @@ class FavoriteController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  public async getFavoriteStory(
+    req: AuthRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "인증 권한 없음" });
+        return;
+      }
+      const userId = req.user.user_id;
+      const posts = await favoriteService.getFavoriteStory(userId);
+      console.log(posts);
+      if (posts) {
+        res.status(200).json(posts);
+        return;
+      }
+      res.status(404).json({ message: "게시물 없음" });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 }
 
 export default new FavoriteController();
