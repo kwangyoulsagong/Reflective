@@ -118,7 +118,7 @@ const Write = () => {
           // 서브 리스트 추가
           const newValue = `${value.substring(
             0,
-            selectionStart
+            selectionEnd
           )}\t<ul><li></li></ul>\n${afterCursor}`;
           textarea.value = newValue;
           const newCursorPosition = selectionStart; // <ul> 태그의 길이 포함
