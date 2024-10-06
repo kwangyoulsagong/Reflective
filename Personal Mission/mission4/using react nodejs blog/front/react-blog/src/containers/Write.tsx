@@ -119,7 +119,7 @@ const Write = () => {
           const newValue = `${value.substring(
             0,
             selectionEnd
-          )}\t<ul><li></li></ul>\n${afterCursor}`;
+          )}<ul><li></li></ul>\n${afterCursor}`;
           textarea.value = newValue;
           const newCursorPosition = selectionStart; // <ul> 태그의 길이 포함
           textarea.setSelectionRange(newCursorPosition, newCursorPosition);
