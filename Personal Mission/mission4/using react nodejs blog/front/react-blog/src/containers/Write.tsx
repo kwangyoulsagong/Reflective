@@ -96,40 +96,36 @@ const Write = () => {
           selectionStart + tabCharacter.length
         );
         textarea.focus();
+        const beforeCursor = value.substring(0, selectionStart);
         setContent(newValue);
+
+        const inLi =
+          beforeCursor.lastIndexOf("<li>") > beforeCursor.lastIndexOf("</li>");
+        if (inLi) {
+          insertText("\n<ul><li>");
+        }
       }
 
-      // if (e.key === "Enter") {
-      //   const beforeCursor = value.substring(0, selectionStart);
-      //   const afterCursor = value.substring(selectionStart);
+      if (e.key === "Enter") {
+        const beforeCursor = value.substring(0, selectionStart);
 
-      //   // 현재 커서 위치에서 <li> 태그가 있는지 확인
-      //   const inLi =
-      //     beforeCursor.lastIndexOf("<li>") > beforeCursor.lastIndexOf("</li>");
-      //   // <ul> 또는 <ol> 태그 안에 있는지 체크
-      //   const inUl =
-      //     beforeCursor.lastIndexOf("<ul>") > beforeCursor.lastIndexOf("</ul>");
-      //   const inOl =
-      //     beforeCursor.lastIndexOf("<ol>") > beforeCursor.lastIndexOf("</ol>");
+        const inUl =
+          beforeCursor.lastIndexOf("<ul>") > beforeCursor.lastIndexOf("</ul>");
 
-      //   // 리스트 내에서 Enter 키를 눌렀을 때 서브 리스트 생성
-      //   if (inLi) {
-      //     e.preventDefault();
-      //     // 서브 리스트 추가
-      //     const newValue = `${value.substring(
-      //       0,
-      //       selectionEnd
-      //     )}<ul><li></li></ul>\n${afterCursor}`;
-      //     textarea.value = newValue;
-      //     const newCursorPosition = selectionStart; // <ul> 태그의 길이 포함
-      //     textarea.setSelectionRange(newCursorPosition, newCursorPosition);
-      //     textarea.focus();
-      //     setContent(newValue);
-      //   } else if (inUl || inOl) {
-      //     e.preventDefault();
-      //     insertText("<li>", "</li>");
-      //   }
-      // }
+        // 체크: 두 번 연속 엔터를 입력했는지 확인
+        const isEmptyLineBefore = beforeCursor.endsWith("<li></li>");
+        const endLIne = beforeCursor.startsWith("<li>");
+        const inLi =
+          beforeCursor.lastIndexOf("<li>") > beforeCursor.lastIndexOf("</li>");
+        if (inUl && isEmptyLineBefore) {
+          e.preventDefault();
+          // 두 번 연속 엔터 -> 상위 리스트로 나가기 위해 리스트 닫기
+          insertText("</ul><li></li>");
+        } else if (inUl || endLIne || inLi) {
+          e.preventDefault();
+          insertText("\n<li>");
+        }
+      }
     }
   };
 
@@ -185,7 +181,7 @@ const Write = () => {
               onKeyDown={handleKeyDown}
             />
           </div>
-          <div className="flex-1 p-4 border rounded-lg overflow-autol">
+          <div className="flex-1 p-4 border rounded-lg overflow-auto">
             <Preview content={previewContent} />
           </div>
         </div>
