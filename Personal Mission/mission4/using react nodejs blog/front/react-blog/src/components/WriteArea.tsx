@@ -143,7 +143,7 @@ const EnhancedWriteArea = ({
       <textarea
         ref={inputRef}
         value={value}
-        className="mt-[30px] w-[100%] h-[90%] text-[18px] outline-none p-4 resize-none"
+        className="w-full h-full p-2 outline-none resize-none font-mono"
         placeholder="글 작성하기 ... (명령어를 사용하려면 '/'를 입력하세요)"
         onChange={handleChange}
         onKeyDown={handleKeyDown}

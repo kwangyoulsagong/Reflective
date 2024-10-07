@@ -99,37 +99,37 @@ const Write = () => {
         setContent(newValue);
       }
 
-      if (e.key === "Enter") {
-        const beforeCursor = value.substring(0, selectionStart);
-        const afterCursor = value.substring(selectionStart);
+      // if (e.key === "Enter") {
+      //   const beforeCursor = value.substring(0, selectionStart);
+      //   const afterCursor = value.substring(selectionStart);
 
-        // 현재 커서 위치에서 <li> 태그가 있는지 확인
-        const inLi =
-          beforeCursor.lastIndexOf("<li>") > beforeCursor.lastIndexOf("</li>");
-        // <ul> 또는 <ol> 태그 안에 있는지 체크
-        const inUl =
-          beforeCursor.lastIndexOf("<ul>") > beforeCursor.lastIndexOf("</ul>");
-        const inOl =
-          beforeCursor.lastIndexOf("<ol>") > beforeCursor.lastIndexOf("</ol>");
+      //   // 현재 커서 위치에서 <li> 태그가 있는지 확인
+      //   const inLi =
+      //     beforeCursor.lastIndexOf("<li>") > beforeCursor.lastIndexOf("</li>");
+      //   // <ul> 또는 <ol> 태그 안에 있는지 체크
+      //   const inUl =
+      //     beforeCursor.lastIndexOf("<ul>") > beforeCursor.lastIndexOf("</ul>");
+      //   const inOl =
+      //     beforeCursor.lastIndexOf("<ol>") > beforeCursor.lastIndexOf("</ol>");
 
-        // 리스트 내에서 Enter 키를 눌렀을 때 서브 리스트 생성
-        if (inLi) {
-          e.preventDefault();
-          // 서브 리스트 추가
-          const newValue = `${value.substring(
-            0,
-            selectionEnd
-          )}<ul><li></li></ul>\n${afterCursor}`;
-          textarea.value = newValue;
-          const newCursorPosition = selectionStart; // <ul> 태그의 길이 포함
-          textarea.setSelectionRange(newCursorPosition, newCursorPosition);
-          textarea.focus();
-          setContent(newValue);
-        } else if (inUl || inOl) {
-          e.preventDefault();
-          insertText("<li>", "</li>");
-        }
-      }
+      //   // 리스트 내에서 Enter 키를 눌렀을 때 서브 리스트 생성
+      //   if (inLi) {
+      //     e.preventDefault();
+      //     // 서브 리스트 추가
+      //     const newValue = `${value.substring(
+      //       0,
+      //       selectionEnd
+      //     )}<ul><li></li></ul>\n${afterCursor}`;
+      //     textarea.value = newValue;
+      //     const newCursorPosition = selectionStart; // <ul> 태그의 길이 포함
+      //     textarea.setSelectionRange(newCursorPosition, newCursorPosition);
+      //     textarea.focus();
+      //     setContent(newValue);
+      //   } else if (inUl || inOl) {
+      //     e.preventDefault();
+      //     insertText("<li>", "</li>");
+      //   }
+      // }
     }
   };
 
@@ -168,16 +168,16 @@ const Write = () => {
   };
   return (
     <div className="flex justify-center items-center h-screen">
-      <section className="flex flex-col  w-[1300px] h-[800px]">
+      <section className="flex flex-col w-full max-w-7xl">
         <input
           value={title}
           placeholder="제목을 입력해주세요"
-          className="h-[80px] text-[37px] outline-none"
+          className="text-4xl font-bold mb-4 p-2 outline-none border-b"
           onChange={(e) => setTitle(e.target.value)}
         ></input>
         <WriteMenu onCommand={insertText} insertText={insertText} />
-        <div className="flex flex-1 h-[80%]">
-          <div className="flex-1 p-4">
+        <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-300px)]">
+          <div className="flex-1 p-4 border rounded-lg">
             <WriteArea
               inputRef={textAreaRef}
               value={content}
@@ -185,7 +185,7 @@ const Write = () => {
               onKeyDown={handleKeyDown}
             />
           </div>
-          <div className="flex-1 p-4 overflow-y-scroll">
+          <div className="flex-1 p-4 border rounded-lg overflow-autol">
             <Preview content={previewContent} />
           </div>
         </div>
