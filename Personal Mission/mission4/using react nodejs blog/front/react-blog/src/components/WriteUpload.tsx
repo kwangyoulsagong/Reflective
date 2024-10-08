@@ -15,7 +15,7 @@ const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
       category: data.category || "",
       thumbnail:
         data.thumbnail ||
-        "https://velog.velcdn.com/images/k-svelte-master/post/3b675e72-cdba-4983-8429-1fbea08ca37a/image.png",
+        "https://velog.velcdn.com/images/yunsunglee2/post/a0a4ed3a-1671-4087-b382-edca4cd9d154/image.jpg",
       like_count: 0,
     };
     if (isEdit) {

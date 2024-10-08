@@ -21,6 +21,7 @@
     "@types/react-icons": "^2.2.7",
     "@types/react-syntax-highlighter": "^15.5.13",
     "axios": "^1.7.2",
+    "framer-motion": "^11.11.2",
     "gsap": "^3.12.5",
     "highlight.js": "^11.10.0",
     "lucide-react": "^0.441.0",
