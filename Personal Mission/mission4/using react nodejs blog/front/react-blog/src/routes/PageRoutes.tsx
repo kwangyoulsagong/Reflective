@@ -9,7 +9,7 @@ function PageRoutes() {
   return (
     <Routes>
       <Route path="/write" element={<Write />}></Route>
-      <Route path={`/${nickname}/${title}`} element={<PostDetail />} />
+      <Route path={`/${nickname}/${title}`} element={<PostDetail />} />ㅋ
     </Routes>
   );
 }

@@ -29,7 +29,7 @@ const FavoriteStories = () => {
     if (containerRef.current) {
       if (isOpen && activeStory) {
         containerRef.current.style.maxHeight = "600px"; // 스토리가 열려있을 때 더 큰 높이 설정
-        containerRef.current.style.opacity = "90%";
+        containerRef.current.style.opacity = "95%";
       } else if (isOpen) {
         containerRef.current.style.maxHeight = "150px"; // 열려있지만 스토리가 선택되지 않았을 때
         containerRef.current.style.background = "white";
