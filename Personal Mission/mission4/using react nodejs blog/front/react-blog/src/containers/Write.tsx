@@ -3,9 +3,9 @@ import WriteArea from "../components/WriteArea";
 import WriteMenu from "../components/WriteMenu";
 import Preview from "./Preview";
 import WriteUpload from "../components/WriteUpload";
-import { SavePostType } from "../types/types";
+import { Event, SavePostType } from "../types/types";
 import { useLocation } from "react-router-dom";
-
+import SchedulePlanner from "../components/schedulePlanner";
 const Write = () => {
   // ref 선언
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -24,6 +24,8 @@ const Write = () => {
     like_count: 0,
   });
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [showSchedulePlanner, setShowSchedulePlanner] = useState(false); // 새로 추가
+
   //텍스트 스타일등 삽입 함수
   const escapeHtml = (unsafe: string) => {
     return unsafe
@@ -162,6 +164,23 @@ const Write = () => {
   const closeModal = () => {
     setOpenModal(false);
   };
+
+  const handleShowSchedulePlanner = () => {
+    setShowSchedulePlanner(true);
+  };
+
+  const handleCloseSchedulePlanner = () => {
+    setShowSchedulePlanner(false);
+  };
+
+  const handleScheduleInsert = (schedule: Event) => {
+    // 선택된 일정을 content에 삽입하는 로직
+    const scheduleText = `\n📅 ${
+      schedule.title
+    }\n시작: ${schedule.start.toLocaleString()}\n종료: ${schedule.end.toLocaleString()}\n`;
+    setContent((prevContent: string) => prevContent + scheduleText);
+    setShowSchedulePlanner(false);
+  };
   return (
     <div className="flex justify-center items-center h-screen">
       <section className="flex flex-col w-full max-w-7xl">
@@ -171,7 +190,11 @@ const Write = () => {
           className="text-4xl font-bold mb-4 p-2 outline-none border-b"
           onChange={(e) => setTitle(e.target.value)}
         ></input>
-        <WriteMenu onCommand={insertText} insertText={insertText} />
+        <WriteMenu
+          onCommand={insertText}
+          insertText={insertText}
+          onShowSchedulePlanner={handleShowSchedulePlanner}
+        />
         <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-300px)]">
           <div className="flex-1 p-4 border rounded-lg">
             <WriteArea
@@ -196,6 +219,16 @@ const Write = () => {
       </section>
       {openModal && (
         <WriteUpload data={data} onClose={closeModal} isEdit={isEdit} />
+      )}
+      {showSchedulePlanner && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded-lg w-3/4 h-3/4">
+            <SchedulePlanner
+              onClose={handleCloseSchedulePlanner}
+              onScheduleSelect={handleScheduleInsert}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

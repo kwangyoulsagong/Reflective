@@ -29,8 +29,11 @@ const FavoriteStories = () => {
     if (containerRef.current) {
       if (isOpen && activeStory) {
         containerRef.current.style.maxHeight = "600px"; // 스토리가 열려있을 때 더 큰 높이 설정
+        containerRef.current.style.opacity = "90%";
       } else if (isOpen) {
         containerRef.current.style.maxHeight = "150px"; // 열려있지만 스토리가 선택되지 않았을 때
+        containerRef.current.style.background = "white";
+        containerRef.current.style.opacity = "100%";
       } else {
         containerRef.current.style.maxHeight = "0px"; // 닫혀있을 때
       }
@@ -62,7 +65,7 @@ const FavoriteStories = () => {
         style={{ maxHeight: "0px" }}
       >
         <div className="container mx-auto px-4 py-6">
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
+          <div className="flex gap-10">
             {data &&
               data.map((story: Story) => (
                 <div
@@ -83,26 +86,29 @@ const FavoriteStories = () => {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <p className="text-xs text-center mt-1 truncate w-16">
+                  <p className="text-s text-center mt-1 truncate w-16 text-primary bold">
                     {story.title}
                   </p>
                 </div>
               ))}
           </div>
           {activeStory && (
-            <div className="mt-4 bg-gray-100 rounded-lg w-[500px] h-[400px] relative flex justify-center">
-              <button
-                onClick={() => setActiveStory(null)}
-                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-              >
-                <X size={20} />
-              </button>
-              <article className={styles.previewContainer} ref={contentRef}>
-                <div
-                  className={styles.prose}
-                  dangerouslySetInnerHTML={{ __html: activeStory.contents }}
-                />
-              </article>
+            <div className="flex justify-center">
+              {" "}
+              <div className="mt-4 bg-black rounded-lg w-[500px] h-[400px] relative flex justify-center">
+                <button
+                  onClick={() => setActiveStory(null)}
+                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                >
+                  <X size={20} />
+                </button>
+                <article className={styles.previewContainer} ref={contentRef}>
+                  <div
+                    className={styles.prose}
+                    dangerouslySetInnerHTML={{ __html: activeStory.contents }}
+                  />
+                </article>
+              </div>
             </div>
           )}
         </div>

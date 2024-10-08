@@ -11,10 +11,11 @@ import {
   FaHeading,
   FaImage,
   FaMagic,
+  FaCalendarAlt,
 } from "react-icons/fa";
 import TemplatePopup from "./TemplatePopup";
 
-const WriteMenu = ({ onCommand }: WriteMenuProps) => {
+const WriteMenu = ({ onCommand, onShowSchedulePlanner }: WriteMenuProps) => {
   const [activeButton, setActiveButton] = useState<string>("");
   const [showTemplatePopup, setShowTemplatePopup] = useState(false);
 
@@ -156,6 +157,15 @@ const WriteMenu = ({ onCommand }: WriteMenuProps) => {
           onTemplateSelect={handleTemplateClick}
         />
       )}
+      {/* Schedule Planner Button */}
+      <button
+        className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors hover:bg-gray-200 ${getButtonClass(
+          "schedule"
+        )}`}
+        onClick={onShowSchedulePlanner}
+      >
+        <FaCalendarAlt />
+      </button>
     </div>
   );
 };

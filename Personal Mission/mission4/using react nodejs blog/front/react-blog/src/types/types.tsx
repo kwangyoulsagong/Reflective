@@ -27,6 +27,7 @@ export type WriteAreaProps = {
 export type WriteMenuProps = {
   onCommand: (startTag: string, endTag: string) => void;
   insertText: (startTag: string, endTag: string) => void;
+  onShowSchedulePlanner: () => void;
 };
 export type WriteUploadProps = {
   data: SavePostType;
@@ -78,4 +79,10 @@ export interface commentState {
   updated_date: string;
   user_id: string;
   replies: [];
+}
+
+export interface Event {
+  title: string;
+  start: Date;
+  end: Date;
 }
