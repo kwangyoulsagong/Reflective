@@ -87,21 +87,30 @@ const EnhancedWriteArea = ({
   }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // 슬래시 두 번 입력 처리
     if (e.key === "/") {
-      e.preventDefault();
-      const rect = e.currentTarget.getBoundingClientRect();
-      const lineHeight = parseInt(getComputedStyle(e.currentTarget).lineHeight);
-      const lines = e.currentTarget.value
-        .substr(0, e.currentTarget.selectionStart)
-        .split("\n");
-      const currentLine = lines.length;
+      if (showCommands) {
+        e.preventDefault(); // 두 번째 슬래시 입력에 대해 기본 동작 방지
+        // 메뉴 표시 로직을 여기서 실행하지 않음
+        return; // 이 부분에서 return 해줘서 더 이상 처리하지 않도록 합니다.
+      } else {
+        e.preventDefault();
+        const rect = e.currentTarget.getBoundingClientRect();
+        const lineHeight = parseInt(
+          getComputedStyle(e.currentTarget).lineHeight
+        );
+        const lines = e.currentTarget.value
+          .substr(0, e.currentTarget.selectionStart)
+          .split("\n");
+        const currentLine = lines.length;
 
-      setMenuPosition({
-        x: rect.left + 10,
-        y: rect.top + currentLine * lineHeight - e.currentTarget.scrollTop,
-      });
-      setCursorPosition(e.currentTarget.selectionStart);
-      setShowCommands(true);
+        setMenuPosition({
+          x: rect.left + 10,
+          y: rect.top + currentLine * lineHeight - e.currentTarget.scrollTop,
+        });
+        setCursorPosition(e.currentTarget.selectionStart);
+        setShowCommands(true);
+      }
     } else if (e.key === "Escape") {
       setShowCommands(false);
     }

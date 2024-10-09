@@ -81,51 +81,86 @@ const Write = () => {
     const textarea = textAreaRef.current;
 
     if (textarea) {
-      const { value, selectionStart, selectionEnd } = textarea;
+      const { selectionStart, selectionEnd, value } = textarea;
 
-      //텝을 하면 인덴트
+      // Handle Tab key for indentation
       if (e.key === "Tab") {
-        e.preventDefault();
-        const tabCharacter = "    ";
-        const newValue =
-          value.substring(0, selectionStart) +
-          tabCharacter +
-          value.substring(selectionEnd);
+        e.preventDefault(); // Prevent default tab behavior
 
-        textarea.value = newValue;
-        textarea.setSelectionRange(
-          selectionStart + tabCharacter.length,
-          selectionStart + tabCharacter.length
-        );
-        textarea.focus();
-        const beforeCursor = value.substring(0, selectionStart);
-        setContent(newValue);
+        // Check if we are inside a list item
+        const isInsideListItem =
+          value.lastIndexOf("<li>", selectionStart) !== -1 &&
+          value.indexOf("</li>", selectionStart) !== -1;
 
-        const inLi =
-          beforeCursor.lastIndexOf("<li>") > beforeCursor.lastIndexOf("</li>");
-        if (inLi) {
-          insertText("\n<ul><li>");
+        if (isInsideListItem) {
+          // Create a new list item without breaking the structure
+          const newListItem = "\n<ul><li></li></ul>\n";
+          const newValue =
+            value.substring(0, selectionStart) +
+            newListItem +
+            value.substring(selectionEnd);
+
+          // Set the updated value and adjust the cursor position
+          textarea.value = newValue;
+
+          // Calculate new cursor position: after the new <li>
+          textarea.setSelectionRange(
+            selectionStart + newListItem.length,
+            selectionStart + newListItem.length
+          );
+          textarea.focus();
+        } else {
+          // If not inside a list item, insert a tab character for indentation
+          const tabCharacter = "    "; // or "\t" for a tab space
+          const newValue =
+            value.substring(0, selectionStart) +
+            tabCharacter +
+            value.substring(selectionEnd);
+
+          textarea.value = newValue;
+          textarea.setSelectionRange(
+            selectionStart + tabCharacter.length,
+            selectionStart + tabCharacter.length
+          );
+          textarea.focus();
         }
       }
-
+      // Handle Enter key
       if (e.key === "Enter") {
-        const beforeCursor = value.substring(0, selectionStart);
+        e.preventDefault(); // Prevent default Enter behavior
 
-        const inUl =
-          beforeCursor.lastIndexOf("<ul>") > beforeCursor.lastIndexOf("</ul>");
+        // Check if we are inside a list item
+        const isInsideListItem =
+          value.lastIndexOf("<li>", selectionStart) !== -1 &&
+          value.indexOf("</li>", selectionStart) !== -1;
 
-        // 체크: 두 번 연속 엔터를 입력했는지 확인
-        const isEmptyLineBefore = beforeCursor.endsWith("<li></li>");
-        const endLIne = beforeCursor.startsWith("<li>");
-        const inLi =
-          beforeCursor.lastIndexOf("<li>") > beforeCursor.lastIndexOf("</li>");
-        if (inUl && isEmptyLineBefore) {
-          e.preventDefault();
-          // 두 번 연속 엔터 -> 상위 리스트로 나가기 위해 리스트 닫기
-          insertText("</ul><li></li>");
-        } else if (inUl || endLIne || inLi) {
-          e.preventDefault();
-          insertText("\n<li>");
+        if (isInsideListItem) {
+          // Create a new list item
+          const newListItem = "\n<li></li>\n"; // New list item without line breaks
+          const newValue =
+            value.substring(0, selectionStart) +
+            newListItem +
+            value.substring(selectionEnd);
+
+          // Set the updated value and adjust the cursor position
+          textarea.value = newValue;
+
+          // Calculate new cursor position: after the new <li>
+          textarea.setSelectionRange(
+            selectionStart + newListItem.length,
+            selectionStart + newListItem.length
+          );
+          textarea.focus();
+        } else {
+          // If not inside a list item, just insert a new line
+          const newValue =
+            value.substring(0, selectionStart) +
+            "\n" +
+            value.substring(selectionEnd);
+
+          textarea.value = newValue;
+          textarea.setSelectionRange(selectionStart + 1, selectionStart + 1);
+          textarea.focus();
         }
       }
     }

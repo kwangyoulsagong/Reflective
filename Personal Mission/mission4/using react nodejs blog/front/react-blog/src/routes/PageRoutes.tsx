@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Write from "../containers/Write";
 import PostDetail from "../containers/PostDetail";
 import { usePostRouterStore } from "../provider/postRouterProvider";
+// import Test from "../containers/test";
 
 // 시작 페이지 라우트
 function PageRoutes() {
@@ -9,7 +10,8 @@ function PageRoutes() {
   return (
     <Routes>
       <Route path="/write" element={<Write />}></Route>
-      <Route path={`/${nickname}/${title}`} element={<PostDetail />} />ㅋ
+      <Route path={`/${nickname}/${title}`} element={<PostDetail />} />
+      {/* <Route path={`/test`} element={<Test />} /> */}
     </Routes>
   );
 }

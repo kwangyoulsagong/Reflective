@@ -15,6 +15,32 @@ import {
 } from "react-icons/fa";
 import TemplatePopup from "./TemplatePopup";
 
+interface CommandButtonProps {
+  icon: React.ElementType;
+  onClick: () => void;
+  isActive: boolean;
+  label: string;
+}
+
+const CommandButton = ({
+  icon: Icon,
+  onClick,
+  isActive,
+  label,
+}: CommandButtonProps) => (
+  <button
+    className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors hover:bg-gray-200 ${
+      isActive
+        ? "border-primary text-primary bg-gray-200"
+        : "border-[#D4D4D4] text-[#D4D4D4] bg-white"
+    }`}
+    onClick={onClick}
+    aria-label={label}
+  >
+    <Icon />
+  </button>
+);
+
 const WriteMenu = ({ onCommand, onShowSchedulePlanner }: WriteMenuProps) => {
   const [activeButton, setActiveButton] = useState<string>("");
   const [showTemplatePopup, setShowTemplatePopup] = useState(false);
@@ -28,31 +54,13 @@ const WriteMenu = ({ onCommand, onShowSchedulePlanner }: WriteMenuProps) => {
     onCommand(startTag, endTag);
   };
 
-  const getButtonClass = (buttonName: string) =>
-    activeButton === buttonName
-      ? "border-primary text-primary bg-gray-200"
-      : "border-[#D4D4D4] text-[#D4D4D4] bg-white hover:bg-gray-100";
-
-  const handleCodeButtonClick = () => {
-    const codeTemplate =
-      `<pre><code class="language-javascript"></code></pre>`.trim();
-    onCommand(codeTemplate, "");
-  };
-
-  const handleTemplateClick = (template: string) => {
-    onCommand(template, "");
-    setShowTemplatePopup(false);
-  };
-
   return (
     <div className="border-t-2 border-primary h-[70px] flex justify-start items-center gap-2 p-2 bg-white shadow-md">
       {/* Header Buttons */}
       {["h1", "h2", "h3", "h4"].map((header, index) => (
-        <button
+        <CommandButton
           key={header}
-          className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors hover:bg-gray-200 ${getButtonClass(
-            header
-          )}`}
+          icon={FaHeading}
           onClick={() =>
             handleButtonClick(
               header,
@@ -60,112 +68,92 @@ const WriteMenu = ({ onCommand, onShowSchedulePlanner }: WriteMenuProps) => {
               `</header${index + 1}>`
             )
           }
-        >
-          {<FaHeading />} {index + 1}
-        </button>
+          isActive={activeButton === header}
+          label={`Insert ${header}`}
+        />
       ))}
 
+      {/* Divider */}
       <div className="h-[40px] w-[1px] bg-[#D4D4D4]"></div>
 
       {/* Text Style Buttons */}
-      <button
-        className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors hover:bg-gray-200 ${getButtonClass(
-          "bold"
-        )}`}
-        onClick={() => handleButtonClick("bold", "<strong>", "</strong>")}
-      >
-        <FaBold />
-      </button>
-      <button
-        className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors hover:bg-gray-200 ${getButtonClass(
-          "italic"
-        )}`}
-        onClick={() => handleButtonClick("italic", "<i>", "</i>")}
-      >
-        <FaItalic />
-      </button>
-      <button
-        className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors hover:bg-gray-200 ${getButtonClass(
-          "underline"
-        )}`}
-        onClick={() => handleButtonClick("underline", "<u>", "</u>")}
-      >
-        <FaUnderline />
-      </button>
-
-      {/* List Buttons */}
-      <button
-        className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors hover:bg-gray-200 ${getButtonClass(
-          "ol"
-        )}`}
-        onClick={() => handleButtonClick("ol", "<ol><li>", "</li></ol>")}
-      >
-        <FaListOl />
-      </button>
-      <button
-        className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors hover:bg-gray-200 ${getButtonClass(
-          "ul"
-        )}`}
-        onClick={() => handleButtonClick("ul", "<ul><li>", "</li></ul>")}
-      >
-        <FaListUl />
-      </button>
-
-      <div className="h-[40px] w-[1px] bg-[#D4D4D4]"></div>
-
-      {/* Other Buttons */}
-      <button
-        className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors hover:bg-gray-200 ${getButtonClass(
-          "image"
-        )}`}
-        onClick={() => alert("Image insertion not implemented")}
-      >
-        <FaImage />
-      </button>
-
-      <button
-        className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors hover:bg-gray-200 ${getButtonClass(
-          "code"
-        )}`}
-        onClick={handleCodeButtonClick}
-      >
-        <FaCode />
-      </button>
-      <button
-        className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors hover:bg-gray-200 ${getButtonClass(
-          "link"
-        )}`}
-        onClick={() => handleButtonClick("link", "<a href=''>", "</a>")}
-      >
-        <FaLink />
-      </button>
+      {[
+        {
+          icon: FaBold,
+          label: "Bold",
+          startTag: "<strong>",
+          endTag: "</strong>",
+        },
+        { icon: FaItalic, label: "Italic", startTag: "<i>", endTag: "</i>" },
+        {
+          icon: FaUnderline,
+          label: "Underline",
+          startTag: "<u>",
+          endTag: "</u>",
+        },
+        {
+          icon: FaListOl,
+          label: "Ordered List",
+          startTag: "<ol><li>",
+          endTag: "</li></ol>",
+        },
+        {
+          icon: FaListUl,
+          label: "Unordered List",
+          startTag: "<ul><li>",
+          endTag: "</li></ul>",
+        },
+        { icon: FaImage, label: "Insert Image", startTag: "", endTag: "" }, // For later implementation
+        {
+          icon: FaCode,
+          label: "Insert Code Block",
+          startTag: "<pre><code class='language-javascript'></code></pre>",
+          endTag: "",
+        },
+        {
+          icon: FaLink,
+          label: "Insert Link",
+          startTag: "<a href=''>",
+          endTag: "</a>",
+        },
+      ].map(({ icon, label, startTag, endTag }) => (
+        <CommandButton
+          key={label}
+          icon={icon}
+          onClick={() =>
+            handleButtonClick(label.toLowerCase(), startTag, endTag)
+          }
+          isActive={activeButton === label.toLowerCase()}
+          label={label}
+        />
+      ))}
 
       {/* Template Button */}
       <div className="h-[40px] w-[1px] bg-[#D4D4D4]"></div>
-      <button
-        className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors hover:bg-gray-200 ${getButtonClass(
-          "template"
-        )}`}
+      <CommandButton
+        icon={FaMagic}
         onClick={() => setShowTemplatePopup(true)}
-      >
-        <FaMagic />
-      </button>
+        isActive={activeButton === "template"}
+        label="Insert Template"
+      />
+
+      {/* Schedule Planner Button */}
+      <CommandButton
+        icon={FaCalendarAlt}
+        onClick={onShowSchedulePlanner}
+        isActive={activeButton === "schedule"}
+        label="Open Schedule Planner"
+      />
 
       {showTemplatePopup && (
         <TemplatePopup
           onClose={() => setShowTemplatePopup(false)}
-          onTemplateSelect={handleTemplateClick}
+          onTemplateSelect={(template) => {
+            onCommand(template, "");
+            setShowTemplatePopup(false);
+          }}
         />
       )}
-      {/* Schedule Planner Button */}
-      <button
-        className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors hover:bg-gray-200 ${getButtonClass(
-          "schedule"
-        )}`}
-        onClick={onShowSchedulePlanner}
-      >
-        <FaCalendarAlt />
-      </button>
     </div>
   );
 };
