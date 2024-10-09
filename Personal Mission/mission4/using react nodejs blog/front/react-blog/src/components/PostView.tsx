@@ -14,7 +14,118 @@ import { useNavigate } from "react-router-dom";
 import useSaveFavoritesMutation from "../hooks/api/useSaveFavoritesMutation";
 import useGetPostFavoritesQuery from "../hooks/api/useGetPostFavoritesQuery";
 import useDeleteFavoriteMutation from "../hooks/api/useDeleteFavoriteMutation";
+import mermaid from "mermaid"; // Import Mermaid
+const escapeHtml = (unsafe: string): string => {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+const markdownToHtml = (markdown: string): string => {
+  const lines = markdown.split(/\r?\n/);
+  let html = "";
+  const listStack: string[] = [];
+  let currentIndent = 0;
+  let inCodeBlock = false;
+  let inMermaidBlock = false;
+  let codeContent = "";
+  let codeLanguage = "";
+  const processListItem = (line: string, listType: string) => {
+    const indent = line.search(/\S|$/);
+    const content = line
+      .trim()
+      .replace(/^[-*+]|\d+\.\s/, "")
+      .trim();
 
+    if (listStack.length === 0 || indent > currentIndent) {
+      listStack.push(listType);
+      html += `<${listType}>`;
+      currentIndent = indent;
+    } else if (indent < currentIndent) {
+      while (indent < currentIndent && listStack.length > 0) {
+        const closingTag = listStack.pop();
+        html += `</${closingTag}>`;
+        currentIndent -= 2;
+      }
+      if (
+        listStack.length === 0 ||
+        listStack[listStack.length - 1] !== listType
+      ) {
+        listStack.push(listType);
+        html += `<${listType}>`;
+      }
+    }
+
+    html += `<li>${content}</li>`;
+  };
+
+  for (const line of lines) {
+    if (line.trim().startsWith("```mermaid")) {
+      if (inMermaidBlock) {
+        html += `<div class="mermaid">${escapeHtml(codeContent.trim())}</div>`;
+        inMermaidBlock = false;
+        codeContent = "";
+      } else {
+        inMermaidBlock = true;
+      }
+    } else if (inMermaidBlock) {
+      codeContent += line + "\n";
+    } else if (line.trim().startsWith("```")) {
+      if (inCodeBlock) {
+        html += `<pre><code class="language-${codeLanguage}">${escapeHtml(
+          codeContent.trim()
+        )}</code></pre>`;
+        inCodeBlock = false;
+        codeContent = "";
+        codeLanguage = "";
+      } else {
+        inCodeBlock = true;
+        codeLanguage = line.trim().slice(3);
+      }
+    } else if (inCodeBlock) {
+      codeContent += line + "\n";
+    } else if (line.trim().match(/^[-*+]\s/)) {
+      processListItem(line, "ul");
+    } else if (line.trim().match(/^\d+\.\s/)) {
+      processListItem(line, "ol");
+    } else {
+      while (listStack.length > 0) {
+        const closingTag = listStack.pop();
+        html += `</${closingTag}>`;
+      }
+      currentIndent = 0;
+      html += processLine(line);
+    }
+  }
+
+  while (listStack.length > 0) {
+    const closingTag = listStack.pop();
+    html += `</${closingTag}>`;
+  }
+
+  if (inCodeBlock) {
+    html += `<pre><code class="language-${codeLanguage}">${escapeHtml(
+      codeContent.trim()
+    )}</code></pre>`;
+  }
+
+  return html;
+};
+const processLine = (line: string): string => {
+  return line
+    .replace(/^#### (.*?)$/, "<h4>$1</h4>")
+    .replace(/^### (.*?)$/, "<h3>$1</h3>")
+    .replace(/^## (.*?)$/, "<h2>$1</h2>")
+    .replace(/^# (.*?)$/, "<h1>$1</h1>")
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.*?)\*/g, "<em>$1</em>")
+    .replace(/~~(.*?)~~/g, "<del>$1</del>")
+    .replace(/`([^`]+)`/g, (_, code) => `<code>${escapeHtml(code)}</code>`)
+    .replace(/^\s*>\s*(.*?)$/g, "<blockquote>$1</blockquote>")
+    .replace(/^(?!<h|<blockquote|<li|<\/)(.*?)$/g, "<p>$1</p>");
+};
 const PostView = (data: Partial<getPostType>) => {
   const navigate = useNavigate();
   const user_id = localStorage.getItem("user_id");
@@ -31,6 +142,8 @@ const PostView = (data: Partial<getPostType>) => {
   useEffect(() => {
     if (data?.contents) {
       Prism.highlightAll();
+      mermaid.initialize({ startOnLoad: true });
+      mermaid.contentLoaded(); // Rerender Mermaid diagrams
     }
   }, [data?.contents]);
 
@@ -120,7 +233,9 @@ const PostView = (data: Partial<getPostType>) => {
       <article className={styles.previewContainer} ref={contentRef}>
         <div
           className={styles.prose}
-          dangerouslySetInnerHTML={{ __html: data?.contents || "" }}
+          dangerouslySetInnerHTML={{
+            __html: markdownToHtml(data?.contents || ""),
+          }}
         />
       </article>
     </div>

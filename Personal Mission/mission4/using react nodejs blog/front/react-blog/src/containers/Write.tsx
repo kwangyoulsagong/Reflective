@@ -52,6 +52,7 @@ const Write = () => {
     const listStack: string[] = [];
     let currentIndent = 0;
     let inCodeBlock = false;
+    let inMermaidBlock = false;
     let codeContent = "";
     let codeLanguage = "";
     const processListItem = (line: string, listType: string) => {
@@ -84,7 +85,19 @@ const Write = () => {
     };
 
     for (const line of lines) {
-      if (line.trim().startsWith("```")) {
+      if (line.trim().startsWith("```mermaid")) {
+        if (inMermaidBlock) {
+          html += `<div class="mermaid">${escapeHtml(
+            codeContent.trim()
+          )}</div>`;
+          inMermaidBlock = false;
+          codeContent = "";
+        } else {
+          inMermaidBlock = true;
+        }
+      } else if (inMermaidBlock) {
+        codeContent += line + "\n";
+      } else if (line.trim().startsWith("```")) {
         if (inCodeBlock) {
           html += `<pre><code class="language-${codeLanguage}">${escapeHtml(
             codeContent.trim()
@@ -125,6 +138,7 @@ const Write = () => {
 
     return html;
   };
+
   const processLine = (line: string): string => {
     return line
       .replace(/^#### (.*?)$/, "<h4>$1</h4>")

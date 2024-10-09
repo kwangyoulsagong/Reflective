@@ -6,27 +6,27 @@
   overflow-wrap: break-word; /* Same as word-wrap, supported in newer browsers */
 }
 
-.prose header1 {
+.prose h1 {
   font-size: 1.9rem; /* Equivalent to text-4xl */
   font-weight: bold;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
 
-.prose header2 {
+.prose h2 {
   font-size: 1.6rem; /* Equivalent to text-3xl */
   font-weight: bold;
   margin-top: 1.25rem;
   margin-bottom: 0.75rem;
 }
 
-.prose header3 {
+.prose h3 {
   font-size: 1.4rem; /* Equivalent to text-2xl */
   font-weight: bold;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
-.prose header4 {
+.prose h4 {
   font-size: 1.2rem; /* Equivalent to text-2xl */
   font-weight: bold;
   margin-top: 1rem;

@@ -9,9 +9,7 @@ export const useHeaderIDs = (
     // 콘텐츠가 있고, contentRef가 현재 참조하고 있는 요소가 존재할 경우 실행
     if (contents && contentRef.current) {
       // header1, header2, header3, header4 요소를 모두 선택
-      const headers = contentRef.current.querySelectorAll(
-        "header1,header2,header3,header4"
-      );
+      const headers = contentRef.current.querySelectorAll("h1,h2,h3,h4");
       // 각 헤더에 대해 ID를 생성하고 할당
       headers.forEach((header) => {
         const id = header.textContent
@@ -46,9 +44,7 @@ export const useToC = (
       const ul = document.createElement("ul"); // 새로운 ul 요소 생성
       ul.className = "flex flex-col gap-[30px]"; // ul에 클래스 지정
 
-      const headers = contentRef.current.querySelectorAll(
-        "header1,header2,header3,header4"
-      ); // 모든 헤더 요소를 선택
+      const headers = contentRef.current.querySelectorAll("h1,h2,h3,h4"); // 모든 헤더 요소를 선택
 
       headers.forEach((header) => {
         const a = document.createElement("a"); // 링크 요소 생성
@@ -92,9 +88,7 @@ export const useToC = (
   // 스크롤 시 호출되는 함수: 가장 가까운 헤더를 찾아 원형 네비게이션 위치 업데이트
   const handleScroll = () => {
     if (contentRef.current) {
-      const headers = contentRef.current.querySelectorAll(
-        "header1,header2,header3,header4"
-      ); // 모든 헤더 요소 선택
+      const headers = contentRef.current.querySelectorAll("h1,h2,h3,h4"); // 모든 헤더 요소 선택
       let closestHeader: Element | null = null; // 가장 가까운 헤더를 저장할 변수
       let minDistance = Infinity; // 가장 가까운 거리 초기화
 
