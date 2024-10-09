@@ -25,9 +25,7 @@ export type WriteAreaProps = {
   onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 };
 export type WriteMenuProps = {
-  onCommand: (startTag: string, endTag: string) => void;
-  insertText: (startTag: string, endTag: string) => void;
-  onShowSchedulePlanner: () => void;
+  onCommand: (startTag: string) => void;
 };
 export type WriteUploadProps = {
   data: SavePostType;

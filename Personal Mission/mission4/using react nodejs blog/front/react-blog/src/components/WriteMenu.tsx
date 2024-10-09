@@ -9,7 +9,6 @@ import {
   FaCode,
   FaLink,
   FaHeading,
-  FaImage,
   FaMagic,
   FaCalendarAlt,
 } from "react-icons/fa";
@@ -41,94 +40,53 @@ const CommandButton = ({
   </button>
 );
 
-const WriteMenu = ({ onCommand, onShowSchedulePlanner }: WriteMenuProps) => {
+const WriteMenu = ({ onCommand }: WriteMenuProps) => {
   const [activeButton, setActiveButton] = useState<string>("");
   const [showTemplatePopup, setShowTemplatePopup] = useState(false);
 
-  const handleButtonClick = (
-    buttonName: string,
-    startTag: string,
-    endTag: string = ""
-  ) => {
+  const handleButtonClick = (buttonName: string, markdown: string) => {
     setActiveButton(buttonName);
-    onCommand(startTag, endTag);
+    onCommand(markdown);
+  };
+
+  const handleShowSchedulePlanner = () => {
+    setActiveButton("schedule");
+    // Schedule Planner의 로직을 추가해야 할 수도 있습니다.
   };
 
   return (
     <div className="border-t-2 border-primary h-[70px] flex justify-start items-center gap-2 p-2 bg-white shadow-md">
-      {/* Header Buttons */}
-      {["h1", "h2", "h3", "h4"].map((header, index) => (
+      {["h1", "h2", "h3", "h4"].map((header) => (
         <CommandButton
           key={header}
           icon={FaHeading}
-          onClick={() =>
-            handleButtonClick(
-              header,
-              `<header${index + 1}>`,
-              `</header${index + 1}>`
-            )
-          }
+          onClick={() => handleButtonClick(header, `# ${header} 제목`)}
           isActive={activeButton === header}
           label={`Insert ${header}`}
         />
       ))}
-
-      {/* Divider */}
       <div className="h-[40px] w-[1px] bg-[#D4D4D4]"></div>
-
-      {/* Text Style Buttons */}
       {[
-        {
-          icon: FaBold,
-          label: "Bold",
-          startTag: "<strong>",
-          endTag: "</strong>",
-        },
-        { icon: FaItalic, label: "Italic", startTag: "<i>", endTag: "</i>" },
-        {
-          icon: FaUnderline,
-          label: "Underline",
-          startTag: "<u>",
-          endTag: "</u>",
-        },
-        {
-          icon: FaListOl,
-          label: "Ordered List",
-          startTag: "<ol><li>",
-          endTag: "</li></ol>",
-        },
-        {
-          icon: FaListUl,
-          label: "Unordered List",
-          startTag: "<ul><li>",
-          endTag: "</li></ul>",
-        },
-        { icon: FaImage, label: "Insert Image", startTag: "", endTag: "" }, // For later implementation
+        { icon: FaBold, label: "Bold", markdown: "**텍스트**" },
+        { icon: FaItalic, label: "Italic", markdown: "*텍스트*" },
+        { icon: FaUnderline, label: "Underline", markdown: "~~텍스트~~" },
+        { icon: FaListOl, label: "Ordered List", markdown: "1. 항목" },
+        { icon: FaListUl, label: "Unordered List", markdown: "- 항목" },
         {
           icon: FaCode,
           label: "Insert Code Block",
-          startTag: "<pre><code class='language-javascript'></code></pre>",
-          endTag: "",
+          markdown: "```\n코드\n```",
         },
-        {
-          icon: FaLink,
-          label: "Insert Link",
-          startTag: "<a href=''>",
-          endTag: "</a>",
-        },
-      ].map(({ icon, label, startTag, endTag }) => (
+        { icon: FaLink, label: "Insert Link", markdown: "[링크 텍스트](URL)" },
+      ].map(({ icon, label, markdown }) => (
         <CommandButton
           key={label}
           icon={icon}
-          onClick={() =>
-            handleButtonClick(label.toLowerCase(), startTag, endTag)
-          }
+          onClick={() => handleButtonClick(label.toLowerCase(), markdown)}
           isActive={activeButton === label.toLowerCase()}
           label={label}
         />
       ))}
-
-      {/* Template Button */}
       <div className="h-[40px] w-[1px] bg-[#D4D4D4]"></div>
       <CommandButton
         icon={FaMagic}
@@ -136,20 +94,17 @@ const WriteMenu = ({ onCommand, onShowSchedulePlanner }: WriteMenuProps) => {
         isActive={activeButton === "template"}
         label="Insert Template"
       />
-
-      {/* Schedule Planner Button */}
       <CommandButton
         icon={FaCalendarAlt}
-        onClick={onShowSchedulePlanner}
+        onClick={handleShowSchedulePlanner}
         isActive={activeButton === "schedule"}
-        label="Open Schedule Planner"
+        label="Insert Schedule"
       />
-
       {showTemplatePopup && (
         <TemplatePopup
           onClose={() => setShowTemplatePopup(false)}
           onTemplateSelect={(template) => {
-            onCommand(template, "");
+            onCommand(template);
             setShowTemplatePopup(false);
           }}
         />
