@@ -64,3 +64,13 @@
   color: pink;
   text-decoration: underline;
 }
+code[class*="language-"] {
+}
+
+pre[class*="language-"] {
+  padding: 1em; /* 패딩 추가 */
+  overflow: auto; /* 스크롤 가능하게 설정 */
+  border-radius: 0.3em; /* 모서리 둥글게 */
+  background-color: #fbfbfb; /* 원하는 배경 색상 */
+  color: #ffffff; /* 원하는 글자 색상 */
+}

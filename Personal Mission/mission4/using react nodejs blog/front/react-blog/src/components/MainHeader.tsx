@@ -31,6 +31,7 @@ const MainHeader = () => {
           <img src={me} alt="profile" className="w-full h-full object-cover" />
         </div>
         <button
+          onClick={() => navigate("/mypage")}
           className="w-[11px] sm:w-[12px] md:w-[13px] h-[8px] sm:h-[9px] md:h-[10px] bg-no-repeat bg-center bg-contain relative sm:right-2 md:right-4 sm:top-2 md:top-4"
           style={{ backgroundImage: `url(${toggle})` }}
         />

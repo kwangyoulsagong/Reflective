@@ -12,6 +12,7 @@ import {
   FaMagic,
   FaCalendarAlt,
   FaChartPie, // Import Mermaid icon
+  FaChartBar,
 } from "react-icons/fa";
 import TemplatePopup from "./TemplatePopup";
 import mermaid from "mermaid";
@@ -58,16 +59,28 @@ const WriteMenu = ({ onCommand }: WriteMenuProps) => {
   };
 
   // Function to handle Mermaid syntax insertion
-  const handleInsertMermaid = () => {
-    const mermaidExample = `
-    %%{init: {"themeVariables": {"pieOuterStroke": "#000000", "pieInnerStroke": "#000000", "pieTextFill": "#000000"}, "pie": {"textPosition": 0.5}}}%%
-  pie showData
-      title 제목
-      "메뉴1" : 42.96
-      "메뉴2" : 50.05
-      "메뉴3" : 10.01
-      "메뉴4" :  5
+  const handleInsertMermaid = (chartType: "pie" | "bar") => {
+    let mermaidExample = "";
+    if (chartType === "pie") {
+      mermaidExample = `
+%%{init: {"themeVariables": {"pieOuterStroke": "#000000", "pieInnerStroke": "#000000", "pieTextFill": "#000000"}, "pie": {"textPosition": 0.5}}}%%
+pie showData
+    title 파이 차트 제목
+    "메뉴1" : 42.96
+    "메뉴2" : 50.05
+    "메뉴3" : 10.01
+    "메뉴4" :  5
       `;
+    } else if (chartType === "bar") {
+      mermaidExample = `
+xychart-beta
+    title "Sales Revenue"
+    x-axis [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec]
+    y-axis "Revenue (in $)" 4000 --> 11000
+    bar [5000, 6000, 7500, 8200, 9500, 10500, 11000, 10200, 9200, 8500, 7000, 6000]
+    line [5000, 6000, 7500, 8200, 9500, 10500, 11000, 10200, 9200, 8500, 7000, 6000]
+      `;
+    }
     setMermaidSyntax(mermaidExample);
     onCommand(`\`\`\` mermaid\n${mermaidExample}\n\`\`\``);
   };
@@ -130,9 +143,15 @@ const WriteMenu = ({ onCommand }: WriteMenuProps) => {
       {/* Add Mermaid Command Button */}
       <CommandButton
         icon={FaChartPie}
-        onClick={handleInsertMermaid}
-        isActive={activeButton === "mermaid"}
-        label="Insert Mermaid Chart"
+        onClick={() => handleInsertMermaid("pie")}
+        isActive={activeButton === "mermaid-pie"}
+        label="Insert Mermaid Pie Chart"
+      />
+      <CommandButton
+        icon={FaChartBar}
+        onClick={() => handleInsertMermaid("bar")}
+        isActive={activeButton === "mermaid-bar"}
+        label="Insert Mermaid Bar Chart"
       />
       {showTemplatePopup && (
         <TemplatePopup

@@ -1,42 +1,21 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Clock, Heart, Eye } from "lucide-react";
-import { PostType } from "../types/types";
-import { formatRelativeTime } from "../hooks/TimeReducer";
-import { usePost_idStore } from "../provider/post_idProvider";
-import { usePostRouterStore } from "../provider/postRouterProvider";
+import { Heart, Clock, Eye } from "lucide-react";
 import { useSpring, animated } from "react-spring";
-type PostCardProps = {
+interface PostType {
+  post_id: string;
+  title: string;
+  created_date: string;
+  like_count: number;
+  category: string;
+  nickname: string;
+  thumbnail: string;
+}
+
+interface PostCardProps {
   post: PostType;
   index: number;
   handlePost: (post_id: string, nickname: string, title: string) => void;
-};
-const RecentPost = ({ data }: { data: PostType[] }) => {
-  const navigate = useNavigate();
-  const { setPost_id } = usePost_idStore();
-  const { setNickname, setTitle } = usePostRouterStore();
-
-  const handlePost = (post_id: string, nickname: string, title: string) => {
-    const hyphenatedTitle = title.replace(/\s+/g, "-");
-    navigate(`/${nickname}/${hyphenatedTitle}`);
-    setPost_id(post_id);
-    setNickname(nickname);
-    setTitle(hyphenatedTitle);
-  };
-
-  return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 sm:mt-24 lg:mt-32">
-      {data.map((post, index) => (
-        <PostCard
-          key={post.post_id}
-          post={post}
-          index={index}
-          handlePost={handlePost}
-        />
-      ))}
-    </section>
-  );
-};
+}
 
 const PostCard = ({ post, index, handlePost }: PostCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -59,13 +38,13 @@ const PostCard = ({ post, index, handlePost }: PostCardProps) => {
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => handlePost(post.post_id, post.nickname, post.title)}
       className={`bg-white rounded-lg overflow-hidden cursor-pointer
-        ${
-          index % 3 === 0
-            ? "sm:mt-16 lg:mt-24"
-            : index % 3 === 1
-            ? "sm:mt-8 lg:mt-12"
-            : ""
-        }`}
+          ${
+            index % 3 === 0
+              ? "sm:mt-16 lg:mt-24"
+              : index % 3 === 1
+              ? "sm:mt-8 lg:mt-12"
+              : ""
+          }`}
     >
       <div className="relative overflow-hidden">
         <animated.img
@@ -91,7 +70,7 @@ const PostCard = ({ post, index, handlePost }: PostCardProps) => {
         <div className="flex justify-between items-center text-sm text-gray-600">
           <div className="flex items-center gap-2">
             <Clock size={16} className="text-primary" />
-            <span>{formatRelativeTime(post.created_date)}</span>
+            <span>{post.created_date}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="font-medium">{post.nickname}</span>
@@ -104,4 +83,4 @@ const PostCard = ({ post, index, handlePost }: PostCardProps) => {
   );
 };
 
-export default RecentPost;
+export default PostCard;
