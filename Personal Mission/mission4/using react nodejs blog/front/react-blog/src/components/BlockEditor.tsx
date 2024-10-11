@@ -5,7 +5,15 @@ import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export interface Block {
   id: string;
-  type: "paragraph" | "heading" | "list" | "image" | "code";
+  type:
+    | "paragraph"
+    | "heading1"
+    | "heading2"
+    | "heading3"
+    | "list"
+    | "numbered-list"
+    | "image"
+    | "code";
   content: string;
 }
 
@@ -13,22 +21,27 @@ interface BlockEditorProps {
   block: Block;
   updateBlock: (id: string, content: string, type: Block["type"]) => void;
   removeBlock: (id: string) => void;
+  setFocusedBlockId: (id: string | null) => void;
+  isFocused: boolean;
 }
 
 const BlockEditor: React.FC<BlockEditorProps> = ({
   block,
   updateBlock,
   removeBlock,
+  setFocusedBlockId,
+  isFocused,
 }) => {
   const [content, setContent] = useState(block.content);
   const [isEditing, setIsEditing] = useState(true);
   const editorRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
+
   useEffect(() => {
     setContent(block.content);
 
     if (editorRef.current) {
-      editorRef.current.style.height = "auto"; // Reset height
-      editorRef.current.style.height = `${editorRef.current.scrollHeight}px`; // Set to scroll height
+      editorRef.current.style.height = "auto";
+      editorRef.current.style.height = `${editorRef.current.scrollHeight}px`;
     }
 
     if (block.type === "list" && !block.content.trim()) {
@@ -36,7 +49,17 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
       setContent(initialContent);
       updateBlock(block.id, initialContent, block.type);
     }
-  }, [block.content, block.type, block.id, updateBlock]);
+
+    if (block.type === "numbered-list" && !block.content.trim()) {
+      const initialContent = "1. ";
+      setContent(initialContent);
+      updateBlock(block.id, initialContent, block.type);
+    }
+
+    if (isFocused && editorRef.current) {
+      editorRef.current.focus();
+    }
+  }, [block.content, block.type, block.id, updateBlock, isFocused]);
 
   const handleContentChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -44,21 +67,21 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
     const newContent = e.target.value;
     setContent(newContent);
 
-    // Adjust the height of the textarea
     if (editorRef.current) {
-      editorRef.current.style.height = "auto"; // Reset height
-      editorRef.current.style.height = `${editorRef.current.scrollHeight}px`; // Set to scroll height
+      editorRef.current.style.height = "auto";
+      editorRef.current.style.height = `${editorRef.current.scrollHeight}px`;
     }
 
-    // Update the block with the new content
     updateBlock(block.id, newContent, block.type);
 
-    // Check if it's an image URL and update the view if valid
     if (block.type === "image" && isValidImageUrl(newContent)) {
-      setIsEditing(false); // Switch to view mode immediately
+      setIsEditing(false);
     }
   };
 
+  const handleFocus = () => {
+    setFocusedBlockId(block.id);
+  };
   const isValidImageUrl = (url: string) => {
     // Check for valid image URL using a regex
     return /\.(jpeg|jpg|gif|png|svg)$/.test(url);
@@ -67,7 +90,7 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    if (block.type === "list") {
+    if (block.type === "list" || block.type === "numbered-list") {
       const textarea = e.currentTarget as HTMLTextAreaElement;
       const { selectionStart, selectionEnd, value } = textarea;
       const currentLine =
@@ -77,7 +100,14 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
       if (e.key === "Enter") {
         e.preventDefault();
         const indent = currentLine.match(/^\s*/)[0];
-        const listMarker = "• ";
+        const listMarker =
+          block.type === "numbered-list"
+            ? `${
+                currentLine.match(/^\d+/)
+                  ? parseInt(currentLine.match(/^\d+/)[0]) + 1 + ". "
+                  : "• "
+              } `
+            : "• ";
         const newContent =
           value.substring(0, selectionStart) +
           "\n" +
@@ -123,6 +153,7 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
       }
     }
   };
+
   const applyFormatting = (format: "bold" | "italic" | "underline") => {
     const textarea = editorRef.current;
     if (!textarea) return;
@@ -196,6 +227,19 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
       </div>
     );
   };
+  const renderListContent = (text: string) => {
+    const lines = text.split("\n");
+    return lines
+      .map((line, index) => {
+        const isNumbered = block.type === "numbered-list";
+        const listItem = isNumbered ? line.replace(/^\d+\.\s*/, "") : line;
+        const marker = isNumbered ? `${index + 1}. ` : "• ";
+
+        return `<div>${marker}${listItem}</div>`;
+      })
+      .join("");
+  };
+
   const renderFormattedContent = (text: string) => {
     // Convert markdown-like syntax to HTML
     const htmlContent = text
@@ -212,43 +256,74 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
   };
 
   const renderEditor = () => {
+    const commonProps = {
+      ref: editorRef as React.RefObject<HTMLTextAreaElement | HTMLInputElement>,
+      value: content,
+      onChange: handleContentChange,
+      onFocus: handleFocus,
+    };
+
     switch (block.type) {
       case "paragraph":
-      case "heading":
         return (
           <>
             {renderFormatButtons()}
             {isEditing ? (
               <textarea
-                ref={editorRef as React.RefObject<HTMLTextAreaElement>}
-                value={content}
-                onChange={handleContentChange}
-                className={`w-full p-2 border rounded-md ${
-                  block.type === "heading" ? "text-xl font-bold" : ""
-                }`}
-                rows={block.type === "heading" ? 1 : 3}
+                {...commonProps}
+                className="w-full p-2 border rounded-md"
+                rows={3}
               />
             ) : (
-              <div
-                className={`w-full p-2 border rounded-md ${
-                  block.type === "heading" ? "text-xl font-bold" : ""
-                }`}
-              >
-                {renderFormattedContent(content)}{" "}
-                {/* Use the formatted content function */}
+              <div className="w-full p-2 border rounded-md">
+                {renderFormattedContent(content)}
               </div>
             )}
           </>
         );
-      case "list":
+
+      case "heading1":
+      case "heading2":
+      case "heading3":
         return (
           <>
             {renderFormatButtons()}
             {isEditing ? (
               <textarea
-                ref={editorRef as React.RefObject<HTMLTextAreaElement>}
-                value={content}
-                onChange={handleContentChange}
+                {...commonProps}
+                className={`w-full p-2 border rounded-md ${
+                  block.type === "heading1"
+                    ? "text-3xl font-bold"
+                    : block.type === "heading2"
+                    ? "text-2xl font-bold"
+                    : "text-xl font-bold"
+                }`}
+                rows={1}
+              />
+            ) : (
+              <div
+                className={`w-full p-2 border rounded-md ${
+                  block.type === "heading1"
+                    ? "text-3xl font-bold"
+                    : block.type === "heading2"
+                    ? "text-2xl font-bold"
+                    : "text-xl font-bold"
+                }`}
+              >
+                {renderFormattedContent(content)}
+              </div>
+            )}
+          </>
+        );
+
+      case "list":
+      case "numbered-list":
+        return (
+          <>
+            {renderFormatButtons()}
+            {isEditing ? (
+              <textarea
+                {...commonProps}
                 onKeyDown={handleKeyDown}
                 className="w-full p-2 border rounded-md"
                 rows={5}
@@ -257,20 +332,19 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
             ) : (
               <div
                 className="w-full p-2 border rounded-md"
-                dangerouslySetInnerHTML={{ __html: content }}
+                dangerouslySetInnerHTML={{ __html: renderListContent(content) }}
               />
             )}
           </>
         );
+
       case "image":
         return (
           <div>
             {isEditing ? (
               <input
-                ref={editorRef as React.RefObject<HTMLInputElement>}
+                {...commonProps}
                 type="text"
-                value={content}
-                onChange={handleContentChange}
                 className="w-full p-2 border rounded-md"
                 placeholder="Enter image URL..."
               />
@@ -283,12 +357,11 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
             )}
           </div>
         );
+
       case "code":
         return isEditing ? (
           <textarea
-            ref={editorRef as React.RefObject<HTMLTextAreaElement>}
-            value={content}
-            onChange={handleContentChange}
+            {...commonProps}
             className="w-full p-2 font-mono border rounded-md bg-gray-100"
             rows={5}
             onBlur={() => setIsEditing(false)}
@@ -309,7 +382,6 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
         return null;
     }
   };
-
   return (
     <div className="mb-4 p-2 border rounded-md">
       <div className="flex justify-between items-center mb-2">

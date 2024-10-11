@@ -1,38 +1,121 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { PlusCircle, Type, ListOrdered, Image, Code } from "lucide-react";
 
 interface BlockMenuProps {
   onAddBlock: (type: string) => void;
-  onFormatText: (format: string) => void;
-  activeButton: string; // Add activeButton prop to track the active state
 }
 
-const BlockMenu: React.FC<BlockMenuProps> = ({ onAddBlock, activeButton }) => {
-  const blockTypes = [
-    { type: "paragraph", icon: PlusCircle, label: "Text" },
-    { type: "heading", icon: Type, label: "Heading" },
-    { type: "list", icon: ListOrdered, label: "List" },
-    { type: "image", icon: Image, label: "Image" },
-    { type: "code", icon: Code, label: "Code" },
+const BlockMenu: React.FC<BlockMenuProps> = ({ onAddBlock }) => {
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const menuItems = [
+    {
+      icon: PlusCircle,
+      label: "텍스트",
+      subLabel: "일반 텍스트 추가",
+      type: "paragraph",
+    },
+    { icon: Type, label: "제목 1", subLabel: "제목 1 추가", type: "heading1" },
+    { icon: Type, label: "제목 2", subLabel: "제목 2 추가", type: "heading2" },
+    { icon: Type, label: "제목 3", subLabel: "제목 3 추가", type: "heading3" },
+    {
+      icon: ListOrdered,
+      label: "번호 매기기 목록",
+      subLabel: "번호가 매겨진 목록 추가",
+      type: "numbered-list",
+    },
+    {
+      icon: ListOrdered,
+      label: "글머리 기호 목록",
+      subLabel: "글머리 기호 목록 추가",
+      type: "list",
+    },
+    { icon: Image, label: "이미지", subLabel: "이미지 추가", type: "image" },
+    { icon: Code, label: "코드", subLabel: "코드 블록 추가", type: "code" },
   ];
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "/") {
+        event.preventDefault();
+        const selection = window.getSelection();
+        if (selection && selection.rangeCount > 0) {
+          const range = selection.getRangeAt(0);
+          const rect = range.getBoundingClientRect();
+          setPopupPosition({ x: rect.left, y: rect.bottom + window.scrollY });
+          setIsPopupOpen(true);
+        }
+      } else if (event.key === "Escape") {
+        setIsPopupOpen(false);
+      }
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsPopupOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleItemClick = (type: string) => {
+    onAddBlock(type);
+    setIsPopupOpen(false);
+  };
+
   return (
-    <div className="flex flex-wrap gap-2 mb-4">
-      {blockTypes.map(({ type, icon: Icon, label }) => (
-        <button
-          key={type}
-          onClick={() => onAddBlock(type)}
-          className={`flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors ${
-            activeButton === type
-              ? "border-primary text-primary bg-gray-200" // Active button styles
-              : "border-[#D4D4D4] text-[#D4D4D4] bg-white hover:border-primary hover:text-primary hover:bg-gray-200" // Inactive button styles with hover
-          }`}
-          aria-label={label}
+    <>
+      {/* 상단 고정 메뉴 */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {menuItems.map(({ type, icon: Icon, label }) => (
+          <button
+            key={type}
+            onClick={() => onAddBlock(type)}
+            className="flex items-center justify-center rounded-lg w-[40px] h-[40px] transition-colors border-[#D4D4D4] text-[#D4D4D4] bg-white hover:border-primary hover:text-primary hover:bg-gray-200"
+            aria-label={label}
+          >
+            <Icon className="w-5 h-5" />
+          </button>
+        ))}
+      </div>
+
+      {/* '/' 키로 활성화되는 팝업 메뉴 */}
+      {isPopupOpen && (
+        <div
+          ref={menuRef}
+          className="fixed z-10 w-64 bg-gray-800 rounded-md shadow-lg"
+          style={{ left: `${popupPosition.x}px`, top: `${popupPosition.y}px` }}
         >
-          <Icon className="w-5 h-5" />
-        </button>
-      ))}
-    </div>
+          <div className="py-1">
+            <div className="px-4 py-2 text-sm text-gray-400">
+              블록 유형을 선택하세요.
+            </div>
+            {menuItems.map((item, index) => (
+              <button
+                key={index}
+                className="flex items-start w-full px-4 py-2 text-sm text-white hover:bg-gray-700"
+                onClick={() => handleItemClick(item.type)}
+              >
+                <item.icon className="w-5 h-5 mr-3 mt-1" />
+                <div className="text-left">
+                  <div>{item.label}</div>
+                  <div className="text-xs text-gray-400">{item.subLabel}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

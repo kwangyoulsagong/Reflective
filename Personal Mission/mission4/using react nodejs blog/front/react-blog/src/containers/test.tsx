@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useLocation } from "react-router-dom";
 import WriteUpload from "../components/WriteUpload";
 import { SavePostType } from "../types/types";
 import BlockEditor from "../components/BlockEditor";
 import BlockMenu from "../components/BlockMenu";
+
 export interface Block {
   id: string;
   type: "paragraph" | "heading" | "list" | "image" | "code";
   content: string;
 }
+
 const Test: React.FC = () => {
   const { state } = useLocation();
   const isEdit = Boolean(state?.post);
@@ -28,14 +30,29 @@ const Test: React.FC = () => {
     like_count: isEdit ? state.post.like_count : 0,
   });
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [focusedBlockId, setFocusedBlockId] = useState<string | null>(null);
 
   const addBlock = (type: Block["type"]) => {
     const newBlock: Block = {
-      id: `block-${blocks.length}`,
+      id: `block-${Date.now()}`,
       content: "",
       type,
     };
-    setBlocks([...blocks, newBlock]);
+
+    setBlocks((prevBlocks) => {
+      const focusedIndex = prevBlocks.findIndex(
+        (block) => block.id === focusedBlockId
+      );
+      if (focusedIndex === -1) {
+        return [...prevBlocks, newBlock];
+      } else {
+        const newBlocks = [...prevBlocks];
+        newBlocks.splice(focusedIndex + 1, 0, newBlock);
+        return newBlocks;
+      }
+    });
+
+    setFocusedBlockId(newBlock.id);
   };
 
   const updateBlock = (id: string, content: string, type: Block["type"]) => {
@@ -64,7 +81,7 @@ const Test: React.FC = () => {
     setData((prev) => ({
       ...prev,
       title,
-      contents: blocks, // 각 블록 정보를 배열로 저장
+      contents: blocks,
     }));
     setOpenModal(true);
   };
@@ -99,6 +116,8 @@ const Test: React.FC = () => {
                           block={block}
                           updateBlock={updateBlock}
                           removeBlock={removeBlock}
+                          setFocusedBlockId={setFocusedBlockId}
+                          isFocused={block.id === focusedBlockId}
                         />
                       </div>
                     )}

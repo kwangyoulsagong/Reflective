@@ -20,24 +20,31 @@ import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface Block {
   id: string;
-  type: "paragraph" | "heading" | "list" | "image" | "code";
+  type:
+    | "paragraph"
+    | "heading1"
+    | "heading2"
+    | "heading3"
+    | "list"
+    | "numbered-list"
+    | "image"
+    | "code";
   content: string;
 }
 
 const BlockView: React.FC<{ block: Block }> = ({ block }) => {
   const renderContent = (text: string) => {
     return text.split("\n").map((line, index) => {
-      // 리스트 항목을 판단하기 위한 정규 표현식
-      const listMatch = line.match(/^(\s*)(•)/); // 공백과 리스트 기호를 확인
-      const indent = listMatch ? listMatch[1].length : 0; // 인덴트의 공백 수
-      const isListItem = !!listMatch; // 리스트 항목 여부 확인
-      const trimmedLine = line.replace(/^\s*•\s*/, ""); // 리스트 기호를 제거
+      const listMatch = line.match(/^(\s*)(•)/); // Check for bullet list
+      const indent = listMatch ? listMatch[1].length : 0; // Count indentation
+      const isListItem = !!listMatch; // Check if it's a list item
+      const trimmedLine = line.replace(/^\s*•\s*/, ""); // Remove bullet symbol
 
-      // 텍스트 포맷팅 처리
+      // Formatting text
       const formattedLine = trimmedLine
-        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // 볼드 처리
-        .replace(/\*(.*?)\*/g, "<em>$1</em>") // 이탤릭 처리
-        .replace(/__(.*?)__/g, "<u>$1</u>"); // 언더라인 처리
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*(.*?)\*/g, "<em>$1</em>")
+        .replace(/__(.*?)__/g, "<u>$1</u>");
 
       return (
         <div
@@ -52,39 +59,54 @@ const BlockView: React.FC<{ block: Block }> = ({ block }) => {
   };
 
   switch (block.type) {
-    case "title":
-      return <h1 className="text-4xl font-bold mb-6">{block.content}</h1>;
     case "paragraph":
       return <div className="mb-4">{renderContent(block.content)}</div>;
-    case "heading":
+    case "heading1":
+      return <h1 className="text-3xl font-bold mb-4">{block.content}</h1>;
+    case "heading2":
       return <h2 className="text-2xl font-bold mb-4">{block.content}</h2>;
+    case "heading3":
+      return <h3 className="text-xl font-bold mb-4">{block.content}</h3>;
     case "list":
       return (
         <ul className="list-disc list-inside mb-4 pl-4">
           {block.content.split("\n").map((item, index) => {
-            // 리스트 항목을 판단하기 위한 정규 표현식
-            const listMatch = item.match(/^(\s*)(•)/); // 공백과 리스트 기호를 확인
-            const indent = listMatch ? listMatch[1].length : 0; // 인덴트의 공백 수
-            const isListItem = !!listMatch; // 리스트 항목 여부 확인
-            const trimmedLine = item.replace(/^\s*•\s*/, ""); // 리스트 기호를 제거
+            const listMatch = item.match(/^(\s*)(•)/);
+            const indent = listMatch ? listMatch[1].length : 0;
+            const isListItem = !!listMatch;
+            const trimmedLine = item.replace(/^\s*•\s*/, "");
 
             return (
               <li
                 key={index}
                 style={{ marginLeft: isListItem ? `${indent * 10}px` : "0" }}
               >
-                {isListItem ? " " : ""} {/* 리스트 항목이면 기호 추가 */}
+                {isListItem ? " " : ""}
                 {trimmedLine}
               </li>
             );
           })}
         </ul>
       );
+    case "numbered-list":
+      return (
+        <ol className="list-decimal list-inside mb-4 pl-4">
+          {block.content.split("\n").map((item, index) => {
+            const indent = item.match(/^\s*/)[0].length; // Count indentation for numbered list
+
+            return (
+              <li key={index} style={{ marginLeft: `${indent * 10}px` }}>
+                {item.trim()} {/* Trim whitespace for proper display */}
+              </li>
+            );
+          })}
+        </ol>
+      );
     case "image":
       return (
         <img
-          src={block.content} // block.content에서 직접 URL 가져오기
-          alt={`Image for block ${block.id}`} // 적절한 대체 텍스트 제공
+          src={block.content}
+          alt={`Image for block ${block.id}`}
           className="mb-4 max-w-full h-auto"
         />
       );
