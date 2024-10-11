@@ -1,16 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
 import { PlusCircle, Type, ListOrdered, Image, Code } from "lucide-react";
+import { Block } from "../types/types";
 
 interface BlockMenuProps {
-  onAddBlock: (type: string) => void;
+  onAddBlock: (type: Block["type"]) => void;
 }
 
 const BlockMenu: React.FC<BlockMenuProps> = ({ onAddBlock }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
   const menuRef = useRef<HTMLDivElement>(null);
+  const mousePositionRef = useRef({ x: 0, y: 0 });
 
-  const menuItems = [
+  const menuItems: {
+    type: Block["type"];
+    icon: React.ComponentType<{ className?: string }>;
+    label: string;
+    subLabel: string;
+  }[] = [
     {
       icon: PlusCircle,
       label: "텍스트",
@@ -40,16 +47,19 @@ const BlockMenu: React.FC<BlockMenuProps> = ({ onAddBlock }) => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "/") {
         event.preventDefault();
-        const selection = window.getSelection();
-        if (selection && selection.rangeCount > 0) {
-          const range = selection.getRangeAt(0);
-          const rect = range.getBoundingClientRect();
-          setPopupPosition({ x: rect.left, y: rect.bottom + window.scrollY });
-          setIsPopupOpen(true);
-        }
+        setPopupPosition({
+          x: mousePositionRef.current.x,
+          y: mousePositionRef.current.y - 400,
+        });
+        setIsPopupOpen(true);
       } else if (event.key === "Escape") {
         setIsPopupOpen(false);
       }
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      // Update the mouse position in the ref
+      mousePositionRef.current = { x: event.clientX, y: event.clientY };
     };
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -58,16 +68,20 @@ const BlockMenu: React.FC<BlockMenuProps> = ({ onAddBlock }) => {
       }
     };
 
+    // Add event listeners
+    document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
+      // Remove event listeners on cleanup
+      document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  const handleItemClick = (type: string) => {
+  const handleItemClick = (type: Block["type"]) => {
     onAddBlock(type);
     setIsPopupOpen(false);
   };
@@ -105,7 +119,9 @@ const BlockMenu: React.FC<BlockMenuProps> = ({ onAddBlock }) => {
                 className="flex items-start w-full px-4 py-2 text-sm text-white hover:bg-gray-700"
                 onClick={() => handleItemClick(item.type)}
               >
-                <item.icon className="w-5 h-5 mr-3 mt-1" />
+                <div className="w-5 h-5">
+                  <item.icon className="w-5 h-5" />
+                </div>
                 <div className="text-left">
                   <div>{item.label}</div>
                   <div className="text-xs text-gray-400">{item.subLabel}</div>

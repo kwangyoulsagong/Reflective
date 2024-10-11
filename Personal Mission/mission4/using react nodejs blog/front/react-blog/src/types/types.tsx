@@ -1,4 +1,18 @@
 // LoginType 인터페이스 정의
+
+export interface Block {
+  id: string;
+  type:
+    | "paragraph"
+    | "heading1"
+    | "heading2"
+    | "heading3"
+    | "list"
+    | "numbered-list"
+    | "image"
+    | "code";
+  content: string;
+}
 export interface LoginType {
   user_id: string;
   nickname: string;
@@ -34,11 +48,12 @@ export type WriteUploadProps = {
 };
 export interface SavePostType {
   title: string;
-  contents: string;
+  contents: Block[];
   category: string;
   thumbnail: string;
   like_count: number;
 }
+
 export interface getPostType {
   post_id: string;
   user_id: string;

@@ -92,7 +92,8 @@ const BlockView: React.FC<{ block: Block }> = ({ block }) => {
       return (
         <ol className="list-decimal list-inside mb-4 pl-4">
           {block.content.split("\n").map((item, index) => {
-            const indent = item.match(/^\s*/)[0].length; // Count indentation for numbered list
+            const match = item.match(/^\s*/); // Attempt to match leading whitespace
+            const indent = match ? match[0].length : 0; // Use match[0].length if match is found, otherwise default to 0
 
             return (
               <li key={index} style={{ marginLeft: `${indent * 10}px` }}>
@@ -113,7 +114,7 @@ const BlockView: React.FC<{ block: Block }> = ({ block }) => {
     case "code":
       return (
         <SyntaxHighlighter
-          language={block.language || "javascript"}
+          language={"javascript"}
           style={tomorrow}
           className="mb-4 p-4 rounded-md"
         >

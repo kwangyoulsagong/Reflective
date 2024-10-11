@@ -1,16 +1,15 @@
-import React, { useState, useRef } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import React, { useState } from "react";
+import {
+  DropResult,
+  DragDropContext,
+  Droppable,
+  Draggable,
+} from "react-beautiful-dnd";
 import { useLocation } from "react-router-dom";
 import WriteUpload from "../components/WriteUpload";
-import { SavePostType } from "../types/types";
+import { Block, SavePostType } from "../types/types";
 import BlockEditor from "../components/BlockEditor";
 import BlockMenu from "../components/BlockMenu";
-
-export interface Block {
-  id: string;
-  type: "paragraph" | "heading" | "list" | "image" | "code";
-  content: string;
-}
 
 const Test: React.FC = () => {
   const { state } = useLocation();
@@ -24,7 +23,7 @@ const Test: React.FC = () => {
   );
   const [data, setData] = useState<SavePostType>({
     title: "",
-    contents: "",
+    contents: [],
     category: isEdit ? state.post.category : "",
     thumbnail: isEdit ? state.post.thumbnail : "",
     like_count: isEdit ? state.post.like_count : 0,
@@ -67,7 +66,7 @@ const Test: React.FC = () => {
     setBlocks(blocks.filter((block) => block.id !== id));
   };
 
-  const onDragEnd = (result: any) => {
+  const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
     const items = Array.from(blocks);

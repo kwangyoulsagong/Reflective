@@ -2,20 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Trash2, Bold, Italic, Underline, Eye, EyeOff } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
-
-export interface Block {
-  id: string;
-  type:
-    | "paragraph"
-    | "heading1"
-    | "heading2"
-    | "heading3"
-    | "list"
-    | "numbered-list"
-    | "image"
-    | "code";
-  content: string;
-}
+import { Block } from "../types/types";
 
 interface BlockEditorProps {
   block: Block;
@@ -82,8 +69,8 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
   const handleFocus = () => {
     setFocusedBlockId(block.id);
   };
+
   const isValidImageUrl = (url: string) => {
-    // Check for valid image URL using a regex
     return /\.(jpeg|jpg|gif|png|svg)$/.test(url);
   };
 
@@ -99,12 +86,12 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
 
       if (e.key === "Enter") {
         e.preventDefault();
-        const indent = currentLine.match(/^\s*/)[0];
+        const indent = currentLine.match(/^\s*/)?.[0] || "";
         const listMarker =
           block.type === "numbered-list"
             ? `${
-                currentLine.match(/^\d+/)
-                  ? parseInt(currentLine.match(/^\d+/)[0]) + 1 + ". "
+                currentLine.match(/^\d+/)?.[0]
+                  ? parseInt(currentLine.match(/^\d+/)?.[0] || "0") + 1 + ". "
                   : "• "
               } `
             : "• ";
@@ -124,9 +111,8 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
               selectionStart + indent.length + listMarker.length + 1;
             textarea.selectionStart = textarea.selectionEnd = newPosition;
 
-            // Adjust the height of the textarea
-            textarea.style.height = "auto"; // Reset height
-            textarea.style.height = `${textarea.scrollHeight}px`; // Set to scroll height
+            textarea.style.height = "auto";
+            textarea.style.height = `${textarea.scrollHeight}px`;
           }
         }, 0);
       } else if (e.key === "Tab") {
@@ -145,9 +131,8 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
             const newPosition = selectionStart + newIndent.length;
             textarea.selectionStart = textarea.selectionEnd = newPosition;
 
-            // Adjust the height of the textarea
-            textarea.style.height = "auto"; // Reset height
-            textarea.style.height = `${textarea.scrollHeight}px`; // Set to scroll height
+            textarea.style.height = "auto";
+            textarea.style.height = `${textarea.scrollHeight}px`;
           }
         }, 0);
       }
@@ -155,11 +140,15 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
   };
 
   const applyFormatting = (format: "bold" | "italic" | "underline") => {
+    console.log(format);
     const textarea = editorRef.current;
+    console.log(textarea);
     if (!textarea) return;
 
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
+    const start: number =
+      textarea.selectionStart !== null ? textarea.selectionStart : 0; // Fallback to 0 if null
+    const end: number =
+      textarea.selectionEnd !== null ? textarea.selectionEnd : 0; // Fallback to 0 if null
     const selectedText = content.substring(start, end);
 
     let formattedText = "";
@@ -180,23 +169,23 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
     setContent(newContent);
     updateBlock(block.id, newContent, block.type);
 
-    // Reset cursor position
     setTimeout(() => {
-      textarea.selectionStart = start + 2;
-      textarea.selectionEnd = end + 2;
-      textarea.focus();
+      if (textarea) {
+        textarea.selectionStart = start + formattedText.length; // Update this to reflect the formatted text length
+        textarea.selectionEnd = end + formattedText.length; // Update this to reflect the formatted text length
+        textarea.focus();
+      }
     }, 0);
   };
-  const renderLineBreaks = (text: string) => {
-    return text.split("\n").map((line, index) => (
-      <span key={index}>
-        {line}
-        <br />
-      </span>
-    ));
-  };
+
   const renderFormatButtons = () => {
-    if (block.type !== "paragraph" && block.type !== "heading") return null;
+    if (
+      block.type !== "paragraph" &&
+      block.type !== "heading1" &&
+      block.type !== "heading2" &&
+      block.type !== "heading3"
+    )
+      return null;
 
     return (
       <div className="flex space-x-2 mb-2">
@@ -227,6 +216,7 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
       </div>
     );
   };
+
   const renderListContent = (text: string) => {
     const lines = text.split("\n");
     return lines
@@ -241,28 +231,34 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
   };
 
   const renderFormattedContent = (text: string) => {
-    // Convert markdown-like syntax to HTML
     const htmlContent = text
-      .replace(/__(.*?)__/g, "<u>$1</u>") // Underline
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Bold
-      .replace(/\*(.*?)\*/g, "<em>$1</em>"); // Italic
+      .replace(/__(.*?)__/g, "<u>$1</u>")
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.*?)\*/g, "<em>$1</em>");
 
     return htmlContent.split("\n").map((line, index) => (
-      <span key={index}>
+      <React.Fragment key={index}>
         <span dangerouslySetInnerHTML={{ __html: line }} />
         <br />
-      </span>
+      </React.Fragment>
     ));
   };
 
   const renderEditor = () => {
     const commonProps = {
-      ref: editorRef as React.RefObject<HTMLTextAreaElement | HTMLInputElement>,
       value: content,
       onChange: handleContentChange,
       onFocus: handleFocus,
     };
+    const textareaProps = {
+      ...commonProps,
+      ref: editorRef as React.RefObject<HTMLTextAreaElement>,
+    };
 
+    const inputProps = {
+      ...commonProps,
+      ref: editorRef as React.RefObject<HTMLInputElement>,
+    };
     switch (block.type) {
       case "paragraph":
         return (
@@ -270,7 +266,7 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
             {renderFormatButtons()}
             {isEditing ? (
               <textarea
-                {...commonProps}
+                {...textareaProps}
                 className="w-full p-2 border rounded-md"
                 rows={3}
               />
@@ -290,7 +286,7 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
             {renderFormatButtons()}
             {isEditing ? (
               <textarea
-                {...commonProps}
+                {...textareaProps}
                 className={`w-full p-2 border rounded-md ${
                   block.type === "heading1"
                     ? "text-3xl font-bold"
@@ -323,7 +319,7 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
             {renderFormatButtons()}
             {isEditing ? (
               <textarea
-                {...commonProps}
+                {...textareaProps}
                 onKeyDown={handleKeyDown}
                 className="w-full p-2 border rounded-md"
                 rows={5}
@@ -343,7 +339,7 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
           <div>
             {isEditing ? (
               <input
-                {...commonProps}
+                {...inputProps}
                 type="text"
                 className="w-full p-2 border rounded-md"
                 placeholder="Enter image URL..."
@@ -361,7 +357,7 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
       case "code":
         return isEditing ? (
           <textarea
-            {...commonProps}
+            {...textareaProps}
             className="w-full p-2 font-mono border rounded-md bg-gray-100"
             rows={5}
             onBlur={() => setIsEditing(false)}
@@ -382,6 +378,7 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
         return null;
     }
   };
+
   return (
     <div className="mb-4 p-2 border rounded-md">
       <div className="flex justify-between items-center mb-2">
