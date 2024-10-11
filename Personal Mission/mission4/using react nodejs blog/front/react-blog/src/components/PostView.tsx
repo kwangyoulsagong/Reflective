@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import Prism from "prismjs";
+
 import "prismjs/themes/prism.css";
 import "prismjs/components/prism-javascript.min.js";
-import styles from "./styles/Preview.module.css";
+
 import unheart from "../assets/unheart.png";
 import heart from "../assets/heart.png";
 import { useHeaderIDs, useToC } from "../hooks/usePostViewUtils";
@@ -14,118 +14,95 @@ import { useNavigate } from "react-router-dom";
 import useSaveFavoritesMutation from "../hooks/api/useSaveFavoritesMutation";
 import useGetPostFavoritesQuery from "../hooks/api/useGetPostFavoritesQuery";
 import useDeleteFavoriteMutation from "../hooks/api/useDeleteFavoriteMutation";
-import mermaid from "mermaid"; // Import Mermaid
-const escapeHtml = (unsafe: string): string => {
-  return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-};
-const markdownToHtml = (markdown: string): string => {
-  const lines = markdown.split(/\r?\n/);
-  let html = "";
-  const listStack: string[] = [];
-  let currentIndent = 0;
-  let inCodeBlock = false;
-  let inMermaidBlock = false;
-  let codeContent = "";
-  let codeLanguage = "";
-  const processListItem = (line: string, listType: string) => {
-    const indent = line.search(/\S|$/);
-    const content = line
-      .trim()
-      .replace(/^[-*+]|\d+\.\s/, "")
-      .trim();
 
-    if (listStack.length === 0 || indent > currentIndent) {
-      listStack.push(listType);
-      html += `<${listType}>`;
-      currentIndent = indent;
-    } else if (indent < currentIndent) {
-      while (indent < currentIndent && listStack.length > 0) {
-        const closingTag = listStack.pop();
-        html += `</${closingTag}>`;
-        currentIndent -= 2;
-      }
-      if (
-        listStack.length === 0 ||
-        listStack[listStack.length - 1] !== listType
-      ) {
-        listStack.push(listType);
-        html += `<${listType}>`;
-      }
-    }
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-    html += `<li>${content}</li>`;
+interface Block {
+  id: string;
+  type: "paragraph" | "heading" | "list" | "image" | "code";
+  content: string;
+}
+
+const BlockView: React.FC<{ block: Block }> = ({ block }) => {
+  const renderContent = (text: string) => {
+    return text.split("\n").map((line, index) => {
+      // 리스트 항목을 판단하기 위한 정규 표현식
+      const listMatch = line.match(/^(\s*)(•)/); // 공백과 리스트 기호를 확인
+      const indent = listMatch ? listMatch[1].length : 0; // 인덴트의 공백 수
+      const isListItem = !!listMatch; // 리스트 항목 여부 확인
+      const trimmedLine = line.replace(/^\s*•\s*/, ""); // 리스트 기호를 제거
+
+      // 텍스트 포맷팅 처리
+      const formattedLine = trimmedLine
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // 볼드 처리
+        .replace(/\*(.*?)\*/g, "<em>$1</em>") // 이탤릭 처리
+        .replace(/__(.*?)__/g, "<u>$1</u>"); // 언더라인 처리
+
+      return (
+        <div
+          key={index}
+          style={{ marginLeft: isListItem ? `${indent * 10}px` : "0" }}
+          dangerouslySetInnerHTML={{
+            __html: `${isListItem ? "• " : ""}${formattedLine}`,
+          }}
+        />
+      );
+    });
   };
 
-  for (const line of lines) {
-    if (line.trim().startsWith("```mermaid")) {
-      if (inMermaidBlock) {
-        html += `<div class="mermaid">${escapeHtml(codeContent.trim())}</div>`;
-        inMermaidBlock = false;
-        codeContent = "";
-      } else {
-        inMermaidBlock = true;
-      }
-    } else if (inMermaidBlock) {
-      codeContent += line + "\n";
-    } else if (line.trim().startsWith("```")) {
-      if (inCodeBlock) {
-        html += `<pre><code class="language-${codeLanguage}">${escapeHtml(
-          codeContent.trim()
-        )}</code></pre>`;
-        inCodeBlock = false;
-        codeContent = "";
-        codeLanguage = "";
-      } else {
-        inCodeBlock = true;
-        codeLanguage = line.trim().slice(3);
-      }
-    } else if (inCodeBlock) {
-      codeContent += line + "\n";
-    } else if (line.trim().match(/^[-*+]\s/)) {
-      processListItem(line, "ul");
-    } else if (line.trim().match(/^\d+\.\s/)) {
-      processListItem(line, "ol");
-    } else {
-      while (listStack.length > 0) {
-        const closingTag = listStack.pop();
-        html += `</${closingTag}>`;
-      }
-      currentIndent = 0;
-      html += processLine(line);
-    }
-  }
+  switch (block.type) {
+    case "title":
+      return <h1 className="text-4xl font-bold mb-6">{block.content}</h1>;
+    case "paragraph":
+      return <div className="mb-4">{renderContent(block.content)}</div>;
+    case "heading":
+      return <h2 className="text-2xl font-bold mb-4">{block.content}</h2>;
+    case "list":
+      return (
+        <ul className="list-disc list-inside mb-4 pl-4">
+          {block.content.split("\n").map((item, index) => {
+            // 리스트 항목을 판단하기 위한 정규 표현식
+            const listMatch = item.match(/^(\s*)(•)/); // 공백과 리스트 기호를 확인
+            const indent = listMatch ? listMatch[1].length : 0; // 인덴트의 공백 수
+            const isListItem = !!listMatch; // 리스트 항목 여부 확인
+            const trimmedLine = item.replace(/^\s*•\s*/, ""); // 리스트 기호를 제거
 
-  while (listStack.length > 0) {
-    const closingTag = listStack.pop();
-    html += `</${closingTag}>`;
+            return (
+              <li
+                key={index}
+                style={{ marginLeft: isListItem ? `${indent * 10}px` : "0" }}
+              >
+                {isListItem ? " " : ""} {/* 리스트 항목이면 기호 추가 */}
+                {trimmedLine}
+              </li>
+            );
+          })}
+        </ul>
+      );
+    case "image":
+      return (
+        <img
+          src={block.content} // block.content에서 직접 URL 가져오기
+          alt={`Image for block ${block.id}`} // 적절한 대체 텍스트 제공
+          className="mb-4 max-w-full h-auto"
+        />
+      );
+    case "code":
+      return (
+        <SyntaxHighlighter
+          language={block.language || "javascript"}
+          style={tomorrow}
+          className="mb-4 p-4 rounded-md"
+        >
+          {block.content}
+        </SyntaxHighlighter>
+      );
+    default:
+      return null;
   }
-
-  if (inCodeBlock) {
-    html += `<pre><code class="language-${codeLanguage}">${escapeHtml(
-      codeContent.trim()
-    )}</code></pre>`;
-  }
-
-  return html;
 };
-const processLine = (line: string): string => {
-  return line
-    .replace(/^#### (.*?)$/, "<h4>$1</h4>")
-    .replace(/^### (.*?)$/, "<h3>$1</h3>")
-    .replace(/^## (.*?)$/, "<h2>$1</h2>")
-    .replace(/^# (.*?)$/, "<h1>$1</h1>")
-    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\*(.*?)\*/g, "<em>$1</em>")
-    .replace(/~~(.*?)~~/g, "<del>$1</del>")
-    .replace(/`([^`]+)`/g, (_, code) => `<code>${escapeHtml(code)}</code>`)
-    .replace(/^\s*>\s*(.*?)$/g, "<blockquote>$1</blockquote>")
-    .replace(/^(?!<h|<blockquote|<li|<\/)(.*?)$/g, "<p>$1</p>");
-};
+
 const PostView = (data: Partial<getPostType>) => {
   const navigate = useNavigate();
   const user_id = localStorage.getItem("user_id");
@@ -139,11 +116,16 @@ const PostView = (data: Partial<getPostType>) => {
     false
   );
 
+  const [blocks, setBlocks] = useState<Block[]>([]);
+
   useEffect(() => {
-    if (data?.contents) {
-      Prism.highlightAll();
-      mermaid.initialize({ startOnLoad: true });
-      mermaid.contentLoaded(); // Rerender Mermaid diagrams
+    if (Array.isArray(data?.contents)) {
+      setBlocks(data.contents);
+    } else {
+      console.error(
+        "Expected data.contents to be an array, but got:",
+        typeof data?.contents
+      );
     }
   }, [data?.contents]);
 
@@ -155,17 +137,19 @@ const PostView = (data: Partial<getPostType>) => {
   const { mutate: deleteMutate } = useDeletePostMutation();
   const { mutate: saveFavoriteMutate } = useSaveFavoritesMutation();
   const { mutate: deleteFavoriteMutate } = useDeleteFavoriteMutation();
+
   useEffect(() => {
     if (favorite) {
       setIsFavorite(favorite.is_favorite);
     }
   }, [favorite]);
+
   const handleDeletePost = async (post_id: string) => {
     deleteMutate(post_id);
   };
 
   const handleUpdatePost = () => {
-    navigate("/write", { state: { post: data } }); // post_id와 함께 전달
+    navigate("/test", { state: { post: data } });
   };
 
   const handleAddFavorite = async (user_id: string) => {
@@ -184,15 +168,15 @@ const PostView = (data: Partial<getPostType>) => {
   return (
     <div className="mt-20 w-[900px] h-auto flex flex-col items-center gap-[50px]">
       <h1 className="text-[50px] font-bold">{data?.title}</h1>
-      <header className="flex  gap-10  items-center">
+      <header className="flex gap-10 items-center">
         <section className="flex gap-3">
           <b>{data?.nickname}</b>
           <span>-</span>
           <span>{formatRelativeTime(data?.created_date || "")}</span>
         </section>
-        <section className="flex gap-2 ">
+        <section className="flex gap-2">
           <button onClick={handleLike} className="w-[30px] h-[30px]">
-            <img className="" src={isLiked ? heart : unheart}></img>
+            <img className="" src={isLiked ? heart : unheart} alt="Like" />
           </button>
           <span>{likeCount}</span>
         </section>
@@ -204,7 +188,7 @@ const PostView = (data: Partial<getPostType>) => {
             {isFavorite ? "취소하기" : "즐겨찾기"}
           </button>
         </section>
-        {user_id == data.user_id && (
+        {user_id === data.user_id && (
           <section className="flex gap-3">
             <button onClick={handleUpdatePost}>수정</button>
             <button onClick={() => handleDeletePost(data.post_id || "")}>
@@ -230,13 +214,12 @@ const PostView = (data: Partial<getPostType>) => {
         </div>
         <div id="toc"></div>
       </div>
-      <article className={styles.previewContainer} ref={contentRef}>
-        <div
-          className={styles.prose}
-          dangerouslySetInnerHTML={{
-            __html: markdownToHtml(data?.contents || ""),
-          }}
-        />
+      <article ref={contentRef}>
+        <div>
+          {blocks.map((block) => (
+            <BlockView key={block.id} block={block} />
+          ))}
+        </div>
       </article>
     </div>
   );

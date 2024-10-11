@@ -1,96 +1,132 @@
-import React, { useState, useRef, useEffect } from "react";
-import { ArrowLeft, ArrowRight, RotateCw, X } from "lucide-react";
-
-interface WebBrowserProps {
-  url: string;
-  onUrlSubmit: (url: string) => void;
-  onClose: () => void;
+import React, { useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { useLocation } from "react-router-dom";
+import WriteUpload from "../components/WriteUpload";
+import { SavePostType } from "../types/types";
+import BlockEditor from "../components/BlockEditor";
+import BlockMenu from "../components/BlockMenu";
+export interface Block {
+  id: string;
+  type: "paragraph" | "heading" | "list" | "image" | "code";
+  content: string;
 }
+const Test: React.FC = () => {
+  const { state } = useLocation();
+  const isEdit = Boolean(state?.post);
 
-const WebBrowser: React.FC<WebBrowserProps> = ({
-  url,
-  onUrlSubmit,
-  onClose,
-}) => {
-  const [inputUrl, setInputUrl] = useState(url);
-  const [currentUrl, setCurrentUrl] = useState(url);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [title, setTitle] = useState(isEdit ? state.post.title : "");
+  const [blocks, setBlocks] = useState<Block[]>(
+    isEdit
+      ? state.post.contents
+      : [{ id: "block-0", content: "", type: "paragraph" }]
+  );
+  const [data, setData] = useState<SavePostType>({
+    title: "",
+    contents: "",
+    category: isEdit ? state.post.category : "",
+    thumbnail: isEdit ? state.post.thumbnail : "",
+    like_count: isEdit ? state.post.like_count : 0,
+  });
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
-  useEffect(() => {
-    setInputUrl(url);
-    setCurrentUrl(url);
-  }, [url]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    let processedUrl = inputUrl;
-    if (!inputUrl.startsWith("http://") && !inputUrl.startsWith("https://")) {
-      processedUrl = `https://${inputUrl}`;
-    }
-    setCurrentUrl(processedUrl);
-    onUrlSubmit(processedUrl);
+  const addBlock = (type: Block["type"]) => {
+    const newBlock: Block = {
+      id: `block-${blocks.length}`,
+      content: "",
+      type,
+    };
+    setBlocks([...blocks, newBlock]);
   };
 
-  const handleBack = () => {
-    if (iframeRef.current) {
-      iframeRef.current.contentWindow?.history.back();
-    }
+  const updateBlock = (id: string, content: string, type: Block["type"]) => {
+    setBlocks(
+      blocks.map((block) =>
+        block.id === id ? { ...block, content, type } : block
+      )
+    );
   };
 
-  const handleForward = () => {
-    if (iframeRef.current) {
-      iframeRef.current.contentWindow?.history.forward();
-    }
+  const removeBlock = (id: string) => {
+    setBlocks(blocks.filter((block) => block.id !== id));
   };
 
-  const handleRefresh = () => {
-    if (iframeRef.current) {
-      iframeRef.current.src = currentUrl;
-    }
+  const onDragEnd = (result: any) => {
+    if (!result.destination) return;
+
+    const items = Array.from(blocks);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setBlocks(items);
+  };
+
+  const handleSubmit = () => {
+    setData((prev) => ({
+      ...prev,
+      title,
+      contents: blocks, // 각 블록 정보를 배열로 저장
+    }));
+    setOpenModal(true);
   };
 
   return (
-    <div className="flex flex-col h-full border rounded-lg overflow-hidden">
-      <div className="flex items-center space-x-2 p-2 bg-gray-100">
-        <button onClick={handleBack} className="p-1 hover:bg-gray-200 rounded">
-          <ArrowLeft size={20} />
-        </button>
-        <button
-          onClick={handleForward}
-          className="p-1 hover:bg-gray-200 rounded"
-        >
-          <ArrowRight size={20} />
-        </button>
-        <button
-          onClick={handleRefresh}
-          className="p-1 hover:bg-gray-200 rounded"
-        >
-          <RotateCw size={20} />
-        </button>
-        <form onSubmit={handleSubmit} className="flex-grow">
-          <input
-            type="text"
-            value={inputUrl}
-            onChange={(e) => setInputUrl(e.target.value)}
-            className="w-full px-2 py-1 border rounded"
-            placeholder="Enter URL"
-          />
-        </form>
-        <button onClick={onClose} className="p-1 hover:bg-gray-200 rounded">
-          <X size={20} />
-        </button>
-      </div>
-      <div className="flex-grow">
-        <iframe
-          ref={iframeRef}
-          src={currentUrl}
-          className="w-full h-full border-none"
-          title="Web Browser"
-          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+    <div className="flex justify-center items-center min-h-screen py-8">
+      <section className="flex flex-col w-full max-w-4xl">
+        <input
+          value={title}
+          placeholder="제목을 입력해주세요..."
+          className="text-4xl font-bold mb-4 p-2 outline-none border-b"
+          onChange={(e) => setTitle(e.target.value)}
         />
-      </div>
+        <BlockMenu onAddBlock={addBlock} />
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="blocks">
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {blocks.map((block, index) => (
+                  <Draggable
+                    key={block.id}
+                    draggableId={block.id}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <BlockEditor
+                          block={block}
+                          updateBlock={updateBlock}
+                          removeBlock={removeBlock}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+        <div className="mt-5 flex justify-end">
+          <button
+            onClick={handleSubmit}
+            className="bg-primary rounded-[20px] w-[150px] h-[40px] text-white font-bold"
+          >
+            Submit
+          </button>
+        </div>
+      </section>
+      {openModal && (
+        <WriteUpload
+          data={data}
+          onClose={() => setOpenModal(false)}
+          isEdit={isEdit}
+        />
+      )}
     </div>
   );
 };
 
-export default WebBrowser;
+export default Test;

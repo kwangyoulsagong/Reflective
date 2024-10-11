@@ -1,0 +1,12 @@
+.textarea-custom {
+  font-family: "Courier New", monospace; /* 원하는 폰트 적용 */
+  font-size: 16px;
+}
+
+.textarea-italic {
+  font-style: italic;
+}
+
+.textarea-underline {
+  text-decoration: underline;
+}
