@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { PlusCircle, Type, ListOrdered, Image, Code } from "lucide-react";
+import {
+  PlusCircle,
+  Type,
+  ListOrdered,
+  Image,
+  Code,
+  BarChart,
+} from "lucide-react";
 import { Block } from "../types/types";
 
 interface BlockMenuProps {
@@ -41,6 +48,7 @@ const BlockMenu: React.FC<BlockMenuProps> = ({ onAddBlock }) => {
     },
     { icon: Image, label: "이미지", subLabel: "이미지 추가", type: "image" },
     { icon: Code, label: "코드", subLabel: "코드 블록 추가", type: "code" },
+    { icon: BarChart, label: "차트", subLabel: "차트 추가", type: "chart" },
   ];
 
   useEffect(() => {

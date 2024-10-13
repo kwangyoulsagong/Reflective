@@ -10,7 +10,8 @@ export interface Block {
     | "list"
     | "numbered-list"
     | "image"
-    | "code";
+    | "code"
+    | "chart";
   content: string;
 }
 export interface LoginType {
