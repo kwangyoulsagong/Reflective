@@ -1,9 +1,10 @@
-export const BASE_URL = "http://localhost:8000";
+export const BASE_URL = "http://localhost:5173";
 
 export const AXIOS_BASE_URL = "http://localhost:8000";
 
 export const END_POINTS = {
   COMMENTS: (postId: string) => `/api/v1/comments/${postId}`,
+  REIGISTER: "/api/v1/auth/register",
   LOGIN: "/api/v1/auth/login",
   PATCHLIKE: (post_id: string) => `/api/v1/like/${post_id}`,
 } as const;
