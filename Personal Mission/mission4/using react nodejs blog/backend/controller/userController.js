@@ -40,6 +40,7 @@ class UserController {
     Login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { email, password } = req.body;
+            console.log(email);
             try {
                 const result = yield userService_1.default.Login(email, password);
                 if (result) {

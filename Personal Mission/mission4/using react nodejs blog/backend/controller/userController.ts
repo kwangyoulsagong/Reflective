@@ -21,6 +21,7 @@ class UserController {
   }
   public async Login(req: Request, res: Response): Promise<void> {
     const { email, password } = req.body;
+    console.log(email);
     try {
       const result = await userService.Login(email, password);
       if (result) {

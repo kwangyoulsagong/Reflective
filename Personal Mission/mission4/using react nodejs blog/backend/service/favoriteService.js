@@ -108,7 +108,7 @@ class FavoriteService {
                 console.log(favoriteUsersIds);
                 // 24시간 이내에 작성된 포스트 가져오기
                 const twentyFourHoursAgo = new Date();
-                twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+                twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 48);
                 console.log(twentyFourHoursAgo);
                 const posts = yield postModel_1.default.find({
                     user_id: { $in: favoriteUsersIds },
