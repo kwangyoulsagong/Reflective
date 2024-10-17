@@ -1,16 +1,11 @@
-export const PROD = process.env.NODE_ENV === "production";
+export const BASE_URL = "http://localhost:8000";
 
-export const BASE_URL = PROD
-  ? `${window.location.protocol}//${process.env.PROD_BASE_URL}`
-  : "http://localhost:5173";
-
-export const AXIOS_BASE_URL = PROD
-  ? `${window.location.protocol}//${process.env.AXIOS_PROD_BASE_URL}`
-  : "http://localhost:8000";
+export const AXIOS_BASE_URL = "http://localhost:8000";
 
 export const END_POINTS = {
   COMMENTS: (postId: string) => `/api/v1/comments/${postId}`,
   LOGIN: "/api/v1/auth/login",
+  PATCHLIKE: (post_id: string) => `/api/v1/like/${post_id}`,
 } as const;
 
 export const NETWORK = {
@@ -64,3 +59,5 @@ export const HTTP_ERROR_MESSAGE = {
 export const ERROR_MESSAGE = "오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
 
 export const ACCESS_TOKEN_KEY = "ACCESS_TOKEN";
+export const USER_ID_KEY = "USER_ID";
+export const REFRESH_TOKEN_KEY = "REFRESH_TOKEN";

@@ -18,6 +18,8 @@ export interface ErrorResponse {
 
 // 토큰 체크 및 토큰 저장
 export const checkAndSetToken = (config: InternalAxiosRequestConfig) => {
+  // 토큰이 필요하지 않은 요청은 Authorization을 설정하지 않음
+  if (config.headers?.["Skip-Auth"]) return config;
   if (!config.headers || config.headers.Authorization) return config;
 
   const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
