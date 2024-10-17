@@ -7,12 +7,13 @@ import {
   HTTP_STATUS_CODE,
 } from "../constants/api";
 import postNewToken from "./user/postNewToken";
+import { HTTPError } from "./HTTPError";
 
 // 에러 응답 타입
 export interface ErrorResponse {
-  statusCode: number;
-  message: string;
-  code: number;
+  statusCode?: number;
+  message?: string;
+  code?: number;
 }
 
 // 토큰 체크 및 토큰 저장
