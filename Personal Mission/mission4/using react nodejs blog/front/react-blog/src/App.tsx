@@ -4,7 +4,15 @@ import "./App.css";
 import StartRoutes from "./routes/StartRoutes";
 import PageRoutes from "./routes/PageRoutes";
 function App() {
-  const queryClient = new QueryClient();
+  // QueryClient 인스턴스를 생성합니다
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 1000 * 60 * 5, // 5분
+        gcTime: 1000 * 60 * 30, // 30분
+      },
+    },
+  });
   return (
     <Router>
       <QueryClientProvider client={queryClient}>
