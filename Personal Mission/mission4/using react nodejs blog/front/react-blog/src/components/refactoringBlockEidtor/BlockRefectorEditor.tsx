@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
+  useLayoutEffect,
 } from "react";
 import { Trash2, Bold, Italic, Underline, Eye, EyeOff } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -21,9 +22,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useRecoilState } from "recoil";
+import { useRecoilCallback, useRecoilState } from "recoil";
 import { blockContentState } from "./recoil/blockContentState";
-import { EDITOR_CONFIG } from "../../constants/blockEditor";
+import { EDITOR_CONFIG, INITIAL_CHART_DATA } from "../../constants/blockEditor";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -41,71 +42,87 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
     const [isEditing, setIsEditing] = useState(true);
     const editorRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
 
-    const [chartData, setChartData] = useState({
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
-      datasets: [
-        {
-          label: "Sales",
-          data: [12, 19, 3, 5, 2, 3, 10],
-          borderColor: "rgb(75, 192, 192)",
-          tension: 0.1,
-        },
-      ],
-    });
+    const [chartData, setChartData] = useState(INITIAL_CHART_DATA);
+    // 디바운스 함수를 useRef로 관리하여 메모리 누수 방지
+    const debouncedUpdateRef = useRef<ReturnType<typeof debounce>>();
 
-    // 디바운스된 업데이트 함수
-    const debouncedUpdate = useCallback(
-      debounce((id: string, content: string, type: Block["type"]) => {
-        updateBlock(id, content, type);
-      }, EDITOR_CONFIG.DEBOUNCE_DELAY),
-      [updateBlock]
+    // 컴포넌트 마운트 시 디바운스 함수 생성
+    useEffect(() => {
+      debouncedUpdateRef.current = debounce(
+        (id: string, content: string, type: Block["type"]) => {
+          updateBlock(id, content, type);
+        },
+        EDITOR_CONFIG.DEBOUNCE_DELAY
+      );
+
+      // 클린업 함수에서 디바운스 함수 취소
+      return () => {
+        debouncedUpdateRef.current?.cancel();
+      };
+    }, [updateBlock]);
+
+    // Recoil 상태 업데이트를 위한 콜백
+    const updateBlockContent = useRecoilCallback(
+      ({ set }) =>
+        (id: string, content: string) => {
+          set(blockContentState, (prev) => new Map(prev).set(id, content));
+        },
+      []
     );
 
-    useEffect(() => {
-      const currentContent = block.content;
-      setBlockContent((prev) => new Map(prev).set(block.id, currentContent));
-      // 자동으로 높이 늘리기
+    // 에디터 height 조정을 위한 별도의 함수
+    const adjustEditorHeight = useCallback(() => {
       if (editorRef.current) {
-        editorRef.current.style.height = "auto";
-        editorRef.current.style.height = `${editorRef.current.scrollHeight}px`;
-      }
-
-      // 리스트 초기값
-      if (block.type === "list" && !block.content.trim()) {
-        const initialContent = EDITOR_CONFIG.DEFAULT_LIST_MARKER;
-        setBlockContent((prev) => new Map(prev).set(block.id, initialContent));
-        updateBlock(block.id, initialContent, block.type);
-      }
-      // 넘버 리스트 초기값
-      if (block.type === "numbered-list" && !block.content.trim()) {
-        const initialContent = EDITOR_CONFIG.DEFAULT_NUMBERED_MARKER;
-        setBlockContent((prev) => new Map(prev).set(block.id, initialContent));
-        updateBlock(block.id, initialContent, block.type);
-      }
-      // 커서 위치
-      if (isFocused && editorRef.current) {
-        editorRef.current.focus();
-      }
-    }, [block.content, block.type, block.id, updateBlock, isFocused]);
-
-    // 내용입력
-    const handleContentChange = useCallback(
-      (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        const newContent = e.target.value;
-        setBlockContent((prev) => new Map(prev).set(block.id, newContent));
-
         if (editorRef.current) {
           editorRef.current.style.height = "auto";
           editorRef.current.style.height = `${editorRef.current.scrollHeight}px`;
         }
+      }
+    }, []);
 
-        debouncedUpdate(block.id, newContent, block.type);
+    // useLayoutEffect를 사용하여 DOM 업데이트 최적화
+    useLayoutEffect(() => {
+      adjustEditorHeight();
+    }, [adjustEditorHeight, blockContent]);
+
+    // 초기 블록 설정을 위한 효과
+    useEffect(() => {
+      const initializeBlock = () => {
+        const currentContent = block.content;
+        updateBlockContent(block.id, currentContent);
+        // 리스트 초기값
+        if (block.type === "list" && !block.content.trim()) {
+          const initialContent = EDITOR_CONFIG.DEFAULT_LIST_MARKER;
+          updateBlockContent(block.id, initialContent);
+          updateBlock(block.id, initialContent, block.type);
+        }
+        // 넘버 리스트 초기값
+        if (block.type === "numbered-list" && !block.content.trim()) {
+          const initialContent = EDITOR_CONFIG.DEFAULT_NUMBERED_MARKER;
+          updateBlockContent(block.id, initialContent);
+          updateBlock(block.id, initialContent, block.type);
+        }
+        // 커서 위치
+        if (isFocused && editorRef.current) {
+          editorRef.current.focus();
+        }
+      };
+      initializeBlock();
+    }, [block.id, block.type, block.content, isFocused, updateBlock]);
+
+    // 콘텐츠 변경 핸들러 최적화
+    const handleContentChange = useCallback(
+      (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const newContent = e.target.value;
+        updateBlockContent(block.id, newContent);
+
+        debouncedUpdateRef.current?.(block.id, newContent, block.type);
 
         if (block.type === "image" && isValidImageUrl(newContent)) {
           setIsEditing(false);
         }
       },
-      [block.id, block.type, debouncedUpdate]
+      [block.id, block.type]
     );
 
     // 차트 데이터 입력
@@ -208,8 +225,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
               setBlockContent((prev) =>
                 new Map(prev).set(block.id, newContent)
               );
-              debouncedUpdate(block.id, newContent, block.type);
-
+              debouncedUpdateRef.current?.(block.id, newContent, block.type);
               requestAnimationFrame(() => {
                 if (textarea) {
                   const newPosition =
@@ -237,7 +253,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
               setBlockContent((prev) =>
                 new Map(prev).set(block.id, newContent)
               );
-              debouncedUpdate(block.id, newContent, block.type);
+              debouncedUpdateRef.current?.(block.id, newContent, block.type);
 
               requestAnimationFrame(() => {
                 if (textarea) {
@@ -259,7 +275,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
               setBlockContent((prev) =>
                 new Map(prev).set(block.id, newContent)
               );
-              debouncedUpdate(block.id, newContent, block.type);
+              debouncedUpdateRef.current?.(block.id, newContent, block.type);
 
               requestAnimationFrame(() => {
                 if (textarea) {
@@ -273,7 +289,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
           }
         }
       },
-      [block.id, block.type, debouncedUpdate]
+      [block.id, block.type]
     );
     const applyFormatting = useCallback(
       (format: "bold" | "italic" | "underline") => {
@@ -298,7 +314,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
           currentContent.substring(end);
 
         setBlockContent((prev) => new Map(prev).set(block.id, newContent));
-        debouncedUpdate(block.id, newContent, block.type);
+        debouncedUpdateRef.current?.(block.id, newContent, block.type);
 
         requestAnimationFrame(() => {
           if (textarea) {
@@ -308,7 +324,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
           }
         });
       },
-      [block.id, block.type, blockContent, debouncedUpdate]
+      [block.id, block.type, blockContent]
     );
 
     const renderFormatButtons = useCallback(() => {
@@ -376,14 +392,20 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
         </React.Fragment>
       ));
     };
+    // 렌더링 최적화를 위한 메모이제이션
+    const editorContent = useMemo(() => {
+      return blockContent.get(block.id) ?? "";
+    }, [blockContent, block.id]);
 
-    const renderEditor = () => {
-      const content = (blockContent.get(block.id) ?? "") as string;
-      const commonProps = {
-        value: content,
+    const commonProps = useMemo(
+      () => ({
+        value: editorContent,
         onChange: handleContentChange,
         onFocus: () => setFocusedBlockId(block.id),
-      };
+      }),
+      [editorContent, handleContentChange, setFocusedBlockId, block.id]
+    );
+    const renderEditor = () => {
       const textareaProps = {
         ...commonProps,
         ref: editorRef as React.RefObject<HTMLTextAreaElement>,
@@ -406,7 +428,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
                 />
               ) : (
                 <div className="w-full p-2 border rounded-md">
-                  {renderFormattedContent(content)}
+                  {renderFormattedContent(editorContent)}
                 </div>
               )}
             </>
@@ -440,7 +462,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
                       : "text-xl font-bold"
                   }`}
                 >
-                  {renderFormattedContent(content)}
+                  {renderFormattedContent(editorContent)}
                 </div>
               )}
             </>
@@ -463,7 +485,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
                 <div
                   className="w-full p-2 border rounded-md"
                   dangerouslySetInnerHTML={{
-                    __html: renderListContent(content),
+                    __html: renderListContent(editorContent),
                   }}
                 />
               )}
@@ -482,7 +504,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
                 />
               ) : (
                 <img
-                  src={content}
+                  src={editorContent}
                   alt="Uploaded"
                   className="w-full h-auto rounded-md"
                 />
@@ -505,7 +527,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
                 style={tomorrow}
                 className="w-full p-2 font-mono border rounded-md bg-gray-100"
               >
-                {content}
+                {editorContent}
               </SyntaxHighlighter>
             </div>
           );
