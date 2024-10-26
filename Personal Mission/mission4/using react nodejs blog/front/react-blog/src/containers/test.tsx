@@ -8,7 +8,7 @@ import {
 import { useLocation } from "react-router-dom";
 import WriteUpload from "../components/WriteUpload";
 import { Block, SavePostType } from "../types/types";
-import BlockEditor from "../components/BlockEditor";
+import BlockEditor from "../components/refactoringBlockEidtor/BlockRefectorEditor";
 import BlockMenu from "../components/BlockMenu";
 
 const Test: React.FC = () => {

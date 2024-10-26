@@ -14,6 +14,13 @@ export interface Block {
     | "chart";
   content: string;
 }
+export interface BlockEditorProps {
+  block: Block;
+  updateBlock: (id: string, content: string, type: Block["type"]) => void;
+  removeBlock: (id: string) => void;
+  setFocusedBlockId: (id: string | null) => void;
+  isFocused: boolean;
+}
 export interface LoginType {
   user_id: string;
   nickname: string;

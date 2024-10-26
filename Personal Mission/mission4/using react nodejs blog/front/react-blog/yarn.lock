@@ -2350,6 +2350,11 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
+"@types/lodash@^4.17.12":
+  version "4.17.12"
+  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.17.12.tgz"
+  integrity sha512-sviUmCE8AYdaF/KIHLDJBQgeYzPBI0vf/17NaYehBJfYD1j6/L95Slh07NlyK2iNyBNaEkb3En2jRt+a8y3xZQ==
+
 "@types/mdast@^4.0.0":
   version "4.0.4"
   resolved "https://registry.npmjs.org/@types/mdast/-/mdast-4.0.4.tgz"
