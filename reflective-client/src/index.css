@@ -1,0 +1,15 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+:root {
+  --primary-color: #fa997f;
+  --custom-gray: #f9f9f9;
+}
+@media (max-width: 1000px) {
+  .hide-on-small {
+    display: none;
+  }
+}
+html {
+  scroll-behavior: smooth;
+}
