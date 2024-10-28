@@ -24,7 +24,7 @@ const SignUpComponents = () => {
     <section className="flex flex-col gap-8 justify-center items-center ">
       <div className="box-border flex flex-col gap-6 items-center w-[400px] h-[600px] border border-gray-300">
         <header>
-          <img className="w-[85px] mt-10" src={logo} alt="logo" />
+          <img className="w-[150px] mt-10" src={logo} alt="logo" />
         </header>
         <input
           value={state.email}

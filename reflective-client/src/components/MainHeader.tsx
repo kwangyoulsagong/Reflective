@@ -14,7 +14,7 @@ const MainHeader = () => {
         onClick={() => navigate("/home")}
         src={logo}
         alt="logo"
-        className="w-16 sm:w-18 md:w-20"
+        className="w-32 sm:w-36 md:w-40"
       />
       <nav className="flex items-center gap-3 sm:gap-4 md:gap-5 flex-wrap sm:flex-nowrap">
         <button
