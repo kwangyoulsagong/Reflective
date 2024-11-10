@@ -6,6 +6,9 @@ import Prism from "prismjs";
 import "prismjs/themes/prism.css";
 import "prismjs/components/prism-javascript.min.js";
 import styles from "./styles/favorite.module.css";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { Block } from "../types/types";
 
 interface Story {
   _id: string;
@@ -14,6 +17,98 @@ interface Story {
   contents: string;
   created_date: string;
 }
+const BlockView: React.FC<{ block: Block }> = ({ block }) => {
+  const renderContent = (text: string) => {
+    return text.split("\n").map((line, index) => {
+      const listMatch = line.match(/^(\s*)(•)/);
+      const indent = listMatch ? listMatch[1].length : 0;
+      const isListItem = !!listMatch;
+      const trimmedLine = line.replace(/^\s*•\s*/, "");
+
+      const formattedLine = trimmedLine
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*(.*?)\*/g, "<em>$1</em>")
+        .replace(/__(.*?)__/g, "<u>$1</u>");
+
+      return (
+        <div
+          key={index}
+          style={{ marginLeft: isListItem ? `${indent * 10}px` : "0" }}
+          dangerouslySetInnerHTML={{
+            __html: `${isListItem ? "• " : ""}${formattedLine}`,
+          }}
+        />
+      );
+    });
+  };
+
+  switch (block.type) {
+    case "paragraph":
+      return <div className="mb-4">{renderContent(block.content)}</div>;
+    case "heading1":
+      return <h1 className="text-3xl font-bold mb-4">{block.content}</h1>;
+    case "heading2":
+      return <h2 className="text-2xl font-bold mb-4">{block.content}</h2>;
+    case "heading3":
+      return <h3 className="text-xl font-bold mb-4">{block.content}</h3>;
+    case "list":
+      return (
+        <ul className="list-disc list-inside mb-4 pl-4">
+          {block.content.split("\n").map((item, index) => {
+            const listMatch = item.match(/^(\s*)(•)/);
+            const indent = listMatch ? listMatch[1].length : 0;
+            const isListItem = !!listMatch;
+            const trimmedLine = item.replace(/^\s*•\s*/, "");
+
+            return (
+              <li
+                key={index}
+                style={{ marginLeft: isListItem ? `${indent * 10}px` : "0" }}
+              >
+                {isListItem ? " " : ""}
+                {trimmedLine}
+              </li>
+            );
+          })}
+        </ul>
+      );
+    case "numbered-list":
+      return (
+        <ol className="list-decimal list-inside mb-4 pl-4">
+          {block.content.split("\n").map((item, index) => {
+            const match = item.match(/^\s*/);
+            const indent = match ? match[0].length : 0;
+
+            return (
+              <li key={index} style={{ marginLeft: `${indent * 10}px` }}>
+                {item.trim()}
+              </li>
+            );
+          })}
+        </ol>
+      );
+    case "image":
+      return (
+        <img
+          src={block.content}
+          alt={`Image for block ${block.id}`}
+          className="mb-4 max-w-full h-auto"
+        />
+      );
+    case "code":
+      return (
+        <SyntaxHighlighter
+          language={"javascript"}
+          style={tomorrow}
+          className="mb-4 p-4 rounded-md"
+        >
+          {block.content}
+        </SyntaxHighlighter>
+      );
+    default:
+      return null;
+  }
+};
 
 const FavoriteStories = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -116,12 +211,13 @@ const FavoriteStories = () => {
                         className={styles.previewContainer}
                         ref={contentRef}
                       >
-                        <div
-                          className={styles.prose}
-                          dangerouslySetInnerHTML={{
-                            __html: activeStory.contents,
-                          }}
-                        />
+                        {Array.isArray(activeStory.contents) ? (
+                          activeStory.contents.map((block: Block) => (
+                            <BlockView key={block.id} block={block} />
+                          ))
+                        ) : (
+                          <div>Invalid content format</div>
+                        )}
                       </article>
                     </div>
                   </motion.div>

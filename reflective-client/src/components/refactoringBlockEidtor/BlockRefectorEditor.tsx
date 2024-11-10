@@ -25,6 +25,7 @@ import {
 import { useRecoilCallback, useRecoilState } from "recoil";
 import { blockContentState } from "./recoil/blockContentState";
 import { EDITOR_CONFIG, INITIAL_CHART_DATA } from "../../constants/blockEditor";
+import ImageSizeSlider from "./ImageSize/ImageSize";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -43,6 +44,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
     const editorRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
 
     const [chartData, setChartData] = useState(INITIAL_CHART_DATA);
+    const [imageSize, setImageSize] = useState(100);
     // 디바운스 함수를 useRef로 관리하여 메모리 누수 방지
     const debouncedUpdateRef = useRef<ReturnType<typeof debounce>>();
 
@@ -503,11 +505,15 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
                   placeholder="Enter image URL..."
                 />
               ) : (
-                <img
-                  src={editorContent}
-                  alt="Uploaded"
-                  className="w-full h-auto rounded-md"
-                />
+                <div className="space-y-2">
+                  <img
+                    src={editorContent}
+                    alt="Uploaded"
+                    className="w-full h-auto rounded-md"
+                    style={{ maxWidth: `${imageSize}%` }}
+                  />
+                  <ImageSizeSlider onChange={(size) => setImageSize(size)} />
+                </div>
               )}
             </div>
           );

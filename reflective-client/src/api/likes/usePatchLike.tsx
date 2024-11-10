@@ -1,4 +1,4 @@
-import { axiosInstance } from "../../api/axiosinstance";
+import { axiosInstance } from "../axiosinstance";
 import { END_POINTS } from "../../constants/api";
 
 const UsePatchLike = async (post_id: string, body: object) => {
