@@ -8,6 +8,7 @@ export const END_POINTS = {
   LOGIN: "/api/v1/auth/login",
   PATCHLIKE: (post_id: string) => `/api/v1/like/${post_id}`,
   SAVEPOST: "/api/v1/post",
+  POST: (post_id: string) => `/api/v1/post/${post_id}`,
 } as const;
 
 export const NETWORK = {

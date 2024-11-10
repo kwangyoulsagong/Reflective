@@ -15,7 +15,7 @@ const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
       category: data.category || "",
       thumbnail:
         data.thumbnail ||
-        "https://velog.velcdn.com/images/k-svelte-master/post/87c41002-2255-4543-849e-47a275bc1b7d/image.png",
+        "https://velog.velcdn.com/images/maeilmail/post/f4bcf691-e507-4a2b-ab29-badcd0412488/image.png",
       like_count: 0,
     };
     if (isEdit) {
@@ -25,7 +25,7 @@ const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
         category: data.category || "",
         thumbnail:
           data.thumbnail ||
-          "https://velog.velcdn.com/images/k-svelte-master/post/3b675e72-cdba-4983-8429-1fbea08ca37a/image.png",
+          "https://velog.velcdn.com/images/maeilmail/post/f4bcf691-e507-4a2b-ab29-badcd0412488/image.png",
       };
       updateMutation.mutate({ post_id, body });
     } else {
