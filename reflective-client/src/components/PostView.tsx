@@ -8,7 +8,7 @@ import heart from "../assets/heart.png";
 import { useHeaderIDs, useToC } from "../hooks/usePostViewUtils";
 import { getPostType } from "../types/types";
 import { formatRelativeTime } from "../hooks/TimeReducer";
-import useLike from "../hooks/useLike";
+import useLike from "../hooks/api/useLike";
 import useDeletePostMutation from "../hooks/api/useDeletePostMutation";
 import { useNavigate } from "react-router-dom";
 import useSaveFavoritesMutation from "../hooks/api/useSaveFavoritesMutation";
@@ -17,6 +17,7 @@ import useDeleteFavoriteMutation from "../hooks/api/useDeleteFavoriteMutation";
 
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { USER_ID_KEY } from "../constants/api";
 
 interface Block {
   id: string;
@@ -35,12 +36,11 @@ interface Block {
 const BlockView: React.FC<{ block: Block }> = ({ block }) => {
   const renderContent = (text: string) => {
     return text.split("\n").map((line, index) => {
-      const listMatch = line.match(/^(\s*)(•)/); // Check for bullet list
-      const indent = listMatch ? listMatch[1].length : 0; // Count indentation
-      const isListItem = !!listMatch; // Check if it's a list item
-      const trimmedLine = line.replace(/^\s*•\s*/, ""); // Remove bullet symbol
+      const listMatch = line.match(/^(\s*)(•)/);
+      const indent = listMatch ? listMatch[1].length : 0;
+      const isListItem = !!listMatch;
+      const trimmedLine = line.replace(/^\s*•\s*/, "");
 
-      // Formatting text
       const formattedLine = trimmedLine
         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
         .replace(/\*(.*?)\*/g, "<em>$1</em>")
@@ -92,12 +92,12 @@ const BlockView: React.FC<{ block: Block }> = ({ block }) => {
       return (
         <ol className="list-decimal list-inside mb-4 pl-4">
           {block.content.split("\n").map((item, index) => {
-            const match = item.match(/^\s*/); // Attempt to match leading whitespace
-            const indent = match ? match[0].length : 0; // Use match[0].length if match is found, otherwise default to 0
+            const match = item.match(/^\s*/);
+            const indent = match ? match[0].length : 0;
 
             return (
               <li key={index} style={{ marginLeft: `${indent * 10}px` }}>
-                {item.trim()} {/* Trim whitespace for proper display */}
+                {item.trim()}
               </li>
             );
           })}
@@ -128,7 +128,7 @@ const BlockView: React.FC<{ block: Block }> = ({ block }) => {
 
 const PostView = (data: Partial<getPostType>) => {
   const navigate = useNavigate();
-  const user_id = localStorage.getItem("user_id");
+  const user_id = localStorage.getItem(USER_ID_KEY);
   const contentRef = useRef<HTMLDivElement>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [circlePosition, setCirclePosition] = useState<number>(0);

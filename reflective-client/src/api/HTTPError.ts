@@ -4,6 +4,7 @@ export class HTTPError extends Error {
   code?: number;
 
   constructor(statusCode: number, message?: string, code?: number) {
+    console.log(statusCode, message, code);
     super(message);
 
     this.name = "HTTPError";

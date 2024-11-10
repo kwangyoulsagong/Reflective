@@ -13,9 +13,11 @@ export const axiosInstance = axios.create({
   timeout: NETWORK.TIMEOUT,
 });
 
+// 요청 인터셉터: 토큰 설정 및 API 오류 처리
 axiosInstance.interceptors.request.use(checkAndSetToken, handleAPIError);
-axiosInstance.interceptors.request.use(
-  (response) => response,
-  handleTokenError
+
+// 응답 인터셉터: 401 오류가 발생하면 토큰 갱신 처리
+axiosInstance.interceptors.response.use(
+  (response) => response, // 정상 응답을 그대로 반환
+  handleTokenError // 토큰 오류 처리 (401 Unauthorized 처리)
 );
-axiosInstance.interceptors.response.use((response) => response, handleAPIError);

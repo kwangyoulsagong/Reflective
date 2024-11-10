@@ -8,14 +8,7 @@ import ErrorBoundary from "./components/errorboundary/ErrorBoundary";
 import Error from "./components/error/Error";
 function App() {
   // QueryClient 인스턴스를 생성합니다
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 1000 * 60 * 5, // 5분
-        gcTime: 1000 * 60 * 30, // 30분
-      },
-    },
-  });
+  const queryClient = new QueryClient();
   return (
     <Router>
       <QueryClientProvider client={queryClient}>

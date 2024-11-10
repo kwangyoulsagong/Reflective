@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import UseGetLike from "./api/useGetLike";
-import UsePatchLike from "./api/usePatchLike";
+import UseGetLike from "../../api/likes/useGetLike";
+import UsePatchLike from "../../api/likes/usePatchLike";
 const useLike = (
   postId: string,
   initialLikeCount: number,
