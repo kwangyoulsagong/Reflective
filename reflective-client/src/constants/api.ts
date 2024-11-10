@@ -7,6 +7,7 @@ export const END_POINTS = {
   REIGISTER: "/api/v1/auth/register",
   LOGIN: "/api/v1/auth/login",
   PATCHLIKE: (post_id: string) => `/api/v1/like/${post_id}`,
+  SAVEPOST: "/api/v1/post",
 } as const;
 
 export const NETWORK = {
