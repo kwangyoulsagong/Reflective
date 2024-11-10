@@ -102,7 +102,5 @@
 - "정말로 삭제하시겠습니까?" 메세지를 띄우고, 확인/취소 버튼 중 "확인" 버튼을 누른 경우 목록에서 해당 댓글을 삭제하기
 - 취소를 누른 경우 삭제되지 않고 그대로 유지하기
 
-### 프론트엔드와 백엔드 아키텍처 설계
 
-<img src="https://file.notion.so/f/f/1c0bf503-8259-47fe-a707-6a55553299e9/5d25b548-5f06-40c2-901d-3b03e03fa2e2/fullstack-architecture.drawio.png?table=block&id=5cc7f380-48f4-4dbc-ae61-8062d60f1166&spaceId=1c0bf503-8259-47fe-a707-6a55553299e9&expirationTimestamp=1731369600000&signature=NLy1ha9TKi0sQiB5XaBaiOS6Lv4HYfivOGRGa8WgN8Q&downloadName=fullstack-architecture.drawio.png"/>
 
