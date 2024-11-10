@@ -1,22 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-
-const fetchRecentPost = async () => {
-  try {
-    const response = await fetch("http://localhost:8000/api/v1/post", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-};
+import { queryKeys } from "../../constants/queryKeys";
+import fetchRecentPost from "../../api/post/fetchRecentPost";
 
 const useRecentPostQuery = () => {
   return useQuery({
-    queryKey: ["RecentPost"],
+    queryKey: queryKeys.RecentPost,
     queryFn: fetchRecentPost,
   });
 };
