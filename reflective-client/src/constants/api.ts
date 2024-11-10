@@ -13,6 +13,7 @@ export const END_POINTS = {
   SAVECOMMENT: `/api/v1/comments/`,
   FAVORITE: (post_id: string) => `/api/v1/favorite/post/${post_id}`,
   SAVEFAVORITE: `/api/v1/favorite/`,
+  DELETEFAVORITE: (favorite_id: string) => `/api/v1/favorite/${favorite_id}`,
 } as const;
 
 export const NETWORK = {
