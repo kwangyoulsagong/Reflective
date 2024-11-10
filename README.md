@@ -104,5 +104,5 @@
 
 ### 프론트엔드와 백엔드 아키텍처 설계
 
-![fullstack-architecture.drawio.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/1c0bf503-8259-47fe-a707-6a55553299e9/5d25b548-5f06-40c2-901d-3b03e03fa2e2/fullstack-architecture.drawio.png)
+<img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/1c0bf503-8259-47fe-a707-6a55553299e9/5d25b548-5f06-40c2-901d-3b03e03fa2e2/fullstack-architecture.drawio.png"/>
 
