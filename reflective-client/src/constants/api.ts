@@ -11,6 +11,8 @@ export const END_POINTS = {
   POST: (post_id: string) => `/api/v1/post/${post_id}`,
   COMMENT: (post_id: string) => `/api/v1/comments/${post_id}`,
   SAVECOMMENT: `/api/v1/comments/`,
+  FAVORITE: (post_id: string) => `/api/v1/favorite/post/${post_id}`,
+  SAVEFAVORITE: `/api/v1/favorite/`,
 } as const;
 
 export const NETWORK = {
@@ -27,20 +29,6 @@ export const HTTP_STATUS_CODE = {
   NOT_FOUND: 404,
   CONTENT_TOO_LARGE: 413,
   INTERNAL_SERVER_ERROR: 500,
-} as const;
-
-export const ERROR_CODE = {
-  DUPLICATED_NICKNAME: 1013,
-  LARGE_IMAGE_FILE: 5001,
-  TOKEN_ERROR_RANGE: 9000,
-  INVALID_REFRESH_TOKEN: 9101,
-  INVALID_ACCESS_TOKEN: 9102,
-  EXPIRED_REFRESH_TOKEN: 9103,
-  EXPIRED_ACCESS_TOKEN: 9104,
-  INVALID_TOKEN_VALIDATE: 9105,
-  NULL_REFRESH_TOKEN: 9106,
-  UNAUTHORIZED: 9201,
-  UNEXPECTED_TOKEN_ERROR: 9999,
 } as const;
 
 export const HTTP_ERROR_MESSAGE = {

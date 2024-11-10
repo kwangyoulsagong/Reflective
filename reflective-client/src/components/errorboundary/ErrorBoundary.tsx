@@ -3,10 +3,6 @@ import type { ComponentType, PropsWithChildren } from "react";
 import { Component } from "react";
 import type { ErrorProps } from "../../components/error/Error";
 import { HTTPError } from "../../api/HTTPError";
-import { ERROR_CODE } from "../../constants/api";
-
-// Define error code keys
-type ErrorCodeKey = keyof typeof ERROR_CODE;
 
 /**
  * ErrorBoundary 컴포넌트의 props 인터페이스
@@ -81,22 +77,12 @@ class ErrorBoundary extends Component<
     if (error instanceof HTTPError) {
       return {
         statusCode: error.statusCode,
-        errorCode: this.getErrorCodeKey(error.code), //에러코드
       };
     }
     return {
       statusCode: undefined,
-      errorCode: undefined,
     };
   };
-
-  private getErrorCodeKey(code: number | undefined): ErrorCodeKey | undefined {
-    if (code === undefined) return undefined;
-    const entry = Object.entries(ERROR_CODE).find(
-      ([, value]) => value === code
-    );
-    return entry ? (entry[0] as ErrorCodeKey) : undefined;
-  }
 
   render() {
     const { Fallback, children } = this.props;
