@@ -17,6 +17,7 @@ import useDeleteFavoriteMutation from "../hooks/api/useDeleteFavoriteMutation";
 
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { USER_ID_KEY } from "../constants/api";
 
 interface Block {
   id: string;
@@ -128,7 +129,7 @@ const BlockView: React.FC<{ block: Block }> = ({ block }) => {
 
 const PostView = (data: Partial<getPostType>) => {
   const navigate = useNavigate();
-  const user_id = localStorage.getItem("user_id");
+  const user_id = localStorage.getItem(USER_ID_KEY);
   const contentRef = useRef<HTMLDivElement>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [circlePosition, setCirclePosition] = useState<number>(0);

@@ -6,6 +6,8 @@ const useRecentPostQuery = () => {
   return useQuery({
     queryKey: queryKeys.RecentPost,
     queryFn: fetchRecentPost,
+    staleTime: 1000 * 60 * 5, // 5분
+    gcTime: 1000 * 60 * 30, // 30분
   });
 };
 
