@@ -18,6 +18,8 @@ import useDeleteFavoriteMutation from "../hooks/api/useDeleteFavoriteMutation";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { USER_ID_KEY } from "../constants/api";
+import { Line } from "react-chartjs-2";
+import { ChartData } from "chart.js";
 
 interface Block {
   id: string;
@@ -29,7 +31,8 @@ interface Block {
     | "list"
     | "numbered-list"
     | "image"
-    | "code";
+    | "code"
+    | "chart";
   content: string;
 }
 
@@ -62,11 +65,23 @@ const BlockView: React.FC<{ block: Block }> = ({ block }) => {
     case "paragraph":
       return <div className="mb-4">{renderContent(block.content)}</div>;
     case "heading1":
-      return <h1 className="text-3xl font-bold mb-4">{block.content}</h1>;
+      return (
+        <h1 className="text-3xl font-bold mb-4">
+          {renderContent(block.content)}
+        </h1>
+      );
     case "heading2":
-      return <h2 className="text-2xl font-bold mb-4">{block.content}</h2>;
+      return (
+        <h2 className="text-2xl font-bold mb-4">
+          {renderContent(block.content)}
+        </h2>
+      );
     case "heading3":
-      return <h3 className="text-xl font-bold mb-4">{block.content}</h3>;
+      return (
+        <h3 className="text-xl font-bold mb-4">
+          {renderContent(block.content)}
+        </h3>
+      );
     case "list":
       return (
         <ul className="list-disc list-inside mb-4 pl-4">
@@ -90,7 +105,7 @@ const BlockView: React.FC<{ block: Block }> = ({ block }) => {
       );
     case "numbered-list":
       return (
-        <ol className="list-decimal list-inside mb-4 pl-4">
+        <ol className="list-inside mb-4 pl-4">
           {block.content.split("\n").map((item, index) => {
             const match = item.match(/^\s*/);
             const indent = match ? match[0].length : 0;
@@ -121,12 +136,33 @@ const BlockView: React.FC<{ block: Block }> = ({ block }) => {
           {block.content}
         </SyntaxHighlighter>
       );
+    case "chart": {
+      const chartData: ChartData<"line", (number | null)[], unknown> = (() => {
+        let parsedContent;
+
+        try {
+          // block.content를 JSON 객체로 파싱
+          parsedContent = JSON.parse(block.content);
+        } catch (error) {
+          console.error("JSON 파싱 오류:", error);
+          parsedContent = { labels: [], datasets: [] }; // 파싱 실패 시 기본값 설정
+        }
+
+        return {
+          labels: parsedContent.labels || [], // JSON에서 파싱한 labels
+          datasets: parsedContent.datasets || [], // JSON에서 파싱한 datasets
+        };
+      })();
+
+      return <Line data={chartData} />;
+    }
     default:
       return null;
   }
 };
 
 const PostView = (data: Partial<getPostType>) => {
+  console.log(data);
   const navigate = useNavigate();
   const user_id = localStorage.getItem(USER_ID_KEY);
   const contentRef = useRef<HTMLDivElement>(null);
