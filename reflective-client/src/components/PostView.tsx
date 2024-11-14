@@ -172,7 +172,7 @@ const PostView = (data: Partial<getPostType>) => {
   };
 
   const handleUpdatePost = () => {
-    navigate("/test", { state: { post: data } });
+    navigate("/write", { state: { post: data } });
   };
 
   const handleAddFavorite = async (user_id: string) => {
