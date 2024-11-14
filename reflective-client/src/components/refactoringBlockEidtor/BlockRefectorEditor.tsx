@@ -131,9 +131,9 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
     const handleChartDataChange = useCallback(
       (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         try {
-          const newData = JSON.parse(e.target.value);
+          const newData = JSON.parse(e.target.value.trim());
           setChartData(newData);
-          updateBlock(block.id, JSON.stringify(newData), block.type);
+          updateBlock(block.id, e.target.value.trim(), block.type);
         } catch (error) {
           console.error("Invalid JSON:", error);
         }
