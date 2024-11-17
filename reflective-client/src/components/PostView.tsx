@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 
 import "prismjs/themes/prism.css";
 import "prismjs/components/prism-javascript.min.js";
@@ -20,7 +20,12 @@ import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { USER_ID_KEY } from "../constants/api";
 import { Line } from "react-chartjs-2";
 import { ChartData } from "chart.js";
-
+interface ListItem {
+  id: string;
+  content: string;
+  level: number;
+  isCollapsed: boolean;
+}
 interface Block {
   id: string;
   type:
@@ -33,18 +38,13 @@ interface Block {
     | "image"
     | "code"
     | "chart";
-  content: string;
+  content: string | ListItem[];
 }
 
 const BlockView: React.FC<{ block: Block }> = ({ block }) => {
   const renderContent = (text: string) => {
     return text.split("\n").map((line, index) => {
-      const listMatch = line.match(/^(\s*)(•)/);
-      const indent = listMatch ? listMatch[1].length : 0;
-      const isListItem = !!listMatch;
-      const trimmedLine = line.replace(/^\s*•\s*/, "");
-
-      const formattedLine = trimmedLine
+      const formattedLine = line
         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
         .replace(/\*(.*?)\*/g, "<em>$1</em>")
         .replace(/__(.*?)__/g, "<u>$1</u>");
@@ -52,76 +52,95 @@ const BlockView: React.FC<{ block: Block }> = ({ block }) => {
       return (
         <div
           key={index}
-          style={{ marginLeft: isListItem ? `${indent * 10}px` : "0" }}
           dangerouslySetInnerHTML={{
-            __html: `${isListItem ? "• " : ""}${formattedLine}`,
+            __html: formattedLine,
           }}
         />
       );
     });
   };
 
+  const calculateNumber = useCallback(
+    (items: ListItem[], currentIndex: number): string => {
+      const currentItem = items[currentIndex];
+      if (block.type !== "numbered-list") return "•";
+
+      let number = 1;
+      for (let i = 0; i < currentIndex; i++) {
+        if (items[i].level === currentItem.level) {
+          number++;
+        }
+      }
+      return number.toString() + ".";
+    },
+    [block.type]
+  );
+
+  const renderListItems = (items: ListItem[], isNumbered = false) => {
+    return items.map((item, index) => (
+      <div
+        key={item.id || index}
+        style={{ marginLeft: `${item.level * 20}px` }}
+        className="flex items-start gap-2"
+      >
+        {isNumbered ? (
+          <span className="mr-2">{calculateNumber(items, index)}</span>
+        ) : (
+          <span className="mt-1">•</span>
+        )}
+        <span>{item.content}</span>
+      </div>
+    ));
+  };
+
+  const parseContent = (content: string): ListItem[] => {
+    try {
+      return JSON.parse(content);
+    } catch (error) {
+      console.error("JSON 파싱 오류:", error);
+      return []; // 파싱 실패 시 빈 배열 반환
+    }
+  };
+
   switch (block.type) {
     case "paragraph":
-      return <div className="mb-4">{renderContent(block.content)}</div>;
+      return (
+        <div className="mb-4">{renderContent(block.content as string)}</div>
+      );
     case "heading1":
       return (
         <h1 className="text-3xl font-bold mb-4">
-          {renderContent(block.content)}
+          {renderContent(block.content as string)}
         </h1>
       );
     case "heading2":
       return (
         <h2 className="text-2xl font-bold mb-4">
-          {renderContent(block.content)}
+          {renderContent(block.content as string)}
         </h2>
       );
     case "heading3":
       return (
         <h3 className="text-xl font-bold mb-4">
-          {renderContent(block.content)}
+          {renderContent(block.content as string)}
         </h3>
       );
     case "list":
       return (
-        <ul className="list-disc list-inside mb-4 pl-4">
-          {block.content.split("\n").map((item, index) => {
-            const listMatch = item.match(/^(\s*)(•)/);
-            const indent = listMatch ? listMatch[1].length : 0;
-            const isListItem = !!listMatch;
-            const trimmedLine = item.replace(/^\s*•\s*/, "");
-
-            return (
-              <li
-                key={index}
-                style={{ marginLeft: isListItem ? `${indent * 10}px` : "0" }}
-              >
-                {isListItem ? " " : ""}
-                {trimmedLine}
-              </li>
-            );
-          })}
-        </ul>
+        <div className="mb-4 pl-4">
+          {renderListItems(parseContent(block.content as string))}
+        </div>
       );
     case "numbered-list":
       return (
-        <ol className="list-inside mb-4 pl-4">
-          {block.content.split("\n").map((item, index) => {
-            const match = item.match(/^\s*/);
-            const indent = match ? match[0].length : 0;
-
-            return (
-              <li key={index} style={{ marginLeft: `${indent * 10}px` }}>
-                {item.trim()}
-              </li>
-            );
-          })}
-        </ol>
+        <div className="mb-4 pl-4">
+          {renderListItems(parseContent(block.content as string), true)}
+        </div>
       );
     case "image":
       return (
         <img
-          src={block.content}
+          src={block.content as string}
           alt={`Image for block ${block.id}`}
           className="mb-4 max-w-full h-auto"
         />
@@ -133,7 +152,7 @@ const BlockView: React.FC<{ block: Block }> = ({ block }) => {
           style={tomorrow}
           className="mb-4 p-4 rounded-md"
         >
-          {block.content}
+          {block.content as string}
         </SyntaxHighlighter>
       );
     case "chart": {
@@ -141,16 +160,15 @@ const BlockView: React.FC<{ block: Block }> = ({ block }) => {
         let parsedContent;
 
         try {
-          // block.content를 JSON 객체로 파싱
-          parsedContent = JSON.parse(block.content);
+          parsedContent = JSON.parse(block.content as string);
         } catch (error) {
           console.error("JSON 파싱 오류:", error);
-          parsedContent = { labels: [], datasets: [] }; // 파싱 실패 시 기본값 설정
+          parsedContent = { labels: [], datasets: [] };
         }
 
         return {
-          labels: parsedContent.labels || [], // JSON에서 파싱한 labels
-          datasets: parsedContent.datasets || [], // JSON에서 파싱한 datasets
+          labels: parsedContent.labels || [],
+          datasets: parsedContent.datasets || [],
         };
       })();
 
