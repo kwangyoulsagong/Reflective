@@ -6,10 +6,19 @@ import React, {
   useMemo,
   useLayoutEffect,
 } from "react";
-import { Trash2, Bold, Italic, Underline, Eye, EyeOff } from "lucide-react";
+import {
+  Trash2,
+  Bold,
+  Italic,
+  Underline,
+  Eye,
+  EyeOff,
+  ChevronRight,
+  ChevronDown,
+} from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Block, BlockEditorProps } from "../../types/types";
+import { Block, BlockEditorProps, ListItem } from "../../types/types";
 import { debounce } from "lodash";
 import { Line } from "react-chartjs-2";
 import {
@@ -41,8 +50,9 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
     // 컨텐츠 관리 리코일로 관리를 한다
     const [blockContent, setBlockContent] = useRecoilState(blockContentState);
     const [isEditing, setIsEditing] = useState(true);
+    const [listItems, setListItems] = useState<ListItem[]>([]);
     const editorRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
-
+    const itemRefs = useRef<{ [key: string]: HTMLInputElement }>({});
     const [chartData, setChartData] = useState(INITIAL_CHART_DATA);
     const [imageSize, setImageSize] = useState(100);
     // 디바운스 함수를 useRef로 관리하여 메모리 누수 방지
@@ -63,6 +73,49 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
       };
     }, [updateBlock]);
 
+    // 리스트 데이터 직렬화
+    const serializeListItems = useCallback((items: ListItem[]): string => {
+      return JSON.stringify(items);
+    }, []);
+
+    // 리스트 데이터 역직렬화
+    const deserializeListItems = useCallback((content: string): ListItem[] => {
+      try {
+        return JSON.parse(content);
+      } catch {
+        return [];
+      }
+    }, []);
+    // 초기 리스트 데이터 로드
+    useEffect(() => {
+      const content = blockContent.get(block.id) || "";
+      if (block.type === "list" || block.type === "numbered-list") {
+        try {
+          const parsedItems = deserializeListItems(content);
+          setListItems(
+            parsedItems.length > 0
+              ? parsedItems
+              : [
+                  {
+                    id: generateId(),
+                    content: "",
+                    level: 0,
+                    isCollapsed: false,
+                  },
+                ]
+          );
+        } catch {
+          setListItems([
+            {
+              id: generateId(),
+              content: "",
+              level: 0,
+              isCollapsed: false,
+            },
+          ]);
+        }
+      }
+    }, [block.id, block.type]);
     // Recoil 상태 업데이트를 위한 콜백
     const updateBlockContent = useRecoilCallback(
       ({ set }) =>
@@ -146,153 +199,244 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
       return /\.(jpeg|jpg|gif|png|svg)$/.test(url);
     };
 
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        if (block.type === "list" || block.type === "numbered-list") {
-          const textarea = e.currentTarget as HTMLTextAreaElement;
-          const { selectionStart, selectionEnd, value } = textarea;
-          const currentLine =
-            value.substring(0, selectionStart).split("\n").pop() || "";
-          const currentLineStart =
-            value.lastIndexOf("\n", selectionStart - 1) + 1;
+    // 새로운 아이템 ID 생성
+    const generateId = () => `item-${Math.random().toString(36).substr(2, 9)}`;
 
-          if (e.key === "Enter") {
-            // 현재 줄이 비어 있는지 확인
-            const previousLineEmpty = currentLine.trim() === "";
-            const isListLine =
-              /^\d+\.\s*$/.test(currentLine) ||
-              currentLine === EDITOR_CONFIG.DEFAULT_LIST_MARKER;
+    // 아이템 번호 계산
+    const calculateNumber = useCallback(
+      (items: ListItem[], currentIndex: number): string => {
+        const currentItem = items[currentIndex];
+        if (block.type !== "numbered-list") return "•";
 
-            if (previousLineEmpty || isListLine) {
-              // Enter 두 번 누르거나 리스트 항목이 비었으면 상위 리스트로 이동
-              e.preventDefault();
-
-              // 들여쓰기를 줄임
-              const newIndent =
-                currentLine.match(/^\s*/)![0].slice(0, -2) || "";
-              const newContent =
-                value.substring(0, currentLineStart) +
-                newIndent +
-                value.substring(selectionEnd);
-
-              setBlockContent((prev) =>
-                new Map(prev).set(block.id, newContent)
-              );
-              updateBlock(block.id, newContent, block.type);
-
-              // 부드러운 스크롤
-              requestAnimationFrame(() => {
-                if (textarea) {
-                  const newPosition = currentLineStart + newIndent.length;
-                  textarea.selectionStart = textarea.selectionEnd = newPosition;
-                  textarea.style.height = "auto";
-                  textarea.style.height = `${textarea.scrollHeight}px`;
-                }
-              });
-            } else {
-              // 일반적으로 리스트 번호 증가
-              e.preventDefault();
-              const indent = currentLine.match(/^\s*/)?.[0] || "";
-
-              let currentNumber = parseInt(
-                currentLine.match(/^\d+/)?.[0] || "0"
-              );
-              if (isNaN(currentNumber) || currentNumber === 0) {
-                // 현재 줄이 번호 리스트가 아니면 이전 줄의 번호를 추적
-                const previousLines = value
-                  .substring(0, selectionStart)
-                  .split("\n");
-                for (let i = previousLines.length - 1; i >= 0; i--) {
-                  const match = previousLines[i].match(/^\s*(\d+)\./);
-                  if (match) {
-                    currentNumber = parseInt(match[1]);
-                    break;
-                  }
-                }
-              }
-              const nextNumber =
-                block.type === "numbered-list" ? currentNumber + 1 : 0;
-
-              const listMarker =
-                block.type === "numbered-list"
-                  ? `${nextNumber}. ` // 번호 리스트의 경우 다음 번호로 증가
-                  : EDITOR_CONFIG.DEFAULT_LIST_MARKER;
-              const newContent =
-                value.substring(0, selectionStart) +
-                "\n" +
-                indent +
-                listMarker +
-                value.substring(selectionEnd);
-
-              setBlockContent((prev) =>
-                new Map(prev).set(block.id, newContent)
-              );
-              debouncedUpdateRef.current?.(block.id, newContent, block.type);
-              requestAnimationFrame(() => {
-                if (textarea) {
-                  const newPosition =
-                    selectionStart + indent.length + listMarker.length + 1;
-                  textarea.selectionStart = textarea.selectionEnd = newPosition;
-                  textarea.style.height = "auto";
-                  textarea.style.height = `${textarea.scrollHeight}px`;
-                }
-              });
-            }
-          } else if (e.key === "Tab") {
-            e.preventDefault();
-            const newIndent = "  ";
-            let newContent = value;
-
-            if (block.type === "numbered-list") {
-              // Tab 눌렀을 때 번호 리스트라면 다시 1로 초기화
-              const newNumberedList = EDITOR_CONFIG.DEFAULT_NUMBERED_MARKER;
-              newContent =
-                value.substring(0, currentLineStart) +
-                newIndent +
-                newNumberedList +
-                value.substring(selectionStart);
-
-              setBlockContent((prev) =>
-                new Map(prev).set(block.id, newContent)
-              );
-              debouncedUpdateRef.current?.(block.id, newContent, block.type);
-
-              requestAnimationFrame(() => {
-                if (textarea) {
-                  const newPosition =
-                    currentLineStart +
-                    newIndent.length +
-                    newNumberedList.length;
-                  textarea.selectionStart = textarea.selectionEnd = newPosition;
-                  textarea.style.height = "auto";
-                  textarea.style.height = `${textarea.scrollHeight}px`;
-                }
-              });
-            } else {
-              newContent =
-                value.substring(0, currentLineStart) +
-                newIndent +
-                value.substring(currentLineStart);
-
-              setBlockContent((prev) =>
-                new Map(prev).set(block.id, newContent)
-              );
-              debouncedUpdateRef.current?.(block.id, newContent, block.type);
-
-              requestAnimationFrame(() => {
-                if (textarea) {
-                  const newPosition = selectionStart + newIndent.length;
-                  textarea.selectionStart = textarea.selectionEnd = newPosition;
-                  textarea.style.height = "auto";
-                  textarea.style.height = `${textarea.scrollHeight}px`;
-                }
-              });
-            }
+        let number = 1;
+        for (let i = 0; i < currentIndex; i++) {
+          const item = items[i];
+          // 같은 레벨의 이전 아이템들만 카운트
+          if (item.level === currentItem.level) {
+            number++;
+          }
+          // 상위 레벨로 돌아갔다가 다시 현재 레벨이 나타나면 번호를 리셋
+          if (
+            item.level < currentItem.level &&
+            i + 1 < items.length &&
+            items[i + 1].level === currentItem.level
+          ) {
+            number = 1;
           }
         }
+
+        // 들여쓰기 레벨에 따라 다른 번호 스타일 적용
+        const getNumberStyle = (level: number, num: number): string => {
+          switch (level % 3) {
+            case 0:
+              return `${num}.`; // 1., 2., 3.
+            case 1:
+              return `${String.fromCharCode(96 + num)}.`; // a., b., c.
+            case 2:
+              return `${num})`; // 1), 2), 3)
+            default:
+              return `${num}.`;
+          }
+        };
+
+        return getNumberStyle(currentItem.level, number);
       },
-      [block.id, block.type]
+      [block.type]
     );
+    // 리스트 아이템 추가
+    const addListItem = useCallback((afterId: string, level: number) => {
+      const newItem: ListItem = {
+        id: generateId(),
+        content: "",
+        level,
+        isCollapsed: false,
+      };
+
+      setListItems((prev) => {
+        const index = prev.findIndex((item) => item.id === afterId);
+        const newItems = [...prev];
+        newItems.splice(index + 1, 0, newItem);
+
+        // 리코일 상태 업데이트
+        const serializedContent = serializeListItems(newItems);
+        updateBlockContent(block.id, serializedContent);
+        debouncedUpdateRef.current?.(block.id, serializedContent, block.type);
+        return newItems;
+      });
+
+      setTimeout(() => {
+        itemRefs.current[newItem.id]?.focus();
+      }, 0);
+    }, []);
+
+    // 리스트 아이템 제거
+    const removeListItem = useCallback((id: string) => {
+      setListItems((prev) => {
+        const index = prev.findIndex((item) => item.id === id);
+        if (index === -1) return prev;
+
+        const newItems = [...prev];
+        newItems.splice(index, 1);
+
+        // 리코일 상태 업데이트
+        const serializedContent = serializeListItems(newItems);
+        updateBlockContent(block.id, serializedContent);
+        debouncedUpdateRef.current?.(block.id, serializedContent, block.type);
+
+        if (index > 0) {
+          setTimeout(() => {
+            itemRefs.current[prev[index - 1].id]?.focus();
+          }, 0);
+        }
+
+        return newItems;
+      });
+    }, []);
+
+    // 들여쓰기 증가
+    const increaseIndent = useCallback((id: string) => {
+      setListItems((prev) => {
+        const index = prev.findIndex((item) => item.id === id);
+        if (index === 0) return prev;
+
+        const prevItem = prev[index - 1];
+        const currentItem = prev[index];
+
+        if (currentItem.level >= prevItem.level + 1) return prev;
+
+        const newItems = [...prev];
+        newItems[index] = { ...currentItem, level: currentItem.level + 1 };
+
+        // 리코일 상태 업데이트
+        const serializedContent = serializeListItems(newItems);
+        updateBlockContent(block.id, serializedContent);
+        debouncedUpdateRef.current?.(block.id, serializedContent, block.type);
+        return newItems;
+      });
+    }, []);
+
+    // 들여쓰기 감소
+    const decreaseIndent = useCallback((id: string) => {
+      setListItems((prev) => {
+        const index = prev.findIndex((item) => item.id === id);
+        const currentItem = prev[index];
+
+        if (currentItem.level === 0) return prev;
+
+        const newItems = [...prev];
+        newItems[index] = { ...currentItem, level: currentItem.level - 1 };
+
+        // 리코일 상태 업데이트
+        const serializedContent = serializeListItems(newItems);
+        updateBlockContent(block.id, serializedContent);
+        debouncedUpdateRef.current?.(block.id, serializedContent, block.type);
+
+        return newItems;
+      });
+    }, []);
+
+    // 리스트 아이템 키보드 이벤트 처리
+    const handleListKeyDown = useCallback(
+      (e: React.KeyboardEvent<HTMLInputElement>, id: string) => {
+        const currentItem = listItems.find((item) => item.id === id);
+        if (!currentItem) return;
+
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+
+          if (currentItem.content.trim() === "") {
+            if (currentItem.level > 0) {
+              decreaseIndent(id);
+            } else {
+              removeListItem(id);
+            }
+          } else {
+            addListItem(id, currentItem.level);
+          }
+        } else if (e.key === "Tab") {
+          e.preventDefault();
+          if (e.shiftKey) {
+            decreaseIndent(id);
+          } else {
+            increaseIndent(id);
+          }
+        } else if (e.key === "Backspace" && currentItem.content === "") {
+          e.preventDefault();
+          removeListItem(id);
+        }
+      },
+      [listItems, addListItem, removeListItem, increaseIndent, decreaseIndent]
+    );
+
+    // 리스트 아이템 내용 변경 처리
+    const handleListItemChange = useCallback((id: string, content: string) => {
+      setListItems((prev) => {
+        const newItems = prev.map((item) =>
+          item.id === id ? { ...item, content } : item
+        );
+        // 리코일 상태 업데이트
+        const serializedContent = serializeListItems(newItems);
+        updateBlockContent(block.id, serializedContent);
+        debouncedUpdateRef.current?.(block.id, serializedContent, block.type);
+        return newItems;
+      });
+    }, []);
+
+    // 리스트 렌더링
+    const renderList = useCallback(() => {
+      return (
+        <div className="space-y-1">
+          {listItems.map((item, index) => (
+            <div
+              key={item.id}
+              className="flex items-start group"
+              style={{ marginLeft: `${item.level * 24}px` }}
+            >
+              <div className="flex items-center mr-2 mt-2">
+                {item.isCollapsed ? (
+                  <ChevronRight className="w-4 h-4 text-gray-400" />
+                ) : (
+                  <ChevronDown className="w-4 h-4 text-gray-400" />
+                )}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center">
+                  <span className="mr-2 text-gray-500 min-w-[24px]">
+                    {calculateNumber(listItems, index)}
+                  </span>
+                  <input
+                    ref={(el) => {
+                      if (el) itemRefs.current[item.id] = el;
+                    }}
+                    value={item.content}
+                    onChange={(e) =>
+                      handleListItemChange(item.id, e.target.value)
+                    }
+                    onKeyDown={(e) => handleListKeyDown(e, item.id)}
+                    className="flex-1 px-2 py-1 bg-transparent outline-none border-none focus:ring-1 focus:ring-blue-500 rounded"
+                    placeholder="List item..."
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+          {listItems.length === 0 && (
+            <button
+              onClick={() => addListItem(generateId(), 0)}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              Add first item...
+            </button>
+          )}
+        </div>
+      );
+    }, [
+      listItems,
+      calculateNumber,
+      handleListItemChange,
+      handleListKeyDown,
+      addListItem,
+    ]);
     const applyFormatting = useCallback(
       (format: "bold" | "italic" | "underline") => {
         const textarea = editorRef.current;
@@ -365,21 +509,6 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
         </div>
       );
     }, [block.type, applyFormatting, isEditing]);
-
-    const renderListContent = useMemo(() => {
-      const content = blockContent.get(block.id) || "";
-      const lines = content.split("\n");
-      return lines
-        .map((line: string, index: number) => {
-          const isNumbered = block.type === "numbered-list";
-          const listItem = isNumbered ? line.replace(/^\d+\.\s*/, "") : line;
-          const marker = isNumbered
-            ? `${index + 1}. `
-            : EDITOR_CONFIG.DEFAULT_LIST_MARKER;
-          return `<div key=${index}>${marker}${listItem}</div>`;
-        })
-        .join("");
-    }, [blockContent, block.id, block.type]);
 
     const renderFormattedContent = (text: string) => {
       const htmlContent = text
@@ -472,27 +601,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
 
         case "list":
         case "numbered-list":
-          return (
-            <>
-              {renderFormatButtons()}
-              {isEditing ? (
-                <textarea
-                  {...textareaProps}
-                  onKeyDown={handleKeyDown}
-                  className="w-full p-2 border rounded-md"
-                  rows={5}
-                  placeholder="List item (press Enter for new item, Tab for indentation)"
-                />
-              ) : (
-                <div
-                  className="w-full p-2 border rounded-md"
-                  dangerouslySetInnerHTML={{
-                    __html: renderListContent(editorContent),
-                  }}
-                />
-              )}
-            </>
-          );
+          return renderList();
 
         case "image":
           return (

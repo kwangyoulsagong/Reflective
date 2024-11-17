@@ -107,3 +107,9 @@ export interface Event {
   start: Date;
   end: Date;
 }
+export interface ListItem {
+  id: string;
+  content: string;
+  level: number;
+  isCollapsed?: boolean;
+}
