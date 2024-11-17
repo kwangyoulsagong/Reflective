@@ -210,15 +210,39 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
 
         let number = 1;
         for (let i = 0; i < currentIndex; i++) {
-          if (items[i].level === currentItem.level) {
+          const item = items[i];
+          // 같은 레벨의 이전 아이템들만 카운트
+          if (item.level === currentItem.level) {
             number++;
           }
+          // 상위 레벨로 돌아갔다가 다시 현재 레벨이 나타나면 번호를 리셋
+          if (
+            item.level < currentItem.level &&
+            i + 1 < items.length &&
+            items[i + 1].level === currentItem.level
+          ) {
+            number = 1;
+          }
         }
-        return number.toString() + ".";
+
+        // 들여쓰기 레벨에 따라 다른 번호 스타일 적용
+        const getNumberStyle = (level: number, num: number): string => {
+          switch (level % 3) {
+            case 0:
+              return `${num}.`; // 1., 2., 3.
+            case 1:
+              return `${String.fromCharCode(96 + num)}.`; // a., b., c.
+            case 2:
+              return `${num})`; // 1), 2), 3)
+            default:
+              return `${num}.`;
+          }
+        };
+
+        return getNumberStyle(currentItem.level, number);
       },
       [block.type]
     );
-
     // 리스트 아이템 추가
     const addListItem = useCallback((afterId: string, level: number) => {
       const newItem: ListItem = {
