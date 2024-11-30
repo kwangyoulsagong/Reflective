@@ -5,7 +5,6 @@ import { WriteUploadProps } from "../types/types";
 
 const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
   const { post_id } = usePost_idStore();
-  console.log(post_id);
   const saveMutation = useSaveMutation();
   const updateMutation = useUpdatePostMutaion();
   const handleSubmit = () => {
@@ -25,7 +24,7 @@ const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
         category: data.category || "",
         thumbnail:
           data.thumbnail ||
-          "https://velog.velcdn.com/images/maeilmail/post/f4bcf691-e507-4a2b-ab29-badcd0412488/image.png",
+          "https://velog.velcdn.com/images/k-svelte-master/post/87c41002-2255-4543-849e-47a275bc1b7d/image.png",
       };
       updateMutation.mutate({ post_id, body });
     } else {
@@ -33,7 +32,7 @@ const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
     }
   };
   return (
-    <div className="absolute w-full h-[120vh] flex justify-center items-center bg-gray-300 opacity-80">
+    <div className="fixed top-0 w-full h-full flex justify-center items-center bg-gray-300 opacity-80">
       <section className="w-[400px] h-[400px] rounded-md bg-[#ffffff]">
         <div className="flex justify-end">
           <button onClick={() => onClose()}>X</button>

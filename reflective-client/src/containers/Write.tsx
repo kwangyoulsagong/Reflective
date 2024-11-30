@@ -46,6 +46,7 @@ const Write: React.FC = () => {
         return [...prevBlocks, newBlock];
       } else {
         const newBlocks = [...prevBlocks];
+        // 시작위치, 삭제할 갯수, 새로운 객체 뒤에 추가
         newBlocks.splice(focusedIndex + 1, 0, newBlock);
         return newBlocks;
       }
@@ -67,10 +68,13 @@ const Write: React.FC = () => {
   };
 
   const onDragEnd = (result: DropResult) => {
+    // 드롭 대상이 없는 경우 함수 종료
     if (!result.destination) return;
-
+    // 기존 블록 배열을 복사하여 새로운 배열 생성
     const items = Array.from(blocks);
+    // 드래그한 블록을 원래 위치에서 제거
     const [reorderedItem] = items.splice(result.source.index, 1);
+    // 드래그한 블록을 새 위치에 삽입
     items.splice(result.destination.index, 0, reorderedItem);
 
     setBlocks(items);
@@ -132,7 +136,7 @@ const Write: React.FC = () => {
             onClick={handleSubmit}
             className="bg-primary rounded-[20px] w-[150px] h-[40px] text-white font-bold"
           >
-            Submit
+            제출하기
           </button>
         </div>
       </section>
