@@ -1,7 +1,7 @@
-import logo from "../assets/logo.svg";
-import notification from "../assets/notification.svg";
-import me from "../assets/me.jpeg";
-import toggle from "../assets/toggle.svg";
+import logo from "../../../assets/logo.svg";
+import notification from "../../../assets/notification.svg";
+import me from "../../../assets/me.jpeg";
+import toggle from "../../../assets/toggle.svg";
 import { useNavigate } from "react-router-dom";
 
 const MainHeader = () => {

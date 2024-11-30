@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Layers, FileText, Bookmark, Settings } from "lucide-react";
-import MainHeader from "../components/MainHeader";
+import MainHeader from "../components/common/Header/Header";
 import me from "../assets/me.jpeg";
 import TabButton from "../components/mypage/TabButton";
 import RankCard from "../components/mypage/RankCard";

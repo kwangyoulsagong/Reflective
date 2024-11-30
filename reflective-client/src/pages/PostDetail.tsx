@@ -1,5 +1,5 @@
 import Comments from "../components/Comments";
-import MainHeader from "../components/MainHeader";
+import Header from "../components/common/Header/Header";
 import PostView from "../components/PostView";
 import usePostDetailQuery from "../hooks/api/usePostDetailQuery";
 import { usePost_idStore } from "../provider/post_idProvider";
@@ -12,7 +12,7 @@ const PostDetail = () => {
   return (
     <div className="flex justify-center items-center">
       <div className="flex flex-col items-center justify-center w-[1920px] ">
-        <MainHeader />
+        <Header />
         <PostView {...data} />
         <Comments />
         <footer className="h-[300px]"></footer>

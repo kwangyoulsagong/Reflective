@@ -1,5 +1,5 @@
 import React from "react";
-import MainHeader from "../components/MainHeader";
+import Header from "../components/common/Header/Header";
 import MainRanks from "../components/MainRanks";
 import RecentPost from "../components/RecentPost/RecentPost";
 import Search from "../components/Search";
@@ -35,7 +35,7 @@ const Home = () => {
     <div className="flex justify-center">
       <div className="flex flex-col items-center w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <Favorite />
-        <MainHeader />
+        <Header />
         <Search />
         <MainRanks data={topFour} />
         <RecentPost data={data} />
