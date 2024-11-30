@@ -1,7 +1,3 @@
-// LoginType 인터페이스 정의
-
-import { Block } from "./BlockEditor/BlockEditor";
-
 export interface LoginType {
   user_id: string;
   nickname: string;
@@ -30,18 +26,6 @@ export type WriteAreaProps = {
 export type WriteMenuProps = {
   onCommand: (startTag: string) => void;
 };
-export type WriteUploadProps = {
-  data: SavePostType;
-  onClose: () => void;
-  isEdit: boolean;
-};
-export interface SavePostType {
-  title: string;
-  contents: Block[];
-  category: string;
-  thumbnail: string;
-  like_count: number;
-}
 
 export interface getPostType {
   post_id: string;

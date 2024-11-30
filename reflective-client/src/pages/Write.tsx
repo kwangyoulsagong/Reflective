@@ -7,9 +7,9 @@ import {
 } from "react-beautiful-dnd";
 import { useLocation } from "react-router-dom";
 import WriteUpload from "../components/WriteUpload";
-import { Block, SavePostType } from "../types/types";
-import BlockEditor from "../components/refactoringBlockEidtor/BlockRefectorEditor";
-import BlockMenu from "../components/BlockMenu";
+import BlockEditor from "../components/BlockEidtor/BlockEditor";
+import BlockMenu from "../components/BlockEidtor/BlockMenu";
+import { Block, SavePostType } from "../types/BlockEditor/BlockEditor";
 
 const Write: React.FC = () => {
   const { state } = useLocation();

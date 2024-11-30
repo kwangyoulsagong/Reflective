@@ -25,3 +25,16 @@ export interface ListItem {
   level: number;
   isCollapsed?: boolean;
 }
+
+export type WriteUploadProps = {
+  data: SavePostType;
+  onClose: () => void;
+  isEdit: boolean;
+};
+export interface SavePostType {
+  title: string;
+  contents: Block[];
+  category: string;
+  thumbnail: string;
+  like_count: number;
+}
