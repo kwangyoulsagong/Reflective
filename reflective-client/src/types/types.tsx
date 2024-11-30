@@ -1,26 +1,7 @@
 // LoginType 인터페이스 정의
 
-export interface Block {
-  id: string;
-  type:
-    | "paragraph"
-    | "heading1"
-    | "heading2"
-    | "heading3"
-    | "list"
-    | "numbered-list"
-    | "image"
-    | "code"
-    | "chart";
-  content: string;
-}
-export interface BlockEditorProps {
-  block: Block;
-  updateBlock: (id: string, content: string, type: Block["type"]) => void;
-  removeBlock: (id: string) => void;
-  setFocusedBlockId: (id: string | null) => void;
-  isFocused: boolean;
-}
+import { Block } from "./BlockEditor/BlockEditor";
+
 export interface LoginType {
   user_id: string;
   nickname: string;
@@ -106,10 +87,4 @@ export interface Event {
   title: string;
   start: Date;
   end: Date;
-}
-export interface ListItem {
-  id: string;
-  content: string;
-  level: number;
-  isCollapsed?: boolean;
 }

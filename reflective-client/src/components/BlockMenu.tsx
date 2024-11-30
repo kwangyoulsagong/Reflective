@@ -7,7 +7,7 @@ import {
   Code,
   BarChart,
 } from "lucide-react";
-import { Block } from "../types/types";
+import { Block } from "../types/BlockEditor/BlockEditor";
 
 interface BlockMenuProps {
   onAddBlock: (type: Block["type"]) => void;

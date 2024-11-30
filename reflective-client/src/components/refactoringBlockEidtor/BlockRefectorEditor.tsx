@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Block, BlockEditorProps, ListItem } from "../../types/types";
 import { debounce } from "lodash";
 import { Line } from "react-chartjs-2";
 import {
@@ -35,6 +34,11 @@ import { useRecoilCallback, useRecoilState } from "recoil";
 import { blockContentState } from "./recoil/blockContentState";
 import { EDITOR_CONFIG, INITIAL_CHART_DATA } from "../../constants/blockEditor";
 import ImageSizeSlider from "./ImageSize/ImageSize";
+import {
+  Block,
+  BlockEditorProps,
+  ListItem,
+} from "../../types/BlockEditor/BlockEditor";
 ChartJS.register(
   CategoryScale,
   LinearScale,
