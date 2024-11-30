@@ -1,9 +1,13 @@
+import { Types } from "mongoose";
 import Post, { IPost } from "../model/postModel";
 import User from "../model/userModel";
 
 class PostService {
   // 게시물 저장
-  public async savePost(user_id: string, data: IPost): Promise<IPost | null> {
+  public async savePost(
+    user_id: string,
+    data: IPost
+  ): Promise<{ post_id: Types.ObjectId; title: string } | null> {
     const body = {
       user_id: user_id,
       title: data.title,
@@ -14,7 +18,11 @@ class PostService {
     };
     const post = new Post(body);
     if (post) {
-      return await post.save();
+      const savedPost = await post.save();
+      return {
+        post_id: savedPost.post_id,
+        title: savedPost.title,
+      };
     }
     return null;
   }
