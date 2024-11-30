@@ -31,7 +31,7 @@ import {
   Legend,
 } from "chart.js";
 import { useRecoilCallback, useRecoilState } from "recoil";
-import { blockContentState } from "./recoil/blockContentState";
+
 import { EDITOR_CONFIG, INITIAL_CHART_DATA } from "../../constants/blockEditor";
 import ImageSizeSlider from "./ImageSize/ImageSize";
 import {
@@ -39,6 +39,7 @@ import {
   BlockEditorProps,
   ListItem,
 } from "../../types/BlockEditor/BlockEditor";
+import { blockContentState } from "../../recoil/atoms/blockContentState";
 ChartJS.register(
   CategoryScale,
   LinearScale,
