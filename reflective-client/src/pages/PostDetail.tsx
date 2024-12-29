@@ -6,7 +6,6 @@ import { usePost_idStore } from "../provider/post_idProvider";
 const PostDetail = () => {
   const { post_id } = usePost_idStore();
   const { data, isLoading, error } = usePostDetailQuery(post_id);
-  console.log(data);
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
   return (

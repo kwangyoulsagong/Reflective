@@ -1,26 +1,28 @@
 import React, { useState } from "react";
-import {
-  DropResult,
-  DragDropContext,
-  Droppable,
-  Draggable,
-} from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useLocation } from "react-router-dom";
 import WriteUpload from "../components/WriteUpload";
 import BlockEditor from "../components/BlockEidtor/BlockEditor";
 import BlockMenu from "../components/BlockEidtor/BlockMenu";
-import { Block, SavePostType } from "../types/BlockEditor/BlockEditor";
+import { SavePostType } from "../types/BlockEditor/BlockEditor";
+import useBlocks from "../hooks/Blocks/useBlocks";
 
 const Write: React.FC = () => {
   const { state } = useLocation();
   const isEdit = Boolean(state?.post);
 
   const [title, setTitle] = useState(isEdit ? state.post.title : "");
-  const [blocks, setBlocks] = useState<Block[]>(
-    isEdit
-      ? state.post.contents
-      : [{ id: "block-0", content: "", type: "paragraph" }]
-  );
+  const {
+    blocks,
+    focusedBlockId,
+    setFocusedBlockId,
+    addBlock,
+    updateBlock,
+    removeBlock,
+    onDragEnd,
+  } = useBlocks({
+    initialBlocks: isEdit ? state.post.contents : undefined,
+  });
   const [data, setData] = useState<SavePostType>({
     title: "",
     contents: [],
@@ -29,56 +31,6 @@ const Write: React.FC = () => {
     like_count: isEdit ? state.post.like_count : 0,
   });
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [focusedBlockId, setFocusedBlockId] = useState<string | null>(null);
-
-  const addBlock = (type: Block["type"]) => {
-    const newBlock: Block = {
-      id: `block-${Date.now()}`,
-      content: "",
-      type,
-    };
-
-    setBlocks((prevBlocks) => {
-      const focusedIndex = prevBlocks.findIndex(
-        (block) => block.id === focusedBlockId
-      );
-      if (focusedIndex === -1) {
-        return [...prevBlocks, newBlock];
-      } else {
-        const newBlocks = [...prevBlocks];
-        // 시작위치, 삭제할 갯수, 새로운 객체 뒤에 추가
-        newBlocks.splice(focusedIndex + 1, 0, newBlock);
-        return newBlocks;
-      }
-    });
-
-    setFocusedBlockId(newBlock.id);
-  };
-
-  const updateBlock = (id: string, content: string, type: Block["type"]) => {
-    setBlocks(
-      blocks.map((block) =>
-        block.id === id ? { ...block, content, type } : block
-      )
-    );
-  };
-
-  const removeBlock = (id: string) => {
-    setBlocks(blocks.filter((block) => block.id !== id));
-  };
-
-  const onDragEnd = (result: DropResult) => {
-    // 드롭 대상이 없는 경우 함수 종료
-    if (!result.destination) return;
-    // 기존 블록 배열을 복사하여 새로운 배열 생성
-    const items = Array.from(blocks);
-    // 드래그한 블록을 원래 위치에서 제거
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    // 드래그한 블록을 새 위치에 삽입
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    setBlocks(items);
-  };
 
   const handleSubmit = () => {
     setData((prev) => ({

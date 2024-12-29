@@ -6,6 +6,7 @@ const usePostDetailQuery = (post_id: string) => {
   return useQuery({
     queryKey: queryKeys.PostDetail,
     queryFn: () => fetchPostDetail(post_id),
+    throwOnError: true,
   });
 };
 

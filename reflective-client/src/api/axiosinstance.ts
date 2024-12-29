@@ -1,23 +1,57 @@
-import axios from "axios";
-
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import {
   checkAndSetToken,
   handleAPIError,
   handleTokenError,
 } from "./interceptors";
+import { AXIOS_BASE_URL, HTTP_STATUS_CODE, NETWORK } from "../constants/api";
+import { HTTPError } from "./HTTPError";
+import type { ErrorResponse } from "./interceptors";
 
-import { AXIOS_BASE_URL, NETWORK } from "../constants/api";
-// Axios 인스턴스의 기본 URL을 설정합니다.
 export const axiosInstance = axios.create({
   baseURL: AXIOS_BASE_URL,
   timeout: NETWORK.TIMEOUT,
 });
 
-// 요청 인터셉터: 토큰 설정 및 API 오류 처리
-axiosInstance.interceptors.request.use(checkAndSetToken, handleAPIError);
+// 요청 인터셉터
+axiosInstance.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => checkAndSetToken(config),
+  () => {
+    throw new HTTPError(
+      HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+      "요청 처리 중 에러가 발생했습니다"
+    );
+  }
+);
 
-// 응답 인터셉터: 401 오류가 발생하면 토큰 갱신 처리
+// 응답 인터셉터
 axiosInstance.interceptors.response.use(
-  (response) => response, // 정상 응답을 그대로 반환
-  handleTokenError // 토큰 오류 처리 (401 Unauthorized 처리)
+  (response) => response,
+  async (error: AxiosError<ErrorResponse>) => {
+    try {
+      // 토큰 에러 처리
+      if (error.response?.status === HTTP_STATUS_CODE.UNAUTHORIZED) {
+        const updatedConfig = await handleTokenError(error);
+        if (!updatedConfig) {
+          throw new HTTPError(
+            HTTP_STATUS_CODE.UNAUTHORIZED,
+            "인증에 실패했습니다"
+          );
+        }
+        // 토큰이 갱신된 경우 요청 재시도
+        return await axiosInstance(updatedConfig);
+      }
+      // 일반 API 에러 처리
+      return handleAPIError(error);
+    } catch (handledError) {
+      // ErrorBoundary로 전파되도록 동기적으로 에러를 던짐
+      if (handledError instanceof Error) {
+        throw handledError;
+      }
+      throw new HTTPError(
+        HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+        "알 수 없는 에러가 발생했습니다"
+      );
+    }
+  }
 );
