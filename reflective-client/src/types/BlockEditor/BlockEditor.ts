@@ -38,3 +38,7 @@ export interface SavePostType {
   thumbnail: string;
   like_count: number;
 }
+export type blockContentProps = {
+  block: Block;
+  updateBlock: (id: string, content: string, type: Block["type"]) => void;
+};
