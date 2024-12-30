@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { debounce } from "lodash";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -30,16 +29,15 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useRecoilCallback, useRecoilState } from "recoil";
 
 import { EDITOR_CONFIG, INITIAL_CHART_DATA } from "../../constants/blockEditor";
 import ImageSizeSlider from "./ImageSize/ImageSize";
 import {
-  Block,
   BlockEditorProps,
   ListItem,
 } from "../../types/BlockEditor/BlockEditor";
-import { blockContentState } from "../../recoil/atoms/blockContentState";
+
+import useBlockContent from "../../hooks/BlockEditor/useBlockContent";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -53,30 +51,20 @@ ChartJS.register(
 const BlockEditor: React.FC<BlockEditorProps> = React.memo(
   ({ block, updateBlock, removeBlock, setFocusedBlockId, isFocused }) => {
     // 컨텐츠 관리 리코일로 관리를 한다
-    const [blockContent, setBlockContent] = useRecoilState(blockContentState);
+
     const [isEditing, setIsEditing] = useState(true);
     const [listItems, setListItems] = useState<ListItem[]>([]);
     const editorRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
     const itemRefs = useRef<{ [key: string]: HTMLInputElement }>({});
     const [chartData, setChartData] = useState(INITIAL_CHART_DATA);
     const [imageSize, setImageSize] = useState(100);
-    // 디바운스 함수를 useRef로 관리하여 메모리 누수 방지
-    const debouncedUpdateRef = useRef<ReturnType<typeof debounce>>();
 
-    // 컴포넌트 마운트 시 디바운스 함수 생성
-    useEffect(() => {
-      debouncedUpdateRef.current = debounce(
-        (id: string, content: string, type: Block["type"]) => {
-          updateBlock(id, content, type);
-        },
-        EDITOR_CONFIG.DEBOUNCE_DELAY
-      );
-
-      // 클린업 함수에서 디바운스 함수 취소
-      return () => {
-        debouncedUpdateRef.current?.cancel();
-      };
-    }, [updateBlock]);
+    const {
+      blockContent,
+      setBlockContent,
+      updateBlockContent,
+      debouncedUpdateRef,
+    } = useBlockContent({ block, updateBlock });
 
     // 리스트 데이터 직렬화
     const serializeListItems = useCallback((items: ListItem[]): string => {
@@ -122,13 +110,6 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
       }
     }, [block.id, block.type]);
     // Recoil 상태 업데이트를 위한 콜백
-    const updateBlockContent = useRecoilCallback(
-      ({ set }) =>
-        (id: string, content: string) => {
-          set(blockContentState, (prev) => new Map(prev).set(id, content));
-        },
-      []
-    );
 
     // 에디터 height 조정을 위한 별도의 함수
     const adjustEditorHeight = useCallback(() => {
