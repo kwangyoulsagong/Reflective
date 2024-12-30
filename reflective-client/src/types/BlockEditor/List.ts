@@ -1,3 +1,5 @@
+import { Block } from "./BlockEditor";
+
 export interface ListItem {
   id: string;
   content: string;
@@ -19,4 +21,14 @@ export interface ListError extends Error {
 export interface VirtualItem {
   index: number;
   offsetTop: number;
+}
+export interface UseListProps {
+  block: Block;
+  updateBlockContent: (id: string, content: string) => void;
+  debouncedUpdateRef: React.MutableRefObject<
+    ((id: string, content: string, type: Block["type"]) => void) | undefined
+  >;
+  blockContent: Map<string, string>;
+  options?: ListOptions;
+  onError?: (error: ListError) => void;
 }

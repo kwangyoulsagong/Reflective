@@ -6,16 +6,7 @@ import React, {
   useMemo,
   useLayoutEffect,
 } from "react";
-import {
-  Trash2,
-  Bold,
-  Italic,
-  Underline,
-  Eye,
-  EyeOff,
-  ChevronRight,
-  ChevronDown,
-} from "lucide-react";
+import { Trash2, Bold, Italic, Underline, Eye, EyeOff } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Line } from "react-chartjs-2";
@@ -32,12 +23,10 @@ import {
 
 import { EDITOR_CONFIG, INITIAL_CHART_DATA } from "../../constants/blockEditor";
 import ImageSizeSlider from "./ImageSize/ImageSize";
-import {
-  BlockEditorProps,
-  ListItem,
-} from "../../types/BlockEditor/BlockEditor";
+import { BlockEditorProps } from "../../types/BlockEditor/BlockEditor";
 
 import useBlockContent from "../../hooks/BlockEditor/useBlockContent";
+import { ListEditor } from "./ListEditor/ListEditor";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -53,9 +42,9 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
     // 컨텐츠 관리 리코일로 관리를 한다
 
     const [isEditing, setIsEditing] = useState(true);
-    const [listItems, setListItems] = useState<ListItem[]>([]);
+
     const editorRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
-    const itemRefs = useRef<{ [key: string]: HTMLInputElement }>({});
+
     const [chartData, setChartData] = useState(INITIAL_CHART_DATA);
     const [imageSize, setImageSize] = useState(100);
 
@@ -66,52 +55,6 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
       debouncedUpdateRef,
     } = useBlockContent({ block, updateBlock });
 
-    // 리스트 데이터 직렬화
-    const serializeListItems = useCallback((items: ListItem[]): string => {
-      return JSON.stringify(items);
-    }, []);
-
-    // 리스트 데이터 역직렬화
-    const deserializeListItems = useCallback((content: string): ListItem[] => {
-      try {
-        return JSON.parse(content);
-      } catch {
-        return [];
-      }
-    }, []);
-    // 초기 리스트 데이터 로드
-    useEffect(() => {
-      const content = blockContent.get(block.id) || "";
-      if (block.type === "list" || block.type === "numbered-list") {
-        try {
-          const parsedItems = deserializeListItems(content);
-          setListItems(
-            parsedItems.length > 0
-              ? parsedItems
-              : [
-                  {
-                    id: generateId(),
-                    content: "",
-                    level: 0,
-                    isCollapsed: false,
-                  },
-                ]
-          );
-        } catch {
-          setListItems([
-            {
-              id: generateId(),
-              content: "",
-              level: 0,
-              isCollapsed: false,
-            },
-          ]);
-        }
-      }
-    }, [block.id, block.type]);
-    // Recoil 상태 업데이트를 위한 콜백
-
-    // 에디터 height 조정을 위한 별도의 함수
     const adjustEditorHeight = useCallback(() => {
       if (editorRef.current) {
         if (editorRef.current) {
@@ -185,244 +128,6 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
       return /\.(jpeg|jpg|gif|png|svg)$/.test(url);
     };
 
-    // 새로운 아이템 ID 생성
-    const generateId = () => `item-${Math.random().toString(36).substr(2, 9)}`;
-
-    // 아이템 번호 계산
-    const calculateNumber = useCallback(
-      (items: ListItem[], currentIndex: number): string => {
-        const currentItem = items[currentIndex];
-        if (block.type !== "numbered-list") return "•";
-
-        let number = 1;
-        for (let i = 0; i < currentIndex; i++) {
-          const item = items[i];
-          // 같은 레벨의 이전 아이템들만 카운트
-          if (item.level === currentItem.level) {
-            number++;
-          }
-          // 상위 레벨로 돌아갔다가 다시 현재 레벨이 나타나면 번호를 리셋
-          if (
-            item.level < currentItem.level &&
-            i + 1 < items.length &&
-            items[i + 1].level === currentItem.level
-          ) {
-            number = 1;
-          }
-        }
-
-        // 들여쓰기 레벨에 따라 다른 번호 스타일 적용
-        const getNumberStyle = (level: number, num: number): string => {
-          switch (level % 3) {
-            case 0:
-              return `${num}.`; // 1., 2., 3.
-            case 1:
-              return `${String.fromCharCode(96 + num)}.`; // a., b., c.
-            case 2:
-              return `${num})`; // 1), 2), 3)
-            default:
-              return `${num}.`;
-          }
-        };
-
-        return getNumberStyle(currentItem.level, number);
-      },
-      [block.type]
-    );
-    // 리스트 아이템 추가
-    const addListItem = useCallback((afterId: string, level: number) => {
-      const newItem: ListItem = {
-        id: generateId(),
-        content: "",
-        level,
-        isCollapsed: false,
-      };
-
-      setListItems((prev) => {
-        const index = prev.findIndex((item) => item.id === afterId);
-        const newItems = [...prev];
-        newItems.splice(index + 1, 0, newItem);
-
-        // 리코일 상태 업데이트
-        const serializedContent = serializeListItems(newItems);
-        updateBlockContent(block.id, serializedContent);
-        debouncedUpdateRef.current?.(block.id, serializedContent, block.type);
-        return newItems;
-      });
-
-      setTimeout(() => {
-        itemRefs.current[newItem.id]?.focus();
-      }, 0);
-    }, []);
-
-    // 리스트 아이템 제거
-    const removeListItem = useCallback((id: string) => {
-      setListItems((prev) => {
-        const index = prev.findIndex((item) => item.id === id);
-        if (index === -1) return prev;
-
-        const newItems = [...prev];
-        newItems.splice(index, 1);
-
-        // 리코일 상태 업데이트
-        const serializedContent = serializeListItems(newItems);
-        updateBlockContent(block.id, serializedContent);
-        debouncedUpdateRef.current?.(block.id, serializedContent, block.type);
-
-        if (index > 0) {
-          setTimeout(() => {
-            itemRefs.current[prev[index - 1].id]?.focus();
-          }, 0);
-        }
-
-        return newItems;
-      });
-    }, []);
-
-    // 들여쓰기 증가
-    const increaseIndent = useCallback((id: string) => {
-      setListItems((prev) => {
-        const index = prev.findIndex((item) => item.id === id);
-        if (index === 0) return prev;
-
-        const prevItem = prev[index - 1];
-        const currentItem = prev[index];
-
-        if (currentItem.level >= prevItem.level + 1) return prev;
-
-        const newItems = [...prev];
-        newItems[index] = { ...currentItem, level: currentItem.level + 1 };
-
-        // 리코일 상태 업데이트
-        const serializedContent = serializeListItems(newItems);
-        updateBlockContent(block.id, serializedContent);
-        debouncedUpdateRef.current?.(block.id, serializedContent, block.type);
-        return newItems;
-      });
-    }, []);
-
-    // 들여쓰기 감소
-    const decreaseIndent = useCallback((id: string) => {
-      setListItems((prev) => {
-        const index = prev.findIndex((item) => item.id === id);
-        const currentItem = prev[index];
-
-        if (currentItem.level === 0) return prev;
-
-        const newItems = [...prev];
-        newItems[index] = { ...currentItem, level: currentItem.level - 1 };
-
-        // 리코일 상태 업데이트
-        const serializedContent = serializeListItems(newItems);
-        updateBlockContent(block.id, serializedContent);
-        debouncedUpdateRef.current?.(block.id, serializedContent, block.type);
-
-        return newItems;
-      });
-    }, []);
-
-    // 리스트 아이템 키보드 이벤트 처리
-    const handleListKeyDown = useCallback(
-      (e: React.KeyboardEvent<HTMLInputElement>, id: string) => {
-        const currentItem = listItems.find((item) => item.id === id);
-        if (!currentItem) return;
-
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-
-          if (currentItem.content.trim() === "") {
-            if (currentItem.level > 0) {
-              decreaseIndent(id);
-            } else {
-              removeListItem(id);
-            }
-          } else {
-            addListItem(id, currentItem.level);
-          }
-        } else if (e.key === "Tab") {
-          e.preventDefault();
-          if (e.shiftKey) {
-            decreaseIndent(id);
-          } else {
-            increaseIndent(id);
-          }
-        } else if (e.key === "Backspace" && currentItem.content === "") {
-          e.preventDefault();
-          removeListItem(id);
-        }
-      },
-      [listItems, addListItem, removeListItem, increaseIndent, decreaseIndent]
-    );
-
-    // 리스트 아이템 내용 변경 처리
-    const handleListItemChange = useCallback((id: string, content: string) => {
-      setListItems((prev) => {
-        const newItems = prev.map((item) =>
-          item.id === id ? { ...item, content } : item
-        );
-        // 리코일 상태 업데이트
-        const serializedContent = serializeListItems(newItems);
-        updateBlockContent(block.id, serializedContent);
-        debouncedUpdateRef.current?.(block.id, serializedContent, block.type);
-        return newItems;
-      });
-    }, []);
-
-    // 리스트 렌더링
-    const renderList = useCallback(() => {
-      return (
-        <div className="space-y-1">
-          {listItems.map((item, index) => (
-            <div
-              key={item.id}
-              className="flex items-start group"
-              style={{ marginLeft: `${item.level * 24}px` }}
-            >
-              <div className="flex items-center mr-2 mt-2">
-                {item.isCollapsed ? (
-                  <ChevronRight className="w-4 h-4 text-gray-400" />
-                ) : (
-                  <ChevronDown className="w-4 h-4 text-gray-400" />
-                )}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center">
-                  <span className="mr-2 text-gray-500 min-w-[24px]">
-                    {calculateNumber(listItems, index)}
-                  </span>
-                  <input
-                    ref={(el) => {
-                      if (el) itemRefs.current[item.id] = el;
-                    }}
-                    value={item.content}
-                    onChange={(e) =>
-                      handleListItemChange(item.id, e.target.value)
-                    }
-                    onKeyDown={(e) => handleListKeyDown(e, item.id)}
-                    className="flex-1 px-2 py-1 bg-transparent outline-none border-none focus:ring-1 focus:ring-blue-500 rounded"
-                    placeholder="List item..."
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
-          {listItems.length === 0 && (
-            <button
-              onClick={() => addListItem(generateId(), 0)}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              Add first item...
-            </button>
-          )}
-        </div>
-      );
-    }, [
-      listItems,
-      calculateNumber,
-      handleListItemChange,
-      handleListKeyDown,
-      addListItem,
-    ]);
     const applyFormatting = useCallback(
       (format: "bold" | "italic" | "underline") => {
         const textarea = editorRef.current;
@@ -587,7 +292,24 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
 
         case "list":
         case "numbered-list":
-          return renderList();
+          return (
+            <ListEditor
+              block={block}
+              updateBlockContent={updateBlockContent}
+              debouncedUpdateRef={debouncedUpdateRef}
+              blockContent={blockContent}
+              options={{
+                maxLevel: 5,
+                minItems: 1,
+                maxItems: 1000,
+                allowCollapse: true,
+              }}
+              className="w-full"
+              onError={(error) => {
+                console.error("List operation failed:", error);
+              }}
+            />
+          );
 
         case "image":
           return (
