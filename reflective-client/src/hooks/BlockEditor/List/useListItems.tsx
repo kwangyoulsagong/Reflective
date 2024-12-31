@@ -272,24 +272,24 @@ const useListItems = ({
         e.preventDefault();
         if (currentItem.content.trim() === "") {
           if (currentItem.level > 0) {
-            void decreaseIndent(id);
+            decreaseIndent(id);
           } else if (listItems.length > mergedOptions.minItems) {
-            void removeListItem(id);
+            removeListItem(id);
           }
         } else {
-          void addListItem(id, currentItem.level);
+          addListItem(id, currentItem.level);
         }
       } else if (e.key === "Tab") {
         e.preventDefault();
         if (e.shiftKey) {
-          void decreaseIndent(id);
+          decreaseIndent(id);
         } else {
-          void increaseIndent(id);
+          increaseIndent(id);
         }
       } else if (e.key === "Backspace" && currentItem.content === "") {
         e.preventDefault();
         if (listItems.length > mergedOptions.minItems) {
-          void removeListItem(id);
+          removeListItem(id);
         }
       }
     },

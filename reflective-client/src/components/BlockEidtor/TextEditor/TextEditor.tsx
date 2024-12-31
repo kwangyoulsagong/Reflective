@@ -1,7 +1,8 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback } from "react";
 import { TextEditorProps } from "../../../types/BlockEditor/Text";
 import useTextFormatting from "../../../hooks/BlockEditor/Text/useTextFormatting";
 import { FormatButtons } from "./FormattedButtons";
+import useAutoSize from "../../../hooks/BlockEditor/useAutoSize";
 
 export const TextEditor = React.memo<TextEditorProps>(
   ({
@@ -14,9 +15,12 @@ export const TextEditor = React.memo<TextEditorProps>(
     onFocus,
     className = "",
   }) => {
-    const editorRef = useRef<HTMLTextAreaElement>(null);
     const currentContent = blockContent.get(block.id) || "";
-
+    const editorRef = useAutoSize(
+      currentContent,
+      isEditing,
+      block.type === "paragraph" ? 72 : 40
+    );
     const handleContentChange = useCallback(
       (newContent: string) => {
         updateBlockContent(block.id, newContent);
@@ -56,7 +60,12 @@ export const TextEditor = React.memo<TextEditorProps>(
             value={currentContent}
             onChange={(e) => handleContentChange(e.target.value)}
             onFocus={onFocus}
-            className={`w-full px-2 py-1 bg-transparent outline-none border-0 border-b border-gray-200 focus:border-b-gray-400 transition-colors ${getHeadingClass()} ${className}`}
+            placeholder="글을 작성해보세요..."
+            className={`
+                w-full p-2 bg-transparent outline-none  border border-transparent rounded-md resize-none  overflow-hidden
+                ${getHeadingClass()} 
+                ${className}
+              `}
             rows={block.type === "paragraph" ? 3 : 1}
           />
         ) : (

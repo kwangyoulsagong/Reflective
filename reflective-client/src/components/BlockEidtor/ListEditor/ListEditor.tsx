@@ -2,22 +2,9 @@ import React, { useCallback } from "react";
 
 import { ListItem } from "./ListItem";
 import { VirtualizedList } from "./VirtualizedList";
-import { Block } from "../../../types/BlockEditor/BlockEditor";
-import { ListError, ListOptions } from "../../../types/BlockEditor/List";
+import { ListEditorProps, ListError } from "../../../types/BlockEditor/List";
 import { useLogger } from "../../../hooks/BlockEditor/List/useLogger";
 import useListItems from "../../../hooks/BlockEditor/List/useListItems";
-
-interface ListEditorProps {
-  block: Block;
-  updateBlockContent: (id: string, content: string) => void;
-  debouncedUpdateRef: React.MutableRefObject<
-    ((id: string, content: string, type: Block["type"]) => void) | undefined
-  >;
-  blockContent: Map<string, string>;
-  options?: ListOptions;
-  className?: string;
-  onError?: (error: ListError) => void;
-}
 
 export const ListEditor: React.FC<ListEditorProps> = ({
   block,

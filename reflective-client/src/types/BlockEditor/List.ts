@@ -32,3 +32,14 @@ export interface UseListProps {
   options?: ListOptions;
   onError?: (error: ListError) => void;
 }
+export interface ListEditorProps {
+  block: Block;
+  updateBlockContent: (id: string, content: string) => void;
+  debouncedUpdateRef: React.MutableRefObject<
+    ((id: string, content: string, type: Block["type"]) => void) | undefined
+  >;
+  blockContent: Map<string, string>;
+  options?: ListOptions;
+  className?: string;
+  onError?: (error: ListError) => void;
+}
