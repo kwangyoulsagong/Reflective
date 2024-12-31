@@ -23,3 +23,5 @@ export const DEFAULT_OPTIONS: Required<ListOptions> = {
   maxItems: 1000,
   allowCollapse: true,
 };
+
+export const IMAGE_URL_PATTERN = /\.(jpeg|jpg|gif|png|svg|avif|webp)$/i;

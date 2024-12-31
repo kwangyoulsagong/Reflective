@@ -1,5 +1,5 @@
-import { EDITOR_CONFIG } from "../../constants/blockEditor";
-import { ListItem, ListType } from "../../types/BlockEditor/List";
+import { EDITOR_CONFIG } from "../../../constants/blockEditor";
+import { ListItem, ListType } from "../../../types/BlockEditor/List";
 
 export class ListNumberingStrategy {
   constructor(private readonly type: ListType) {}

@@ -1,5 +1,5 @@
 import { MutableRefObject } from "react";
-import { ListItem } from "../../types/BlockEditor/List";
+import { ListItem } from "../../../types/BlockEditor/List";
 
 export class FocusManager {
   constructor(

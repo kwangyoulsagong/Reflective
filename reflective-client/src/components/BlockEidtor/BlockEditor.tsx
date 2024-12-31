@@ -22,12 +22,13 @@ import {
 } from "chart.js";
 
 import { EDITOR_CONFIG, INITIAL_CHART_DATA } from "../../constants/blockEditor";
-import ImageSizeSlider from "./ImageSize/ImageSize";
+
 import { BlockEditorProps } from "../../types/BlockEditor/BlockEditor";
 
 import useBlockContent from "../../hooks/BlockEditor/useBlockContent";
 import { ListEditor } from "./ListEditor/ListEditor";
 import { TextEditor } from "./TextEditor/TextEditor";
+import ImageEditor from "./ImageEditor/ImageEditor";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -47,7 +48,6 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
     const editorRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
 
     const [chartData, setChartData] = useState(INITIAL_CHART_DATA);
-    const [imageSize, setImageSize] = useState(100);
 
     const { blockContent, updateBlockContent, debouncedUpdateRef } =
       useBlockContent({ block, updateBlock });
@@ -98,10 +98,6 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
         updateBlockContent(block.id, newContent);
 
         debouncedUpdateRef.current?.(block.id, newContent, block.type);
-
-        if (block.type === "image" && isValidImageUrl(newContent)) {
-          setIsEditing(false);
-        }
       },
       [block.id, block.type]
     );
@@ -119,11 +115,6 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
       },
       [block.id, block.type, updateBlock]
     );
-
-    // 이미지 타입
-    const isValidImageUrl = (url: string) => {
-      return /\.(jpeg|jpg|gif|png|svg)$/.test(url);
-    };
 
     // 렌더링 최적화를 위한 메모이제이션
     const editorContent = useMemo(() => {
@@ -144,10 +135,6 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
         ref: editorRef as React.RefObject<HTMLTextAreaElement>,
       };
 
-      const inputProps = {
-        ...commonProps,
-        ref: editorRef as React.RefObject<HTMLInputElement>,
-      };
       switch (block.type) {
         case "paragraph":
         case "heading1":
@@ -188,26 +175,15 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
 
         case "image":
           return (
-            <div>
-              {isEditing ? (
-                <input
-                  {...inputProps}
-                  type="text"
-                  className="w-full p-2 border rounded-md"
-                  placeholder="Enter image URL..."
-                />
-              ) : (
-                <div className="space-y-2">
-                  <img
-                    src={editorContent}
-                    alt="Uploaded"
-                    className="w-full h-auto rounded-md"
-                    style={{ maxWidth: `${imageSize}%` }}
-                  />
-                  <ImageSizeSlider onChange={(size) => setImageSize(size)} />
-                </div>
-              )}
-            </div>
+            <ImageEditor
+              block={block}
+              blockContent={blockContent}
+              updateBlockContent={updateBlockContent}
+              debouncedUpdateRef={debouncedUpdateRef}
+              setFocusedBlockId={setFocusedBlockId}
+              isEditing={isEditing}
+              setIsEditing={setIsEditing}
+            />
           );
 
         case "code":

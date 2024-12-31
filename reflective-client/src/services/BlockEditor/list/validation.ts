@@ -1,4 +1,8 @@
-import { ListError, ListItem, ListOptions } from "../../types/BlockEditor/List";
+import {
+  ListError,
+  ListItem,
+  ListOptions,
+} from "../../../types/BlockEditor/List";
 
 export class ListValidator {
   constructor(private readonly options: Required<ListOptions>) {}

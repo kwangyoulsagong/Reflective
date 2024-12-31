@@ -6,9 +6,9 @@ import {
 } from "../../../types/BlockEditor/List";
 import { useLogger } from "./useLogger";
 import { DEFAULT_OPTIONS } from "../../../constants/blockEditor";
-import { FocusManager } from "../../../services/list/focus";
-import { ListValidator } from "../../../services/list/validation";
-import { ListNumberingStrategy } from "../../../services/list/numbering";
+import { FocusManager } from "../../../services/BlockEditor/list/focus";
+import { ListValidator } from "../../../services/BlockEditor/list/validation";
+import { ListNumberingStrategy } from "../../../services/BlockEditor/list/numbering";
 import useVirtualizer from "./useVirtualizer";
 
 const useListItems = ({
