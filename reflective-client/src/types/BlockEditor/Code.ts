@@ -1,6 +1,7 @@
 export interface CodeEditorProps {
   block: {
     id: string;
+    content: string;
     type: string;
   };
   blockContent: Map<string, string>;

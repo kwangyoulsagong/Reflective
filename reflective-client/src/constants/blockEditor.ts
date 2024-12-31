@@ -25,3 +25,9 @@ export const DEFAULT_OPTIONS: Required<ListOptions> = {
 };
 
 export const IMAGE_URL_PATTERN = /\.(jpeg|jpg|gif|png|svg|avif|webp)$/i;
+export const getRandomColor = () => {
+  const r = Math.floor(Math.random() * 255);
+  const g = Math.floor(Math.random() * 255);
+  const b = Math.floor(Math.random() * 255);
+  return `rgb(${r}, ${g}, ${b})`;
+};

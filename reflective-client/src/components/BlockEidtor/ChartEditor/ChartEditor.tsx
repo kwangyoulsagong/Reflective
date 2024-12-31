@@ -1,23 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { Eye, Edit2, Plus, Trash2 } from "lucide-react";
-import { ChartEditorProps } from "../../../types/BlockEditor/Chart";
-
-interface ChartData {
-  labels: string[];
-  datasets: {
-    label: string;
-    data: number[];
-    borderColor?: string;
-  }[];
-}
-
-const getRandomColor = () => {
-  const r = Math.floor(Math.random() * 255);
-  const g = Math.floor(Math.random() * 255);
-  const b = Math.floor(Math.random() * 255);
-  return `rgb(${r}, ${g}, ${b})`;
-};
+import { ChartData, ChartEditorProps } from "../../../types/BlockEditor/Chart";
+import { getRandomColor } from "../../../constants/blockEditor";
 
 const ChartEditor = React.memo<ChartEditorProps>(
   ({

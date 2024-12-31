@@ -10,7 +10,6 @@ const useBlocks = ({
 }: UseBlocksProps) => {
   // 블록 상태
   const [blocks, setBlocks] = useState<Block[]>(initialBlocks);
-  console.log("edit", blocks);
   // 선택하거나 편집 중인 블록의 ID를 관리
   const [focusedBlockId, setFocusedBlockId] = useState<string | null>(null);
 

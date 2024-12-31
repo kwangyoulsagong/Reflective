@@ -33,7 +33,6 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
     const [isEditing, setIsEditing] = useState(true);
     const { blockContent, updateBlockContent, debouncedUpdateRef } =
       useBlockContent({ block, updateBlock });
-    console.log("edit", block);
     const renderEditor = () => {
       switch (block.type) {
         case "paragraph":
