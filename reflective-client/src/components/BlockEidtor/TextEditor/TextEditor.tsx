@@ -15,7 +15,9 @@ const TextEditor = React.memo<TextEditorProps>(
     onFocus,
     className = "",
   }) => {
-    const currentContent = blockContent.get(block.id) || "";
+    const currentContent = isEditing
+      ? block.content
+      : blockContent.get(block.id) || "";
     const editorRef = useAutoSize(
       currentContent,
       isEditing,

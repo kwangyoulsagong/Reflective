@@ -305,7 +305,7 @@ const useListItems = ({
   // 초기 데이터 로드
   useEffect(() => {
     try {
-      const content = blockContent.get(block.id) || "[]"; // 기본값을 빈 배열 문자열로
+      const content = block.content || blockContent.get(block.id) || "[]";
       let initialItems: ListItem[] = [];
       try {
         initialItems = deserializeItems(content);

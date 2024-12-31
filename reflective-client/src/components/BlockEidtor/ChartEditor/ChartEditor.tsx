@@ -28,15 +28,37 @@ const ChartEditor = React.memo<ChartEditorProps>(
     isEditing,
     setIsEditing,
   }) => {
-    const [chartData, setChartData] = useState<ChartData>({
-      labels: [],
-      datasets: [
-        {
-          label: "",
-          data: [],
-          borderColor: getRandomColor(),
-        },
-      ],
+    // 초기 상태를 block.content에서 파싱하도록 변경
+    const [chartData, setChartData] = useState<ChartData>(() => {
+      try {
+        // 블록의 content를 우선적으로 사용
+        const content =
+          block.content ||
+          '{"labels":[],"datasets":[{"label":"","data":[],"borderColor":"rgb(255,0,0)"}]}';
+        const parsedData = JSON.parse(content);
+        return {
+          labels: parsedData.labels || [],
+          datasets: parsedData.datasets || [
+            {
+              label: "",
+              data: [],
+              borderColor: getRandomColor(),
+            },
+          ],
+        };
+      } catch {
+        // 파싱 실패 시 기본값
+        return {
+          labels: [],
+          datasets: [
+            {
+              label: "",
+              data: [],
+              borderColor: getRandomColor(),
+            },
+          ],
+        };
+      }
     });
 
     const [error, setError] = useState<string | null>(null);

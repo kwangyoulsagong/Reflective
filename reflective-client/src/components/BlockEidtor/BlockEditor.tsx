@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Trash2 } from "lucide-react";
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,11 +10,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-
 import { BlockEditorProps } from "../../types/BlockEditor/BlockEditor";
-
 import useBlockContent from "../../hooks/BlockEditor/useBlockContent";
-
 import ImageEditor from "./ImageEditor/ImageEditor";
 import ListEditor from "./ListEditor/ListEditor";
 import TextEditor from "./TextEditor/TextEditor";
@@ -37,7 +33,7 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
     const [isEditing, setIsEditing] = useState(true);
     const { blockContent, updateBlockContent, debouncedUpdateRef } =
       useBlockContent({ block, updateBlock });
-
+    console.log("edit", block);
     const renderEditor = () => {
       switch (block.type) {
         case "paragraph":
