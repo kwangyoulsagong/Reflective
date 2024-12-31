@@ -1,15 +1,6 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-  useLayoutEffect,
-} from "react";
+import React, { useState } from "react";
 import { Trash2 } from "lucide-react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Line } from "react-chartjs-2";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -21,14 +12,15 @@ import {
   Legend,
 } from "chart.js";
 
-import { EDITOR_CONFIG, INITIAL_CHART_DATA } from "../../constants/blockEditor";
-
 import { BlockEditorProps } from "../../types/BlockEditor/BlockEditor";
 
 import useBlockContent from "../../hooks/BlockEditor/useBlockContent";
-import { ListEditor } from "./ListEditor/ListEditor";
-import { TextEditor } from "./TextEditor/TextEditor";
+
 import ImageEditor from "./ImageEditor/ImageEditor";
+import ListEditor from "./ListEditor/ListEditor";
+import TextEditor from "./TextEditor/TextEditor";
+import CodeEditor from "./CodeEditor/CodeEditor";
+import ChartEditor from "./ChartEditor/ChartEditor";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -40,101 +32,13 @@ ChartJS.register(
 );
 
 const BlockEditor: React.FC<BlockEditorProps> = React.memo(
-  ({ block, updateBlock, removeBlock, setFocusedBlockId, isFocused }) => {
+  ({ block, updateBlock, removeBlock, setFocusedBlockId }) => {
     // 컨텐츠 관리 리코일로 관리를 한다
-
     const [isEditing, setIsEditing] = useState(true);
-
-    const editorRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
-
-    const [chartData, setChartData] = useState(INITIAL_CHART_DATA);
-
     const { blockContent, updateBlockContent, debouncedUpdateRef } =
       useBlockContent({ block, updateBlock });
 
-    const adjustEditorHeight = useCallback(() => {
-      if (editorRef.current) {
-        if (editorRef.current) {
-          editorRef.current.style.height = "auto";
-          editorRef.current.style.height = `${editorRef.current.scrollHeight}px`;
-        }
-      }
-    }, []);
-
-    // useLayoutEffect를 사용하여 DOM 업데이트 최적화
-    useLayoutEffect(() => {
-      adjustEditorHeight();
-    }, [adjustEditorHeight, blockContent]);
-
-    // 초기 블록 설정을 위한 효과
-    useEffect(() => {
-      const initializeBlock = () => {
-        const currentContent = block.content;
-        updateBlockContent(block.id, currentContent);
-        // 리스트 초기값
-        if (block.type === "list" && !block.content.trim()) {
-          const initialContent = EDITOR_CONFIG.DEFAULT_LIST_MARKER;
-          updateBlockContent(block.id, initialContent);
-          updateBlock(block.id, initialContent, block.type);
-        }
-        // 넘버 리스트 초기값
-        if (block.type === "numbered-list" && !block.content.trim()) {
-          const initialContent = EDITOR_CONFIG.DEFAULT_NUMBERED_MARKER;
-          updateBlockContent(block.id, initialContent);
-          updateBlock(block.id, initialContent, block.type);
-        }
-        // 커서 위치
-        if (isFocused && editorRef.current) {
-          editorRef.current.focus();
-        }
-      };
-      initializeBlock();
-    }, [block.id, block.type, block.content, isFocused, updateBlock]);
-
-    // 콘텐츠 변경 핸들러 최적화
-    const handleContentChange = useCallback(
-      (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        const newContent = e.target.value;
-        updateBlockContent(block.id, newContent);
-
-        debouncedUpdateRef.current?.(block.id, newContent, block.type);
-      },
-      [block.id, block.type]
-    );
-
-    // 차트 데이터 입력
-    const handleChartDataChange = useCallback(
-      (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        try {
-          const newData = JSON.parse(e.target.value.trim());
-          setChartData(newData);
-          updateBlock(block.id, e.target.value.trim(), block.type);
-        } catch (error) {
-          console.error("Invalid JSON:", error);
-        }
-      },
-      [block.id, block.type, updateBlock]
-    );
-
-    // 렌더링 최적화를 위한 메모이제이션
-    const editorContent = useMemo(() => {
-      return blockContent.get(block.id) ?? "";
-    }, [blockContent, block.id]);
-
-    const commonProps = useMemo(
-      () => ({
-        value: editorContent,
-        onChange: handleContentChange,
-        onFocus: () => setFocusedBlockId(block.id),
-      }),
-      [editorContent, handleContentChange, setFocusedBlockId, block.id]
-    );
     const renderEditor = () => {
-      const textareaProps = {
-        ...commonProps,
-        ref: editorRef as React.RefObject<HTMLTextAreaElement>,
-      };
-
       switch (block.type) {
         case "paragraph":
         case "heading1":
@@ -187,44 +91,29 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
           );
 
         case "code":
-          return isEditing ? (
-            <textarea
-              {...textareaProps}
-              className="w-full p-2 font-mono border rounded-md bg-gray-100"
-              rows={5}
-              onBlur={() => setIsEditing(false)}
+          return (
+            <CodeEditor
+              block={block}
+              blockContent={blockContent}
+              updateBlockContent={updateBlockContent}
+              debouncedUpdateRef={debouncedUpdateRef}
+              setFocusedBlockId={setFocusedBlockId}
+              isEditing={isEditing}
+              setIsEditing={setIsEditing}
             />
-          ) : (
-            <div onClick={() => setIsEditing(true)}>
-              <SyntaxHighlighter
-                language="javascript"
-                style={tomorrow}
-                className="w-full p-2 font-mono border rounded-md bg-gray-100"
-              >
-                {editorContent}
-              </SyntaxHighlighter>
-            </div>
           );
         case "chart":
-          return isEditing ? (
-            <div>
-              <textarea
-                value={JSON.stringify(chartData, null, 2)}
-                onChange={handleChartDataChange}
-                className="w-full p-2 font-mono border rounded-md bg-gray-100"
-                rows={10}
-              />
-              <button
-                onClick={() => setIsEditing(false)}
-                className="mt-2 p-2 bg-blue-500 text-white rounded"
-              >
-                차트 미리보기
-              </button>
-            </div>
-          ) : (
-            <div onClick={() => setIsEditing(true)}>
-              <Line data={chartData} />
-            </div>
+          return (
+            <ChartEditor
+              block={block}
+              updateBlock={updateBlock}
+              blockContent={blockContent}
+              updateBlockContent={updateBlockContent}
+              debouncedUpdateRef={debouncedUpdateRef}
+              setFocusedBlockId={setFocusedBlockId}
+              isEditing={isEditing}
+              setIsEditing={setIsEditing}
+            />
           );
         default:
           return null;

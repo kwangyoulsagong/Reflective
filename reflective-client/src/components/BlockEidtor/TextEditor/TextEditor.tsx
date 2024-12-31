@@ -4,7 +4,7 @@ import useTextFormatting from "../../../hooks/BlockEditor/Text/useTextFormatting
 import { FormatButtons } from "./FormattedButtons";
 import useAutoSize from "../../../hooks/BlockEditor/useAutoSize";
 
-export const TextEditor = React.memo<TextEditorProps>(
+const TextEditor = React.memo<TextEditorProps>(
   ({
     block,
     blockContent,
@@ -77,3 +77,4 @@ export const TextEditor = React.memo<TextEditorProps>(
     );
   }
 );
+export default TextEditor;
