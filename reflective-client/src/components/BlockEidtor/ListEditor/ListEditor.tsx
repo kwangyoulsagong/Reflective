@@ -43,7 +43,6 @@ export const ListEditor: React.FC<ListEditorProps> = ({
     virtualItems,
     totalSize,
     itemRefs,
-    isUpdating,
     addListItem,
     handleListItemChange,
     handleListKeyDown,
@@ -90,18 +89,14 @@ export const ListEditor: React.FC<ListEditorProps> = ({
           onClick={() => addListItem(crypto.randomUUID(), 0)}
           className="text-gray-500 hover:text-gray-700 px-4 py-2 rounded-md border border-gray-300"
         >
-          Add first item...
+          첫 아이템을 추가하세요
         </button>
       </div>
     );
   }
 
   return (
-    <div
-      className={`relative ${className}`}
-      aria-busy={isUpdating}
-      aria-live="polite"
-    >
+    <div className={`relative ${className}`}>
       <VirtualizedList
         items={listItems}
         virtualItems={virtualItems}
@@ -110,14 +105,6 @@ export const ListEditor: React.FC<ListEditorProps> = ({
         onScroll={setScrollTop}
         renderItem={renderListItem}
       />
-      {isUpdating && (
-        <div
-          className="absolute top-0 right-0 mt-2 mr-2 text-sm text-gray-500"
-          aria-hidden="true"
-        >
-          Updating...
-        </div>
-      )}
     </div>
   );
 };

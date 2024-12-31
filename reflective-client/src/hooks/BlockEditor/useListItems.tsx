@@ -22,7 +22,7 @@ const useListItems = ({
   const logger = useLogger("useList");
   // 리스트 기능 상태
   const [listItems, setListItems] = useState<ListItem[]>([]);
-  const [isUpdating, setIsUpdating] = useState(false);
+
   const itemRefs = useRef<{ [key: string]: HTMLInputElement }>({});
   const previousItems = useRef<ListItem[]>([]);
 
@@ -117,18 +117,15 @@ const useListItems = ({
 
   // 리스트 아이템 낙관적 업데이트
   const updateItems = useCallback(
-    async (newItems: ListItem[]) => {
+    (newItems: ListItem[]) => {
       try {
         validator.validateItems(newItems);
-        setIsUpdating(true);
-        previousItems.current = listItems;
         setListItems(newItems);
         const serialized = serializeItems(newItems);
         updateBlockContent(block.id, serialized);
-        await debouncedUpdateRef.current?.(block.id, serialized, block.type);
-        previousItems.current = newItems;
-      } finally {
-        setIsUpdating(false);
+        debouncedUpdateRef.current?.(block.id, serialized, block.type);
+      } catch (error) {
+        handleError(error as ListError);
       }
     },
     [
@@ -141,9 +138,9 @@ const useListItems = ({
     ]
   );
 
-  // 리스트 추가 낙관적 업데이트
+  // 리스트 추가
   const addListItem = useCallback(
-    async (afterId: string, level: number) => {
+    (afterId: string, level: number) => {
       try {
         const newItem: ListItem = {
           id: generateId(),
@@ -164,7 +161,7 @@ const useListItems = ({
           return;
         }
 
-        await updateItems(newItems);
+        updateItems(newItems);
         focusManager.focus(newItem.id);
       } catch (error) {
         handleError(error as ListError);
@@ -172,9 +169,9 @@ const useListItems = ({
     },
     [generateId, listItems, validator, updateItems, focusManager, handleError]
   );
-  // 리스트 제거 낙관적 업데이트
+  // 리스트 제거
   const removeListItem = useCallback(
-    async (id: string) => {
+    (id: string) => {
       try {
         if (listItems.length <= mergedOptions.minItems) return;
 
@@ -187,7 +184,7 @@ const useListItems = ({
           newItems.push(createDefaultItem());
         }
 
-        await updateItems(newItems);
+        updateItems(newItems);
 
         if (index > 0) {
           focusManager.focus(listItems[index - 1].id);
@@ -207,12 +204,12 @@ const useListItems = ({
   );
 
   const handleListItemChange = useCallback(
-    async (id: string, content: string) => {
+    (id: string, content: string) => {
       try {
         const newItems = listItems.map((item) =>
           item.id === id ? { ...item, content } : item
         );
-        await updateItems(newItems);
+        updateItems(newItems);
       } catch (error) {
         handleError(error as ListError);
       }
@@ -222,7 +219,7 @@ const useListItems = ({
 
   // 들여쓰기 증가
   const increaseIndent = useCallback(
-    async (id: string) => {
+    (id: string) => {
       try {
         const index = listItems.findIndex((item) => item.id === id);
         if (index === 0) return;
@@ -239,7 +236,7 @@ const useListItems = ({
         const newItems = listItems.map((item) =>
           item.id === id ? { ...item, level: newLevel } : item
         );
-        await updateItems(newItems);
+        updateItems(newItems);
       } catch (error) {
         handleError(error as ListError);
       }
@@ -248,7 +245,7 @@ const useListItems = ({
   );
   //   들여쓰기 감소
   const decreaseIndent = useCallback(
-    async (id: string) => {
+    (id: string) => {
       try {
         const index = listItems.findIndex((item) => item.id === id);
         if (index === -1) return;
@@ -260,7 +257,7 @@ const useListItems = ({
           item.id === id ? { ...item, level: item.level - 1 } : item
         );
 
-        await updateItems(newItems);
+        updateItems(newItems);
       } catch (error) {
         handleError(error as ListError);
       }
@@ -334,7 +331,6 @@ const useListItems = ({
     virtualItems,
     totalSize,
     itemRefs,
-    isUpdating,
     addListItem,
     removeListItem,
     handleListItemChange,
