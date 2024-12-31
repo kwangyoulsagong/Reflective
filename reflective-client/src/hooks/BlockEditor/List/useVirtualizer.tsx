@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { VirtualItem } from "../../types/BlockEditor/List";
+import { VirtualItem } from "../../../types/BlockEditor/List";
 
 interface UseVirtualizerOptions {
   count: number;

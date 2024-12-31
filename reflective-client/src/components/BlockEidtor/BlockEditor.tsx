@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useLayoutEffect,
 } from "react";
-import { Trash2, Bold, Italic, Underline, Eye, EyeOff } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Line } from "react-chartjs-2";
@@ -27,6 +27,7 @@ import { BlockEditorProps } from "../../types/BlockEditor/BlockEditor";
 
 import useBlockContent from "../../hooks/BlockEditor/useBlockContent";
 import { ListEditor } from "./ListEditor/ListEditor";
+import { TextEditor } from "./TextEditor/TextEditor";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -48,12 +49,8 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
     const [chartData, setChartData] = useState(INITIAL_CHART_DATA);
     const [imageSize, setImageSize] = useState(100);
 
-    const {
-      blockContent,
-      setBlockContent,
-      updateBlockContent,
-      debouncedUpdateRef,
-    } = useBlockContent({ block, updateBlock });
+    const { blockContent, updateBlockContent, debouncedUpdateRef } =
+      useBlockContent({ block, updateBlock });
 
     const adjustEditorHeight = useCallback(() => {
       if (editorRef.current) {
@@ -128,92 +125,6 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
       return /\.(jpeg|jpg|gif|png|svg)$/.test(url);
     };
 
-    const applyFormatting = useCallback(
-      (format: "bold" | "italic" | "underline") => {
-        const textarea = editorRef.current;
-        if (!textarea) return;
-
-        const start = textarea.selectionStart ?? 0;
-        const end = textarea.selectionEnd ?? 0;
-        const currentContent = blockContent.get(block.id) || "";
-        const selectedText = currentContent.substring(start, end);
-
-        const formatMap = {
-          bold: `**${selectedText}**`,
-          italic: `*${selectedText}*`,
-          underline: `__${selectedText}__`,
-        };
-
-        const formattedText = formatMap[format];
-        const newContent =
-          currentContent.substring(0, start) +
-          formattedText +
-          currentContent.substring(end);
-
-        setBlockContent((prev) => new Map(prev).set(block.id, newContent));
-        debouncedUpdateRef.current?.(block.id, newContent, block.type);
-
-        requestAnimationFrame(() => {
-          if (textarea) {
-            textarea.selectionStart = start + formattedText.length;
-            textarea.selectionEnd = start + formattedText.length;
-            textarea.focus();
-          }
-        });
-      },
-      [block.id, block.type, blockContent]
-    );
-
-    const renderFormatButtons = useCallback(() => {
-      if (
-        !["paragraph", "heading1", "heading2", "heading3"].includes(block.type)
-      ) {
-        return null;
-      }
-
-      return (
-        <div className="flex space-x-2 mb-2">
-          <button
-            onClick={() => applyFormatting("bold")}
-            className="p-1 hover:bg-gray-200 rounded"
-          >
-            <Bold size={16} />
-          </button>
-          <button
-            onClick={() => applyFormatting("italic")}
-            className="p-1 hover:bg-gray-200 rounded"
-          >
-            <Italic size={16} />
-          </button>
-          <button
-            onClick={() => applyFormatting("underline")}
-            className="p-1 hover:bg-gray-200 rounded"
-          >
-            <Underline size={16} />
-          </button>
-          <button
-            onClick={() => setIsEditing(!isEditing)}
-            className="p-1 hover:bg-gray-200 rounded"
-          >
-            {isEditing ? <Eye size={16} /> : <EyeOff size={16} />}
-          </button>
-        </div>
-      );
-    }, [block.type, applyFormatting, isEditing]);
-
-    const renderFormattedContent = (text: string) => {
-      const htmlContent = text
-        .replace(/__(.*?)__/g, "<u>$1</u>")
-        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-        .replace(/\*(.*?)\*/g, "<em>$1</em>");
-
-      return htmlContent.split("\n").map((line, index) => (
-        <React.Fragment key={index}>
-          <span dangerouslySetInnerHTML={{ __html: line }} />
-          <br />
-        </React.Fragment>
-      ));
-    };
     // 렌더링 최적화를 위한 메모이제이션
     const editorContent = useMemo(() => {
       return blockContent.get(block.id) ?? "";
@@ -239,55 +150,19 @@ const BlockEditor: React.FC<BlockEditorProps> = React.memo(
       };
       switch (block.type) {
         case "paragraph":
-          return (
-            <>
-              {renderFormatButtons()}
-              {isEditing ? (
-                <textarea
-                  {...textareaProps}
-                  className="w-full p-2 border rounded-md"
-                  rows={3}
-                />
-              ) : (
-                <div className="w-full p-2 border rounded-md">
-                  {renderFormattedContent(editorContent)}
-                </div>
-              )}
-            </>
-          );
-
         case "heading1":
         case "heading2":
         case "heading3":
           return (
-            <>
-              {renderFormatButtons()}
-              {isEditing ? (
-                <textarea
-                  {...textareaProps}
-                  className={`w-full p-2 border rounded-md ${
-                    block.type === "heading1"
-                      ? "text-3xl font-bold"
-                      : block.type === "heading2"
-                      ? "text-2xl font-bold"
-                      : "text-xl font-bold"
-                  }`}
-                  rows={1}
-                />
-              ) : (
-                <div
-                  className={`w-full p-2 border rounded-md ${
-                    block.type === "heading1"
-                      ? "text-3xl font-bold"
-                      : block.type === "heading2"
-                      ? "text-2xl font-bold"
-                      : "text-xl font-bold"
-                  }`}
-                >
-                  {renderFormattedContent(editorContent)}
-                </div>
-              )}
-            </>
+            <TextEditor
+              block={block}
+              blockContent={blockContent}
+              updateBlockContent={updateBlockContent}
+              debouncedUpdateRef={debouncedUpdateRef}
+              isEditing={isEditing}
+              setIsEditing={setIsEditing}
+              onFocus={() => setFocusedBlockId(block.id)}
+            />
           );
 
         case "list":

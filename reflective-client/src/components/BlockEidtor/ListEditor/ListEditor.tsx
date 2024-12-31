@@ -4,8 +4,8 @@ import { ListItem } from "./ListItem";
 import { VirtualizedList } from "./VirtualizedList";
 import { Block } from "../../../types/BlockEditor/BlockEditor";
 import { ListError, ListOptions } from "../../../types/BlockEditor/List";
-import { useLogger } from "../../../hooks/BlockEditor/useLogger";
-import useListItems from "../../../hooks/BlockEditor/useListItems";
+import { useLogger } from "../../../hooks/BlockEditor/List/useLogger";
+import useListItems from "../../../hooks/BlockEditor/List/useListItems";
 
 interface ListEditorProps {
   block: Block;

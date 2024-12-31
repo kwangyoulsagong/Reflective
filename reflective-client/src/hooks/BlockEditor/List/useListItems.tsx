@@ -3,12 +3,12 @@ import {
   ListError,
   ListItem,
   UseListProps,
-} from "../../types/BlockEditor/List";
+} from "../../../types/BlockEditor/List";
 import { useLogger } from "./useLogger";
-import { DEFAULT_OPTIONS } from "../../constants/blockEditor";
-import { FocusManager } from "../../services/list/focus";
-import { ListValidator } from "../../services/list/validation";
-import { ListNumberingStrategy } from "../../services/list/numbering";
+import { DEFAULT_OPTIONS } from "../../../constants/blockEditor";
+import { FocusManager } from "../../../services/list/focus";
+import { ListValidator } from "../../../services/list/validation";
+import { ListNumberingStrategy } from "../../../services/list/numbering";
 import useVirtualizer from "./useVirtualizer";
 
 const useListItems = ({
@@ -22,10 +22,8 @@ const useListItems = ({
   const logger = useLogger("useList");
   // 리스트 기능 상태
   const [listItems, setListItems] = useState<ListItem[]>([]);
-
   const itemRefs = useRef<{ [key: string]: HTMLInputElement }>({});
   const previousItems = useRef<ListItem[]>([]);
-
   const mergedOptions = useMemo(
     () => ({ ...DEFAULT_OPTIONS, ...options }),
     [options]
@@ -115,7 +113,7 @@ const useListItems = ({
     [generateId]
   );
 
-  // 리스트 아이템 낙관적 업데이트
+  // 리스트 아이템 업데이트
   const updateItems = useCallback(
     (newItems: ListItem[]) => {
       try {
@@ -243,7 +241,7 @@ const useListItems = ({
     },
     [listItems, mergedOptions.maxLevel, updateItems, handleError]
   );
-  //   들여쓰기 감소
+  // 들여쓰기 감소
   const decreaseIndent = useCallback(
     (id: string) => {
       try {
