@@ -60,7 +60,6 @@ const ChartEditor = React.memo<ChartEditorProps>(
       return gridData;
     });
 
-    // Update chart data when grid changes
     const updateChartFromGrid = useCallback(
       (newGrid: string[][]) => {
         try {
@@ -96,7 +95,6 @@ const ChartEditor = React.memo<ChartEditorProps>(
       ]
     );
 
-    // Grid cell change handler
     const handleCellChange = (
       rowIndex: number,
       colIndex: number,
