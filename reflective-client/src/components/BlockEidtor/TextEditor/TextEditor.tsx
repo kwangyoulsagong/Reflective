@@ -15,9 +15,7 @@ const TextEditor = React.memo<TextEditorProps>(
     onFocus,
     className = "",
   }) => {
-    const currentContent = isEditing
-      ? block.content
-      : blockContent.get(block.id) || "";
+    const currentContent = blockContent.get(block.id) || block.content || "";
     const editorRef = useAutoSize(
       currentContent,
       isEditing,
@@ -28,7 +26,7 @@ const TextEditor = React.memo<TextEditorProps>(
         updateBlockContent(block.id, newContent);
         debouncedUpdateRef.current?.(block.id, newContent, block.type);
       },
-      [block.id, block.type, updateBlockContent]
+      [block.id, block.type, updateBlockContent, debouncedUpdateRef]
     );
     const { applyFormatting, renderFormattedContent } = useTextFormatting({
       editorRef,

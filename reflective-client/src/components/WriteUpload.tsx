@@ -14,7 +14,7 @@ const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
       category: data.category || "",
       thumbnail:
         data.thumbnail ||
-        "https://velog.velcdn.com/images/kimhyo_0218/post/cdab776f-8cdf-4fd0-9e9f-5f59ad8d5b69/reactquery_logo.png",
+        "https://blog.kakaocdn.net/dn/c3hV9c/btqDIQ0SiFk/2SJ29eTJBmWhymwKAskKi0/img.jpg",
       like_count: 0,
     };
     if (isEdit) {

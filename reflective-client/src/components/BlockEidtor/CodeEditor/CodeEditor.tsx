@@ -14,9 +14,7 @@ const CodeEditor = React.memo<CodeEditorProps>(
     isEditing,
     setIsEditing,
   }) => {
-    const currentContent = isEditing
-      ? block.content
-      : blockContent.get(block.id) || "";
+    const currentContent = blockContent.get(block.id) || block.content || "";
     const editorRef = useAutoSize(currentContent, isEditing, 120);
     const handleContentChange = useCallback(
       (newContent: string) => {

@@ -13,9 +13,7 @@ const ImageEditor = ({
   setIsEditing,
 }: ImageEditorProps) => {
   const [imageSize, setImageSize] = useState(100);
-  const currentContent = isEditing
-    ? block.content
-    : blockContent.get(block.id) || "";
+  const currentContent = blockContent.get(block.id) || block.content || "";
   const [error, setError] = useState<string | null>(null);
   const handleContentChange = useCallback(
     (newContent: string) => {
