@@ -21,3 +21,15 @@ export interface ChartData {
     borderColor?: string;
   }[];
 }
+export interface TableEditorProps {
+  grid: Array<Array<string | number>>;
+  onCellChange: (row: number, col: number, value: string) => void;
+  onAddRow: () => void;
+  onAddColumn: () => void;
+  onRemoveRow: (index: number) => void;
+  onRemoveColumn: (index: number) => void;
+}
+export interface ChartPreviewProps {
+  data: ChartData;
+  onEdit: () => void;
+}
