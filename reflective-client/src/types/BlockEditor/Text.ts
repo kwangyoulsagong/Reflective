@@ -15,15 +15,14 @@ export interface TextBlockContent {
 
 export interface TextEditorProps {
   block: Block;
-  blockContent: Map<string, string>; // 추가
-  updateBlockContent: (id: string, content: string) => void; // 추가
+  blockContent: Map<string, string>;
+  updateBlockContent: (id: string, content: string) => void;
   debouncedUpdateRef: React.MutableRefObject<
     ((id: string, content: string, type: Block["type"]) => void) | undefined
-  >; // 추가
+  >;
   isEditing: boolean;
-  setIsEditing: (isEditing: boolean) => void; // 추가
+  setIsEditing: (isEditing: boolean) => void;
   onFocus?: () => void;
-  className?: string;
 }
 export interface UseTextFormattingProps {
   editorRef: React.RefObject<HTMLTextAreaElement>;

@@ -29,7 +29,6 @@ ChartJS.register(
 
 const BlockEditor: React.FC<BlockEditorProps> = React.memo(
   ({ block, updateBlock, removeBlock, setFocusedBlockId }) => {
-    // 컨텐츠 관리 리코일로 관리를 한다
     const [isEditing, setIsEditing] = useState(true);
     const { blockContent, updateBlockContent, debouncedUpdateRef } =
       useBlockContent({ block, updateBlock });

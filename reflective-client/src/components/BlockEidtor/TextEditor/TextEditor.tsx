@@ -13,7 +13,6 @@ const TextEditor = React.memo<TextEditorProps>(
     isEditing,
     setIsEditing,
     onFocus,
-    className = "",
   }) => {
     const currentContent = blockContent.get(block.id) || block.content || "";
     const editorRef = useAutoSize(
@@ -64,12 +63,11 @@ const TextEditor = React.memo<TextEditorProps>(
             className={`
                 w-full p-2 bg-transparent outline-none  border border-transparent rounded-md resize-none  overflow-hidden
                 ${getHeadingClass()} 
-                ${className}
               `}
             rows={block.type === "paragraph" ? 3 : 1}
           />
         ) : (
-          <div className={`w-full p-2 ${getHeadingClass()} ${className}`}>
+          <div className={`w-full p-2 ${getHeadingClass()}`}>
             {renderFormattedContent(currentContent)}
           </div>
         )}
