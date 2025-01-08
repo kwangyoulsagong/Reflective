@@ -29,10 +29,10 @@ const useListItems = ({
     [options]
   );
 
-  // focus item
+  // 포커스 아이템
   const focusManager = useMemo(() => new FocusManager(itemRefs), []);
 
-  // 리스트 유효서 검사
+  // 리스트 유효성 검사
   const validator = useMemo(
     () => new ListValidator(mergedOptions),
     [mergedOptions]

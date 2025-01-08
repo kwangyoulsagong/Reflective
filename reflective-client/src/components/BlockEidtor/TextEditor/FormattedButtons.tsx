@@ -1,4 +1,3 @@
-// src/components/BlockEditor/TextEditor/FormatButtons.tsx
 import React from "react";
 import { Bold, Italic, Underline, Eye, EyeOff } from "lucide-react";
 import { FormatButtonsProps } from "../../../types/BlockEditor/Text";
