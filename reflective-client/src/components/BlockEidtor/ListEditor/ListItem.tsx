@@ -1,4 +1,3 @@
-// ListItem.tsx
 import React, { memo } from "react";
 import { ChevronDown } from "lucide-react";
 import { ListItem as ListItemType } from "../../../types/BlockEditor/List";
@@ -60,5 +59,3 @@ export const ListItem = memo<ListItemProps>(
     );
   }
 );
-
-ListItem.displayName = "ListItem";

@@ -65,7 +65,7 @@ const useListItems = ({
     },
     [logger, onError]
   );
-  //리스트 생서이 id 생성
+  //리스트 생성시 id 생성
   const generateId = useCallback(() => {
     return crypto.randomUUID();
   }, []);
@@ -319,7 +319,7 @@ const useListItems = ({
 
       setListItems(initialItems);
     } catch (error) {
-      console.error("Failed to initialize list items:", error);
+      console.error("리스트 아이템 초기화에 실패 했습니다.", error);
       setListItems([createDefaultItem()]);
     }
   }, [block.id]); // 의존성을 block.id만으로 최소화

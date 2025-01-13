@@ -58,5 +58,3 @@ export const VirtualizedList = memo<VirtualizedListProps>(
     );
   }
 );
-
-VirtualizedList.displayName = "VirtualizedList";
