@@ -1,0 +1,116 @@
+.prose pre {
+  font-family: Arial, sans-serif; /* Or any other font you prefer */
+  width: 100%;
+  white-space: pre-wrap; /* Preserve spaces, tabs, and line breaks */
+  word-wrap: break-word; /* Prevent overflow by wrapping long words */
+  overflow-wrap: break-word; /* Same as word-wrap, supported in newer browsers */
+}
+
+.prose h1 {
+  font-size: 1.9rem; /* Equivalent to text-4xl */
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose h2 {
+  font-size: 1.6rem; /* Equivalent to text-3xl */
+  font-weight: bold;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose h3 {
+  font-size: 1.4rem; /* Equivalent to text-2xl */
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+.prose h4 {
+  font-size: 1.2rem; /* Equivalent to text-2xl */
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose a {
+  color: pink;
+  text-decoration: underline;
+}
+.toc-container {
+  position: fixed;
+  right: 50px;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.toc-circle-container {
+  position: relative;
+  height: 300px;
+  width: 50px;
+  background: lightgray;
+}
+
+.toc-circle {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background-color: orange;
+  border-radius: 50%;
+  transition: top 0.5s ease;
+}
+
+.toc-progress-bar {
+  position: absolute;
+  width: 5px;
+  height: 0;
+  background-color: orange;
+  top: 0;
+  left: 22px;
+  transition: height 0.5s ease;
+}
+
+.toc-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 50px;
+}
+
+.toc-links li {
+  margin: 20px 0;
+}
+
+.toc-links a {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  display: block;
+  text-align: center;
+}
+pre[class*="language-"] {
+  padding: 1em; /* 패딩 추가 */
+  overflow: auto; /* 스크롤 가능하게 설정 */
+  border-radius: 0.3em; /* 모서리 둥글게 */
+  background-color: #fbfbfb; /* 원하는 배경 색상 */
+  color: #ffffff; /* 원하는 글자 색상 */
+}
