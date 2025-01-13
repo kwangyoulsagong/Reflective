@@ -28,7 +28,11 @@ class PostService {
             };
             const post = new postModel_1.default(body);
             if (post) {
-                return yield post.save();
+                const savedPost = yield post.save();
+                return {
+                    post_id: savedPost.post_id,
+                    title: savedPost.title,
+                };
             }
             return null;
         });

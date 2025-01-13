@@ -2,12 +2,15 @@ import { HTTP_ERROR_MESSAGE, HTTP_STATUS_CODE } from "../../constants/api";
 
 import { AlertCircle } from "lucide-react";
 export interface ErrorProps {
-  statusCode?: number; // HTTP 상태 코드 (기본값: 404)
-  resetError?: () => void; // 에러를 초기화하는 함수
+  statusCode?: number;
+  message?: string; // message props 추가
+  code?: number; // code props 추가
+  resetError?: () => void;
 }
 
 const Error = ({
   statusCode = HTTP_STATUS_CODE.NOT_FOUND,
+  message, // message props 받기
   resetError,
 }: ErrorProps) => {
   const currentStatusCode =
@@ -65,7 +68,7 @@ const Error = ({
             </h1>
 
             <p className="text-gray-600 text-center mb-6">
-              {HTTP_ERROR_MESSAGE[statusCodeKey].BODY}
+              {message || HTTP_ERROR_MESSAGE[statusCodeKey].BODY}
             </p>
 
             {/* 리셋 버튼 */}

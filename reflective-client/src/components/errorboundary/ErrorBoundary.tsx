@@ -1,44 +1,26 @@
 import * as Sentry from "@sentry/react";
-import type { ComponentType, PropsWithChildren } from "react";
-import { Component } from "react";
-import type { ErrorProps } from "../../components/error/Error";
+import { Component, ComponentType, PropsWithChildren } from "react";
+import { ErrorProps } from "../error/Error";
 import { HTTPError } from "../../api/HTTPError";
+import { HTTP_STATUS_CODE } from "../../constants/api";
 
-/**
- * ErrorBoundary 컴포넌트의 props 인터페이스
- * @property {ComponentType<ErrorProps>} Fallback - 에러 발생시 보여줄 컴포넌트
- * @property {Function} onReset - 에러 초기화 시 실행될 콜백 함수
- */
 interface ErrorBoundaryProps {
   Fallback: ComponentType<ErrorProps>;
   onReset?: (error: ErrorType) => void;
 }
 
-/**
- * ErrorBoundary의 state 인터페이스
- * @property {boolean} hasError - 에러 발생 여부
- * @property {ErrorType | null} error - 발생한 에러 객체
- */
 interface ErrorBoundaryState {
   hasError: boolean;
   error: ErrorType | null;
 }
 
-// 타입 alias를 통한 에러 타입 정의
 type ErrorType = Error | HTTPError;
 
-/**
- * 초기 상태 값
- */
 const INITIAL_STATE: ErrorBoundaryState = {
   hasError: false,
   error: null,
 };
 
-/**
- * 애플리케이션의 에러를 캡처하고 처리하는 ErrorBoundary 컴포넌트
- * 자식 컴포넌트에서 발생하는 에러를 캐치하여 Fallback UI를 표시합니다.
- */
 class ErrorBoundary extends Component<
   PropsWithChildren<ErrorBoundaryProps>,
   ErrorBoundaryState
@@ -49,17 +31,14 @@ class ErrorBoundary extends Component<
     return { hasError: true, error };
   }
 
-  private captureError = (error: ErrorType): void => {
+  componentDidCatch(error: ErrorType, errorInfo: React.ErrorInfo): void {
+    // Sentry에 에러 정보 전송
     Sentry.withScope((scope) => {
       scope.setLevel("error");
+      scope.setExtra("errorInfo", errorInfo);
       scope.setExtra("location", window.location.href);
-      scope.setExtra("errorType", error.name);
-      Sentry.captureMessage(`[${error.name}] ${window.location.href}`);
+      Sentry.captureException(error);
     });
-  };
-
-  componentDidCatch(error: ErrorType): void {
-    this.captureError(error);
   }
 
   private resetErrorBoundary = (): void => {
@@ -77,20 +56,22 @@ class ErrorBoundary extends Component<
     if (error instanceof HTTPError) {
       return {
         statusCode: error.statusCode,
+        message: error.message,
+        code: error.code,
       };
     }
     return {
-      statusCode: undefined,
+      statusCode: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+      message: error.message || "알 수 없는 에러가 발생했습니다",
     };
   };
 
   render() {
+    const { hasError, error } = this.state;
     const { Fallback, children } = this.props;
-    const { error } = this.state;
 
-    if (error) {
+    if (hasError && error) {
       const errorDetails = this.getErrorDetails(error);
-
       return (
         <Fallback {...errorDetails} resetError={this.resetErrorBoundary} />
       );
@@ -99,5 +80,4 @@ class ErrorBoundary extends Component<
     return children;
   }
 }
-
 export default ErrorBoundary;

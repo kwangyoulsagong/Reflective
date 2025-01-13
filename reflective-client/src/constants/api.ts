@@ -22,31 +22,42 @@ export const NETWORK = {
 } as const;
 
 export const HTTP_STATUS_CODE = {
-  SUCCESS: 200,
+  OK: 200,
   CREATED: 201,
   NO_CONTENT: 204,
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
   NOT_FOUND: 404,
   CONTENT_TOO_LARGE: 413,
   INTERNAL_SERVER_ERROR: 500,
 } as const;
 
 export const HTTP_ERROR_MESSAGE = {
-  [HTTP_STATUS_CODE.NOT_FOUND]: {
-    HEADING: "길을 잃었나요?",
-    BODY: "요청하신 페이지를 찾을 수 없습니다.",
+  "400": {
+    HEADING: "잘못된 요청입니다",
+    BODY: "요청을 확인하고 다시 시도해주세요",
+    BUTTON: "다시 시도",
+  },
+  "401": {
+    HEADING: "인증이 필요합니다",
+    BODY: "로그인 후 다시 시도해주세요",
+    BUTTON: "로그인하기",
+  },
+  "403": {
+    HEADING: "접근 권한이 없습니다",
+    BODY: "해당 리소스에 대한 접근 권한이 없습니다",
     BUTTON: "홈으로 가기",
   },
-  [HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR]: {
-    HEADING: "현재 페이지를 표시할 수 없습니다.",
-    BODY: `잠시 후 다시 시도해주세요.`,
+  "404": {
+    HEADING: "페이지를 찾을 수 없습니다",
+    BODY: "요청하신 페이지가 존재하지 않습니다",
+    BUTTON: "홈으로 가기",
+  },
+  "500": {
+    HEADING: "서버 오류가 발생했습니다",
+    BODY: "잠시 후 다시 시도해주세요",
     BUTTON: "새로고침",
-  },
-  [HTTP_STATUS_CODE.BAD_REQUEST]: {
-    HEADING: "잘못된 요청입니다.",
-    BODY: "확인 후 다시 시도해주세요.",
-    BUTTON: "홈으로 가기",
   },
 } as const;
 

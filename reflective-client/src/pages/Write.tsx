@@ -1,26 +1,28 @@
 import React, { useState } from "react";
-import {
-  DropResult,
-  DragDropContext,
-  Droppable,
-  Draggable,
-} from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useLocation } from "react-router-dom";
 import WriteUpload from "../components/WriteUpload";
-import { Block, SavePostType } from "../types/types";
-import BlockEditor from "../components/refactoringBlockEidtor/BlockRefectorEditor";
-import BlockMenu from "../components/BlockMenu";
+import BlockEditor from "../components/BlockEidtor/BlockEditor";
+import BlockMenu from "../components/BlockEidtor/BlockMenu";
+import { SavePostType } from "../types/BlockEditor/BlockEditor";
+import useBlocks from "../hooks/Blocks/useBlocks";
 
 const Write: React.FC = () => {
   const { state } = useLocation();
   const isEdit = Boolean(state?.post);
 
   const [title, setTitle] = useState(isEdit ? state.post.title : "");
-  const [blocks, setBlocks] = useState<Block[]>(
-    isEdit
-      ? state.post.contents
-      : [{ id: "block-0", content: "", type: "paragraph" }]
-  );
+  const {
+    blocks,
+    focusedBlockId,
+    setFocusedBlockId,
+    addBlock,
+    updateBlock,
+    removeBlock,
+    onDragEnd,
+  } = useBlocks({
+    initialBlocks: isEdit ? state.post.contents : undefined,
+  });
   const [data, setData] = useState<SavePostType>({
     title: "",
     contents: [],
@@ -29,52 +31,6 @@ const Write: React.FC = () => {
     like_count: isEdit ? state.post.like_count : 0,
   });
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [focusedBlockId, setFocusedBlockId] = useState<string | null>(null);
-
-  const addBlock = (type: Block["type"]) => {
-    const newBlock: Block = {
-      id: `block-${Date.now()}`,
-      content: "",
-      type,
-    };
-
-    setBlocks((prevBlocks) => {
-      const focusedIndex = prevBlocks.findIndex(
-        (block) => block.id === focusedBlockId
-      );
-      if (focusedIndex === -1) {
-        return [...prevBlocks, newBlock];
-      } else {
-        const newBlocks = [...prevBlocks];
-        newBlocks.splice(focusedIndex + 1, 0, newBlock);
-        return newBlocks;
-      }
-    });
-
-    setFocusedBlockId(newBlock.id);
-  };
-
-  const updateBlock = (id: string, content: string, type: Block["type"]) => {
-    setBlocks(
-      blocks.map((block) =>
-        block.id === id ? { ...block, content, type } : block
-      )
-    );
-  };
-
-  const removeBlock = (id: string) => {
-    setBlocks(blocks.filter((block) => block.id !== id));
-  };
-
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
-
-    const items = Array.from(blocks);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    setBlocks(items);
-  };
 
   const handleSubmit = () => {
     setData((prev) => ({
@@ -132,7 +88,7 @@ const Write: React.FC = () => {
             onClick={handleSubmit}
             className="bg-primary rounded-[20px] w-[150px] h-[40px] text-white font-bold"
           >
-            Submit
+            제출하기
           </button>
         </div>
       </section>

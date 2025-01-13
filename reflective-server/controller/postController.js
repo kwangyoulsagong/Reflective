@@ -20,13 +20,12 @@ class PostController {
             try {
                 const data = req.body;
                 if (!req.user) {
-                    res.status(401).json({ message: '인증 권한 없음' });
+                    res.status(401).json({ message: "인증 권한 없음" });
                     return;
                 }
                 const userId = req.user.user_id;
                 const result = yield postService_1.default.savePost(userId, data);
-                console.log(result);
-                res.status(200).json({ message: "게시물 저장 성공" });
+                res.status(200).json({ message: "게시물 저장 성공", result });
             }
             catch (error) {
                 res.status(500).json({ error: error.message });
@@ -76,7 +75,7 @@ class PostController {
             const data = req.body;
             try {
                 if (!req.user) {
-                    res.status(401).json({ message: '인증 권한 없음' });
+                    res.status(401).json({ message: "인증 권한 없음" });
                     return;
                 }
                 const userId = req.user.user_id;
@@ -89,7 +88,9 @@ class PostController {
                 }
             }
             catch (error) {
-                res.status(500).json({ message: "게시물 수정 에러", error: error.message });
+                res
+                    .status(500)
+                    .json({ message: "게시물 수정 에러", error: error.message });
             }
         });
     }
@@ -99,7 +100,7 @@ class PostController {
             const { post_id } = req.params;
             try {
                 if (!req.user) {
-                    res.status(401).json({ message: '인증 권한 없음' });
+                    res.status(401).json({ message: "인증 권한 없음" });
                     return;
                 }
                 const userId = req.user.user_id;
@@ -112,9 +113,11 @@ class PostController {
                 }
             }
             catch (error) {
-                res.status(500).json({ message: "게시물 삭제 에러", error: error.message });
+                res
+                    .status(500)
+                    .json({ message: "게시물 삭제 에러", error: error.message });
             }
         });
     }
 }
-exports.default = new PostController;
+exports.default = new PostController();
