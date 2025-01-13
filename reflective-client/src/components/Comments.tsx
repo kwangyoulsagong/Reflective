@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePost_idStore } from "../provider/post_idProvider";
 import useSaveCommentMutation from "../hooks/api/useSaveCommentMutation";
-import useGetCommentQuery from "../hooks/api/useGetCommentQuery";
 import useDeleteCommentMutation from "../hooks/api/useDeleteCommentMutation";
 import useUpdateCommentMutation from "../hooks/api/useUpdateCommentMutation";
 import { formatRelativeTime } from "../hooks/TimeReducer";
@@ -13,11 +12,12 @@ import {
   Edit2,
   Trash2,
 } from "lucide-react";
+import useFetchingComments from "../hooks/Commnets/useFetchingComments";
 
 const Comments = () => {
   const { post_id } = usePost_idStore();
   const [newComment, setNewComment] = useState("");
-  const [comments, setComments] = useState<commentState[]>([]);
+
   const [replyContent, setReplyContent] = useState<{ [key: string]: string }>(
     {}
   );
@@ -30,8 +30,7 @@ const Comments = () => {
   const { mutate: saveMutate } = useSaveCommentMutation();
   const { mutate: deleteMutate } = useDeleteCommentMutation();
   const { mutate: updateMutate } = useUpdateCommentMutation();
-  const { data, isLoading, error, refetch } = useGetCommentQuery(post_id);
-
+  const { comments, isLoading, error, refetch } = useFetchingComments(post_id);
   const handleSaveComment = async (parent_comment_id: string | null = null) => {
     const content = parent_comment_id
       ? replyContent[parent_comment_id]
@@ -78,37 +77,6 @@ const Comments = () => {
       }
     );
   };
-
-  const fetchComments = () => {
-    if (!data) return;
-
-    const commentsData = data.map((comment: commentState) => ({
-      ...comment,
-      replies: [],
-    }));
-
-    commentsData.forEach((comment: commentState) => {
-      if (comment.parent_comment_id != null) {
-        const parentComment = commentsData.find(
-          (c: commentState) => c.comment_id === comment.parent_comment_id
-        );
-        if (parentComment) {
-          parentComment.replies.push(comment);
-        }
-      }
-    });
-
-    const rootComments = commentsData.filter(
-      (comment: commentState) => comment.parent_comment_id === null
-    );
-    setComments(rootComments);
-  };
-
-  useEffect(() => {
-    if (data) {
-      fetchComments();
-    }
-  }, [data]);
 
   const toggleReplies = (commentId: string) => {
     setShowReplies((prev) => ({ ...prev, [commentId]: !prev[commentId] }));
