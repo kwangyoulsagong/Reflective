@@ -1,5 +1,5 @@
-import { formatRelativeTime } from "../../../hooks/TimeReducer";
 import { commentContentProps } from "../../../types/Comments/CommentContent/type";
+import { formatRelativeTime } from "../../../utils/times";
 
 const CommentContent = ({
   comment,

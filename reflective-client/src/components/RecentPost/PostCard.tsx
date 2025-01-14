@@ -2,7 +2,7 @@ import { useState } from "react";
 import { PostCardProps } from "../../types/RecentPost/RecentPost";
 import { Clock, Heart, Eye } from "lucide-react";
 import { useSpring, animated } from "react-spring";
-import { formatRelativeTime } from "../../hooks/TimeReducer";
+import { formatRelativeTime } from "../../utils/times";
 
 const PostCard = ({ post, index, handlePost }: PostCardProps) => {
   const [isHovered, setIsHovered] = useState(false);

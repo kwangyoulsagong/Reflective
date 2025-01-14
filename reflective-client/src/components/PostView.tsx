@@ -7,7 +7,6 @@ import unheart from "../assets/unheart.png";
 import heart from "../assets/heart.png";
 import { useHeaderIDs, useToC } from "../hooks/usePostViewUtils";
 import { getPostType } from "../types/types";
-import { formatRelativeTime } from "../hooks/TimeReducer";
 import useLike from "../hooks/api/useLike";
 import useDeletePostMutation from "../hooks/api/useDeletePostMutation";
 import { useNavigate } from "react-router-dom";
@@ -17,9 +16,9 @@ import useDeleteFavoriteMutation from "../hooks/api/useDeleteFavoriteMutation";
 import { USER_ID_KEY } from "../constants/api";
 import { Block } from "../types/BlockView/BlockView";
 import BlockView from "./common/BlockView/BlockView";
+import { formatRelativeTime } from "../utils/times";
 
 const PostView = (data: Partial<getPostType>) => {
-  console.log(data);
   const navigate = useNavigate();
   const user_id = localStorage.getItem(USER_ID_KEY);
   const contentRef = useRef<HTMLDivElement>(null);
