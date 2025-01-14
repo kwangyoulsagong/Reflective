@@ -1,38 +1,17 @@
 import { useEffect, useState } from "react";
 import { commentState } from "../../types/types";
 import useGetCommentQuery from "../api/useGetCommentQuery";
+import { CommentBuilder } from "../../services/Comments/CommentsBuilder";
 
 const useFetchingComments = (postId: string) => {
   const [comments, setComments] = useState<commentState[]>([]);
   const { data, isLoading, error, refetch } = useGetCommentQuery(postId);
-  const fetchComments = () => {
-    if (!data) return;
-
-    const commentsData = data.map((comment: commentState) => ({
-      ...comment,
-      replies: [],
-    }));
-
-    commentsData.forEach((comment: commentState) => {
-      if (comment.parent_comment_id != null) {
-        const parentComment = commentsData.find(
-          (c: commentState) => c.comment_id === comment.parent_comment_id
-        );
-        if (parentComment) {
-          parentComment.replies.push(comment);
-        }
-      }
-    });
-
-    const rootComments = commentsData.filter(
-      (comment: commentState) => comment.parent_comment_id === null
-    );
-    setComments(rootComments);
-  };
+  const commentBuilder = new CommentBuilder();
 
   useEffect(() => {
     if (data) {
-      fetchComments();
+      const commentTree = commentBuilder.builderCommentTree(data);
+      setComments(commentTree);
     }
   }, [data]);
 
