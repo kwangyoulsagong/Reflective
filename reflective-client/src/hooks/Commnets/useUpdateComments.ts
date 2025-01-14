@@ -7,10 +7,10 @@ interface updateCommentState {
   post_id: string;
   refetch: () => void;
 }
-const useCommentsBuilder = ({ post_id, refetch }: updateCommentState) => {
-  const { mutate: saveMutate } = useSaveCommentMutation();
-  const { mutate: deleteMutate } = useDeleteCommentMutation();
-  const { mutate: updateMutate } = useUpdateCommentMutation();
+const useCommentsBuilder = ({ post_id }: updateCommentState) => {
+  const { mutate: saveMutate } = useSaveCommentMutation(post_id);
+  const { mutate: deleteMutate } = useDeleteCommentMutation(post_id);
+  const { mutate: updateMutate } = useUpdateCommentMutation(post_id);
   const [newComment, setNewComment] = useState("");
 
   const [replyContent, setReplyContent] = useState<{ [key: string]: string }>(
@@ -27,23 +27,12 @@ const useCommentsBuilder = ({ post_id, refetch }: updateCommentState) => {
     if (!content) return;
 
     const body = { post_id, parent_comment_id, content };
-    saveMutate(body, {
-      onSuccess: () => {
-        if (parent_comment_id) {
-          setReplyContent((prev) => ({ ...prev, [parent_comment_id]: "" }));
-        } else {
-          setNewComment("");
-        }
-        refetch();
-      },
-    });
+    saveMutate(body);
   };
 
   const handleDeleteComment = async (comment_id: string) => {
     if (window.confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
-      deleteMutate(comment_id, {
-        onSuccess: () => refetch(),
-      });
+      deleteMutate(comment_id);
     }
   };
 
@@ -55,16 +44,9 @@ const useCommentsBuilder = ({ post_id, refetch }: updateCommentState) => {
   const handleUpdateComment = async () => {
     if (!editingComment || !editContent) return;
 
-    updateMutate(
-      { comment_id: editingComment, content: editContent },
-      {
-        onSuccess: () => {
-          setEditingComment(null);
-          setEditContent("");
-          refetch();
-        },
-      }
-    );
+    updateMutate({ comment_id: editingComment, content: editContent });
+    setEditingComment(null);
+    setEditContent("");
   };
   return {
     handleSaveComment,

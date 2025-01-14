@@ -4,7 +4,7 @@ import fetchPostDetail from "../../api/post/fetchPostDetail";
 
 const usePostDetailQuery = (post_id: string) => {
   return useQuery({
-    queryKey: queryKeys.PostDetail,
+    queryKey: [queryKeys.PostDetail, post_id],
     queryFn: () => fetchPostDetail(post_id),
     throwOnError: true,
   });

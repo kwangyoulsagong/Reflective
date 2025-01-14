@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-
 import "prismjs/themes/prism.css";
 import "prismjs/components/prism-javascript.min.js";
-
 import unheart from "../assets/unheart.png";
 import heart from "../assets/heart.png";
 import { useHeaderIDs, useToC } from "../hooks/usePostViewUtils";

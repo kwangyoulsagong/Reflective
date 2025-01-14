@@ -63,6 +63,7 @@ class CommentController {
         userId,
         data
       );
+
       if (updateComment) {
         res.status(200).json({ message: "댓글이 수정 되었습니다." });
       } else {
