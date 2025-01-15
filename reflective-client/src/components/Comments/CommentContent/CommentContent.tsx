@@ -1,6 +1,7 @@
 import { commentContentProps } from "../../../types/Comments/CommentContent/type";
 import { formatRelativeTime } from "../../../utils/times";
 import Button from "../Common/Button/Button";
+import TextArea from "../Common/TextArea/TextArea";
 
 const CommentContent = ({
   comment,
@@ -31,8 +32,8 @@ const CommentContent = ({
         </div>
         {editingComment === comment.comment_id ? (
           <div>
-            <textarea
-              className="w-full p-2 mt-1 text-sm border rounded resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+            <TextArea
+              variant="update"
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
               rows={3}

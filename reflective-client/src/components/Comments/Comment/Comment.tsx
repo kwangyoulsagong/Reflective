@@ -2,6 +2,7 @@ import { commentProps } from "../../../types/Comments/\btype";
 import CommentAction from "../CommentAction/CommentAction";
 import CommentContent from "../CommentContent/CommentContent";
 import Button from "../Common/Button/Button";
+import TextArea from "../Common/TextArea/TextArea";
 
 const Comment = ({
   comment,
@@ -62,9 +63,8 @@ const Comment = ({
             />
           ))}
           <div className="mt-2 ml-10">
-            <textarea
-              className="w-full p-2 text-sm border rounded resize-none focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="답글을 작성해주세요..."
+            <TextArea
+              variant="reply"
               value={replyContent[comment.comment_id] || ""}
               onChange={(e) =>
                 setReplyContent({

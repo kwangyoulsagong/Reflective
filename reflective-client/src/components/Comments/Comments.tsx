@@ -4,6 +4,7 @@ import useFetchingComments from "../../hooks/Commnets/useFetchingComments";
 import useCommentsBuilder from "../../hooks/Commnets/useUpdateComments";
 import Comment from "./Comment/Comment";
 import Button from "./Common/Button/Button";
+import TextArea from "./Common/TextArea/TextArea";
 
 const Comments = () => {
   const { post_id } = usePost_idStore();
@@ -31,13 +32,13 @@ const Comments = () => {
 
   return (
     <div className="flex flex-col mt-20 items-center gap-4 w-full max-w-3xl mx-auto">
-      <textarea
-        className="w-full p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
-        placeholder="댓글을 작성해주세요..."
+      <TextArea
+        variant="new"
         value={newComment}
         onChange={(e) => setNewComment(e.target.value)}
         rows={3}
       />
+
       <div className="flex justify-end w-full">
         <Button variant="primary" onClick={() => handleSaveComment(null)}>
           댓글 작성
