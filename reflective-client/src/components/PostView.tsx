@@ -1,13 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-
 import "prismjs/themes/prism.css";
 import "prismjs/components/prism-javascript.min.js";
-
 import unheart from "../assets/unheart.png";
 import heart from "../assets/heart.png";
 import { useHeaderIDs, useToC } from "../hooks/usePostViewUtils";
 import { getPostType } from "../types/types";
-import { formatRelativeTime } from "../hooks/TimeReducer";
 import useLike from "../hooks/api/useLike";
 import useDeletePostMutation from "../hooks/api/useDeletePostMutation";
 import { useNavigate } from "react-router-dom";
@@ -17,9 +14,9 @@ import useDeleteFavoriteMutation from "../hooks/api/useDeleteFavoriteMutation";
 import { USER_ID_KEY } from "../constants/api";
 import { Block } from "../types/BlockView/BlockView";
 import BlockView from "./common/BlockView/BlockView";
+import { formatRelativeTime } from "../utils/times";
 
 const PostView = (data: Partial<getPostType>) => {
-  console.log(data);
   const navigate = useNavigate();
   const user_id = localStorage.getItem(USER_ID_KEY);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -39,7 +36,7 @@ const PostView = (data: Partial<getPostType>) => {
       setBlocks(data.contents);
     } else {
       console.error(
-        "Expected data.contents to be an array, but got:",
+        "데이터 컨텐츠는 탑이 배열이여야 합니다:",
         typeof data?.contents
       );
     }

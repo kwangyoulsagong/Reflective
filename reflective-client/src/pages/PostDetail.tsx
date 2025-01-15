@@ -1,4 +1,4 @@
-import Comments from "../components/Comments";
+import Comments from "../components/Comments/Comments";
 import Header from "../components/common/Header/Header";
 import PostView from "../components/PostView";
 import usePostDetailQuery from "../hooks/api/usePostDetailQuery";

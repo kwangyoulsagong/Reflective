@@ -2,7 +2,7 @@ import { useState } from "react";
 import { PostCardProps } from "../../types/RecentPost/RecentPost";
 import { Clock, Heart, Eye } from "lucide-react";
 import { useSpring, animated } from "react-spring";
-import { formatRelativeTime } from "../../hooks/TimeReducer";
+import { formatRelativeTime } from "../../utils/times";
 
 const PostCard = ({ post, index, handlePost }: PostCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -33,7 +33,7 @@ const PostCard = ({ post, index, handlePost }: PostCardProps) => {
               : ""
           }`}
     >
-      <div className="relative overflow-hidden">
+      <section className="relative overflow-hidden">
         <animated.img
           style={imageSpring}
           src={post.thumbnail}
@@ -46,8 +46,8 @@ const PostCard = ({ post, index, handlePost }: PostCardProps) => {
             <span className="ml-2">Read more</span>
           </div>
         </div>
-      </div>
-      <div className="p-4">
+      </section>
+      <article className="p-4">
         <span className="text-sm font-semibold text-primary bg-primary/10 px-2 py-1 rounded">
           {post.category}
         </span>
@@ -65,7 +65,7 @@ const PostCard = ({ post, index, handlePost }: PostCardProps) => {
             <span>{post.like_count}</span>
           </div>
         </div>
-      </div>
+      </article>
     </animated.article>
   );
 };
