@@ -6,6 +6,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { commentActionProps } from "../../../types/Comments/CommentAction/type";
+import Button from "../Common/Button/Button";
 
 const CommentAction = ({
   comment,
@@ -26,9 +27,10 @@ const CommentAction = ({
       }`}
     >
       {!isReply && (
-        <button
+        <Button
+          variant="action"
           onClick={() => toggleReplies(comment.comment_id)}
-          className="text-sm text-primary flex items-center"
+          className="text-primary"
         >
           <MessageCircle size={16} className="mr-1" />
           {comment.replies.length} 개의 답글
@@ -37,22 +39,20 @@ const CommentAction = ({
           ) : (
             <ChevronDown size={16} />
           )}
-        </button>
+        </Button>
       )}
-      <button
-        onClick={() => handleEditComment(comment)}
-        className="text-sm text-gray-500 flex items-center hover:text-primary"
-      >
+      <Button variant="action" onClick={() => handleEditComment(comment)}>
         <Edit2 size={16} className="mr-1" />
         수정
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="action"
         onClick={() => handleDeleteComment(comment.comment_id)}
-        className="text-sm text-gray-500 flex items-center hover:text-red-500"
+        className="hover:text-red-500"
       >
         <Trash2 size={16} className="mr-1" />
         삭제
-      </button>
+      </Button>
     </div>
   );
 };

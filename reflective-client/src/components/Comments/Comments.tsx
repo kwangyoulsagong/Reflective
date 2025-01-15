@@ -3,13 +3,14 @@ import { usePost_idStore } from "../../provider/post_idProvider";
 import useFetchingComments from "../../hooks/Commnets/useFetchingComments";
 import useCommentsBuilder from "../../hooks/Commnets/useUpdateComments";
 import Comment from "./Comment/Comment";
+import Button from "./Common/Button/Button";
 
 const Comments = () => {
   const { post_id } = usePost_idStore();
   const [showReplies, setShowReplies] = useState<{ [key: string]: boolean }>(
     {}
   );
-  const { comments, isLoading, error, refetch } = useFetchingComments(post_id);
+  const { comments, isLoading, error } = useFetchingComments(post_id);
   const {
     handleSaveComment,
     handleDeleteComment,
@@ -23,7 +24,7 @@ const Comments = () => {
     setEditingComment,
     editContent,
     setEditContent,
-  } = useCommentsBuilder({ post_id, refetch });
+  } = useCommentsBuilder({ post_id });
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -38,12 +39,9 @@ const Comments = () => {
         rows={3}
       />
       <div className="flex justify-end w-full">
-        <button
-          onClick={() => handleSaveComment(null)}
-          className="px-4 py-2 text-white bg-primary rounded-full hover:bg-primary-dark transition-colors"
-        >
+        <Button variant="primary" onClick={() => handleSaveComment(null)}>
           댓글 작성
-        </button>
+        </Button>
       </div>
       <section className="w-full space-y-6">
         {comments.map((comment) => (

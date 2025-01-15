@@ -1,5 +1,6 @@
 import { commentContentProps } from "../../../types/Comments/CommentContent/type";
 import { formatRelativeTime } from "../../../utils/times";
+import Button from "../Common/Button/Button";
 
 const CommentContent = ({
   comment,
@@ -37,18 +38,12 @@ const CommentContent = ({
               rows={3}
             />
             <div className="flex justify-end mt-1 space-x-2">
-              <button
-                onClick={handleUpdateComment}
-                className="px-3 py-1 text-sm text-white bg-primary rounded-full hover:bg-primary-dark transition-colors"
-              >
+              <Button variant="sm-primary" onClick={handleUpdateComment}>
                 수정완료
-              </button>
-              <button
-                onClick={() => setEditingComment(null)}
-                className="px-3 py-1 text-sm text-gray-600 bg-gray-200 rounded-full hover:bg-gray-300 transition-colors"
-              >
+              </Button>
+              <Button variant="cancel" onClick={() => setEditingComment(null)}>
                 취소
-              </button>
+              </Button>
             </div>
           </div>
         ) : (

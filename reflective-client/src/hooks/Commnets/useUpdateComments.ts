@@ -5,7 +5,6 @@ import useSaveCommentMutation from "../api/useSaveCommentMutation";
 import useUpdateCommentMutation from "../api/useUpdateCommentMutation";
 interface updateCommentState {
   post_id: string;
-  refetch: () => void;
 }
 const useCommentsBuilder = ({ post_id }: updateCommentState) => {
   const { mutate: saveMutate } = useSaveCommentMutation(post_id);

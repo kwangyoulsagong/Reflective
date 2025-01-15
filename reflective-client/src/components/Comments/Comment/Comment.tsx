@@ -1,6 +1,7 @@
 import { commentProps } from "../../../types/Comments/\btype";
 import CommentAction from "../CommentAction/CommentAction";
 import CommentContent from "../CommentContent/CommentContent";
+import Button from "../Common/Button/Button";
 
 const Comment = ({
   comment,
@@ -74,12 +75,12 @@ const Comment = ({
               rows={2}
             />
             <div className="flex justify-end mt-1">
-              <button
+              <Button
+                variant="secondary"
                 onClick={() => handleSaveComment(comment.comment_id)}
-                className="px-3 py-1 text-sm text-primary border border-primary rounded-full hover:bg-primary hover:text-white transition-colors"
               >
                 답글 작성
-              </button>
+              </Button>
             </div>
           </div>
         </div>
