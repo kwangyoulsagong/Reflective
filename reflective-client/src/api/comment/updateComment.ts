@@ -6,10 +6,9 @@ export interface updateCommentState {
   content: string;
 }
 const updateComment = async ({ comment_id, content }: updateCommentState) => {
-  const { data } = await axiosInstance.put(
-    END_POINTS.COMMENT(comment_id),
-    content
-  );
+  const { data } = await axiosInstance.put(END_POINTS.COMMENT(comment_id), {
+    content,
+  });
   return data;
 };
 export default updateComment;
