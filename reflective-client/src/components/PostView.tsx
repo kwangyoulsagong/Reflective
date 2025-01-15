@@ -36,7 +36,7 @@ const PostView = (data: Partial<getPostType>) => {
       setBlocks(data.contents);
     } else {
       console.error(
-        "Expected data.contents to be an array, but got:",
+        "데이터 컨텐츠는 탑이 배열이여야 합니다:",
         typeof data?.contents
       );
     }
