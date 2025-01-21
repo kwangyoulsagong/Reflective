@@ -4,7 +4,7 @@ import fetchPostFavorite from "../../api/favorite/fetchPostFavorite";
 
 const useGetPostFavoritesQuery = (post_id: string) => {
   return useQuery({
-    queryKey: queryKeys.PostFavorite,
+    queryKey: [queryKeys.PostFavorite, post_id],
     queryFn: () => fetchPostFavorite(post_id),
   });
 };
