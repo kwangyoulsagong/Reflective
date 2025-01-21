@@ -1,6 +1,6 @@
 import Comments from "../components/Comments/Comments";
 import Header from "../components/common/Header/Header";
-import PostView from "../components/PostView";
+import PostView from "../components/Post/Post";
 import usePostDetailQuery from "../hooks/api/usePostDetailQuery";
 import { usePost_idStore } from "../provider/post_idProvider";
 const PostDetail = () => {
