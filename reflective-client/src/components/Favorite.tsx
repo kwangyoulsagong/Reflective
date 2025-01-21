@@ -68,7 +68,7 @@ const FavoriteStories = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1, duration: 0.3 }}
               >
-                {data &&
+                {data && data.length > 0 ? (
                   data.map((story: Story) => (
                     <motion.div
                       key={story._id}
@@ -94,7 +94,20 @@ const FavoriteStories = () => {
                         {story.title}
                       </p>
                     </motion.div>
-                  ))}
+                  ))
+                ) : (
+                  <motion.div
+                    className="flex flex-col items-center justify-center text-gray-500"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <p className="text-lg">즐겨찾기가 비어있습니다</p>
+                    <p className="text-sm mt-2">
+                      스토리를 즐겨찾기에 추가해보세요!
+                    </p>
+                  </motion.div>
+                )}
               </motion.div>
               <AnimatePresence>
                 {activeStory && (
