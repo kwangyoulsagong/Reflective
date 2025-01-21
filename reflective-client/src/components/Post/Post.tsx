@@ -7,18 +7,20 @@ import { Block } from "../../types/BlockView/BlockView";
 import BlockView from "../common/BlockView/BlockView";
 import PostHeader from "./Header/Header";
 import Bars from "./Bars/Bars";
+import { PostValidation } from "../../services/Post/Post";
 
 const PostView = (data: Partial<getPostType>) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [blocks, setBlocks] = useState<Block[]>([]);
+  const postValidation = new PostValidation();
+
   useEffect(() => {
-    if (Array.isArray(data?.contents)) {
-      setBlocks(data.contents);
+    const validationResult = postValidation.isValidation(data);
+
+    if (validationResult.isValid) {
+      setBlocks(validationResult.contents || []);
     } else {
-      console.error(
-        "데이터 컨텐츠는 타입이 배열이여야 합니다, 현재는:",
-        typeof data?.contents
-      );
+      console.error(validationResult.isError);
     }
   }, [data?.contents]);
 
