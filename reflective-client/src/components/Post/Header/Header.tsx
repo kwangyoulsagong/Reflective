@@ -5,9 +5,6 @@ import useLike from "../../../hooks/api/useLike";
 import { formatRelativeTime } from "../../../utils/times";
 import { getPostType } from "../../../types/types";
 import usePost from "../../../hooks/Post/usePost";
-import { useQueryClient } from "@tanstack/react-query";
-import { usePost_idStore } from "../../../provider/post_idProvider";
-import { queryKeys } from "../../../constants/queryKeys";
 const PostHeader = ({ data }: { data: Partial<getPostType> }) => {
   const user_id = localStorage.getItem(USER_ID_KEY);
   const { isLiked, likeCount, handleLike } = useLike(
@@ -18,13 +15,6 @@ const PostHeader = ({ data }: { data: Partial<getPostType> }) => {
   const { isFavorite, handleDeletePost, handleUpdatePost, handleAddFavorite } =
     usePost({ data });
 
-  const queryClient = useQueryClient();
-  const { post_id } = usePost_idStore();
-  const previousFavorites = queryClient.getQueryData([
-    queryKeys.PostFavorite,
-    post_id,
-  ]);
-  console.log(previousFavorites);
   return (
     <header className="flex gap-10 items-center">
       <section className="flex gap-3">
