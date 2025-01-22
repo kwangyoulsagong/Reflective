@@ -1,6 +1,6 @@
 import Comments from "../components/Comments/Comments";
 import Header from "../components/common/Header/Header";
-import PostView from "../components/PostView";
+import PostView from "../components/Post/Post";
 import usePostDetailQuery from "../hooks/api/usePostDetailQuery";
 import { usePost_idStore } from "../provider/post_idProvider";
 const PostDetail = () => {
@@ -10,7 +10,7 @@ const PostDetail = () => {
   if (error) return <p>Error: {error.message}</p>;
   return (
     <div className="flex justify-center items-center">
-      <div className="flex flex-col items-center justify-center w-[1920px] ">
+      <div className="flex flex-col items-center justify-center w-[full] ">
         <Header />
         <PostView {...data} />
         <Comments />
