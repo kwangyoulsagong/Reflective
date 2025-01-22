@@ -89,12 +89,8 @@ class FavoriteController {
                 }
                 const userId = req.user.user_id;
                 const posts = yield favoriteService_1.default.getFavoriteStory(userId);
-                console.log(posts);
-                if (posts) {
-                    res.status(200).json(posts);
-                    return;
-                }
-                res.status(404).json({ message: "게시물 없음" });
+                // posts가 없더라도 빈 배열 반환
+                res.status(200).json(posts || []);
             }
             catch (error) {
                 res.status(500).json({ error: error.message });
