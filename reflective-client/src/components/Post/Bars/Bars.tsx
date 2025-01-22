@@ -17,23 +17,19 @@ const Bars = ({ contentRef, data }: barProps) => {
   return (
     <div className="hidden lg:flex fixed right-0 lg:right-4 xl:right-[100px] top-[120px] w-[200px] gap-3 md:gap-5">
       <div className="w-[6px] md:w-[10px] relative flex justify-center">
-        {/* Background bar */}
         <div
           className="absolute w-full bg-gray-200 rounded-full"
           style={{ height: "100%" }}
         ></div>
-        {/* Progress bar */}
         <div
           className="absolute w-full bg-gradient-to-b from-orange-400 to-orange-600 rounded-full transition-all duration-300 ease-out"
           style={{ height: `${filledHeight}px` }}
         ></div>
-        {/* Circle indicator */}
         <div
           className="absolute w-[12px] h-[12px] md:w-[20px] md:h-[20px] -left-[3px] md:-left-[5px] rounded-full bg-orange-500 transition-transform duration-300"
           style={{ transform: `translateY(${circlePosition}px)` }}
         ></div>
       </div>
-      {/* Table of Contents */}
       <div id="toc" className="text-sm md:text-base"></div>
     </div>
   );

@@ -18,7 +18,7 @@ const PostHeader = ({ data }: { data: Partial<getPostType> }) => {
     usePost({ data });
 
   return (
-    <header className="flex flex-wrap items-center gap-3 sm:gap-4 md:gap-6 lg:gap-10">
+    <header className="flex flex-wrap  items-center gap-3 sm:gap-4 md:gap-6 lg:gap-10">
       <section className="flex gap-2 sm:gap-3 items-center">
         <b className="text-sm sm:text-base">{data?.nickname}</b>
         <span className="text-gray-400">-</span>
@@ -62,8 +62,8 @@ const PostHeader = ({ data }: { data: Partial<getPostType> }) => {
                      text-blue-600 hover:bg-blue-50 
                      transition-colors"
           >
-            <Pencil className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span className="hidden sm:inline">수정</span>
+            <Pencil className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+            <span className="hidden sm:inline text-primary">수정</span>
           </button>
           <button
             onClick={() => handleDeletePost(data.post_id || "")}

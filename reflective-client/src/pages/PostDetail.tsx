@@ -10,7 +10,7 @@ const PostDetail = () => {
   if (error) return <p>Error: {error.message}</p>;
   return (
     <div className="flex justify-center items-center">
-      <div className="flex flex-col items-center justify-center w-[1920px] ">
+      <div className="flex flex-col items-center justify-center w-[full] ">
         <Header />
         <PostView {...data} />
         <Comments />
