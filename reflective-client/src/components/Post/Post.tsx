@@ -24,12 +24,14 @@ const PostView = (data: Partial<getPostType>) => {
   }, [data?.contents]);
 
   return (
-    <div className="mt-20 w-[900px] h-auto flex flex-col items-center gap-[50px]">
-      <h1 className="text-[50px] font-bold">{data?.title}</h1>
+    <div className="mt-8 md:mt-16 lg:mt-20 w-full md:w-[900px] mx-auto px-4 md:px-0 h-auto flex flex-col items-center gap-6 md:gap-8 lg:gap-[50px]">
+      <h1 className="text-3xl md:text-4xl lg:text-[50px] font-bold text-center">
+        {data?.title}
+      </h1>
       <PostHeader data={data} />
       <Bars contentRef={contentRef} data={data} />
       <article ref={contentRef}>
-        <div>
+        <div className="w-[375px] md:w-[750px] px-4 md:px-0">
           {blocks.map((block) => (
             <BlockView key={block.id} block={block} />
           ))}
