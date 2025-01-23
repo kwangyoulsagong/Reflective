@@ -3,7 +3,7 @@ import { PostType } from "../../types/types";
 import { usePost_idStore } from "../../provider/post_idProvider";
 import { usePostRouterStore } from "../../provider/postRouterProvider";
 import PostCard from "./PostCard";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import useVirtualScroll from "../../hooks/useVirtualScroll";
 
 const RecentPost = ({ data }: { data: PostType[] }) => {
@@ -25,6 +25,10 @@ const RecentPost = ({ data }: { data: PostType[] }) => {
     setNickname(nickname);
     setTitle(hyphenatedTitle);
   };
+  useEffect(() => {
+    console.log("가상 렌더링 아이템:", virtualItems);
+    console.log("전체 아이템:", data.length);
+  }, [virtualItems, data]);
 
   return (
     <div ref={containerRef} className="h-[800px] overflow-auto w-full">
