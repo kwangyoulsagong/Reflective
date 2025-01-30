@@ -14,7 +14,7 @@ const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
       category: data.category || "",
       thumbnail:
         data.thumbnail ||
-        "https://blog.kakaocdn.net/dn/c3hV9c/btqDIQ0SiFk/2SJ29eTJBmWhymwKAskKi0/img.jpg",
+        "https://res.cloudinary.com/bucketplace-co-kr/image/upload/c_fit,q_100,w_1920/mockup",
       like_count: 0,
     };
     if (isEdit) {
@@ -24,7 +24,7 @@ const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
         category: data.category || "",
         thumbnail:
           data.thumbnail ||
-          "https://velog.velcdn.com/images/k-svelte-master/post/87c41002-2255-4543-849e-47a275bc1b7d/image.png",
+          "https://velog.velcdn.com/images/haryan248/post/38769e41-0bb9-4681-a828-63516d823a63/image.png",
       };
       updateMutation.mutate({ post_id, body });
     } else {
