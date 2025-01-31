@@ -1,4 +1,3 @@
-import { END_POINTS } from "../../constants/api";
 import { axiosInstance } from "../axiosinstance";
 
 const deleteComment = async (comment_id: string) => {

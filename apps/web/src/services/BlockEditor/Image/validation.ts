@@ -1,4 +1,4 @@
-import { IMAGE_URL_PATTERN } from "../../../constants/blockEditor";
+import { IMAGE_URL_PATTERN } from "../../../shared/constants/blockEditor";
 
 export class ImageValidation {
   constructor(private readonly IMG_URL_PATTERN = IMAGE_URL_PATTERN) {}

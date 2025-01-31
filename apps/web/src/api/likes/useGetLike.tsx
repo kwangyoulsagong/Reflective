@@ -1,5 +1,5 @@
 import { axiosInstance } from "../axiosinstance";
-import { END_POINTS } from "../../constants/api";
+import { END_POINTS } from "../../shared/constants/api";
 
 const UseGetLike = async (post_id: string) => {
   try {

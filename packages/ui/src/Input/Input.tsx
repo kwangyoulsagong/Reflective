@@ -1,0 +1,28 @@
+// components/common/CustomInput.tsx
+import React from "react";
+
+interface InputProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+  type?: string;
+  className?: string;
+}
+
+export const Input = ({
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+  className = "",
+}: InputProps) => {
+  return (
+    <input
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      type={type}
+      className={`w-[340px] h-[40px] bg-custom-gray outline-none indent-4 text-sm ${className}`}
+    />
+  );
+};

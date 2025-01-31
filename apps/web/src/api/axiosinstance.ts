@@ -4,7 +4,11 @@ import {
   handleAPIError,
   handleTokenError,
 } from "./interceptors";
-import { AXIOS_BASE_URL, HTTP_STATUS_CODE, NETWORK } from "../constants/api";
+import {
+  AXIOS_BASE_URL,
+  HTTP_STATUS_CODE,
+  NETWORK,
+} from "../shared/constants/api";
 import { HTTPError } from "./HTTPError";
 import type { ErrorResponse } from "./interceptors";
 

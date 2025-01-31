@@ -8,6 +8,7 @@ import {
 } from "../reducers/SignUpReducer";
 import useSignUpMutation from "../hooks/api/useSignUpMutation";
 import { Button } from "@repo/ui/button";
+import { Input } from "@repo/ui/input";
 const SignUpComponents = () => {
   const [state, dispatch] = useReducer(SignUpReducer, initialState);
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const SignUpComponents = () => {
         <header>
           <img className="w-[150px] mt-10" src={logo} alt="logo" />
         </header>
-        <input
+        <Input
           value={state.email}
           placeholder="이메일"
           onChange={(e) =>
@@ -36,22 +37,22 @@ const SignUpComponents = () => {
               payload: e.target.value,
             })
           }
-          type="string"
-          className="mt-5 w-[340px] h-[40px] bg-custom-gray outline-none indent-4 text-sm "
+          className="mt-5"
         />
-        <input
+
+        <Input
           value={state.password}
           placeholder="비밀번호"
+          type="password"
           onChange={(e) =>
             dispatch({
               type: ActionType.SET_PASSWORD,
               payload: e.target.value,
             })
           }
-          type="password"
-          className="w-[340px] h-[40px] bg-custom-gray outline-none indent-4 text-sm "
         />
-        <input
+
+        <Input
           value={state.nickname}
           placeholder="닉네임"
           onChange={(e) =>
@@ -60,10 +61,9 @@ const SignUpComponents = () => {
               payload: e.target.value,
             })
           }
-          type="string"
-          className="w-[340px] h-[40px] bg-custom-gray outline-none indent-4 text-sm "
         />
-        <input
+
+        <Input
           value={state.phone_number}
           placeholder="전화번호"
           onChange={(e) =>
@@ -72,8 +72,6 @@ const SignUpComponents = () => {
               payload: e.target.value,
             })
           }
-          type="string"
-          className="w-[340px] h-[40px] bg-custom-gray outline-none indent-4 text-sm "
         />
         <Button variant="auth" onClick={handleSignUp}>
           회원가입

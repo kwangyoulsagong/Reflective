@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import updateComment from "../../api/comment/updateComment";
-import { queryKeys } from "../../constants/queryKeys";
+import { queryKeys } from "../../shared/constants/queryKeys";
 import { commentState } from "../../types/types";
 interface UpdateCommentParams {
   comment_id: string;

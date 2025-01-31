@@ -1,8 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import Write from "../pages/Write";
-import PostDetail from "../pages/PostDetail";
+import Write from "../../pages/Write";
+import PostDetail from "../../pages/PostDetail";
+
+import MyPage from "../../pages/Mypage";
 import { usePostRouterStore } from "../provider/postRouterProvider";
-import MyPage from "../pages/Mypage";
 
 // 시작 페이지 라우트
 function PageRoutes() {

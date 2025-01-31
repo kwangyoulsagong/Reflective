@@ -6,7 +6,7 @@ import {
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
   USER_ID_KEY,
-} from "../../constants/api";
+} from "../../shared/constants/api";
 const useLoginMutation = () => {
   const navigate = useNavigate();
   return useMutation({

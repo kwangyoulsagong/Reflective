@@ -4,7 +4,7 @@ import {
   InternalAxiosRequestConfig,
 } from "axios";
 import * as Sentry from "@sentry/react";
-import { ACCESS_TOKEN_KEY, HTTP_STATUS_CODE } from "../constants/api";
+import { ACCESS_TOKEN_KEY, HTTP_STATUS_CODE } from "../shared/constants/api";
 import { HTTPError } from "./HTTPError";
 
 export interface ErrorResponse {

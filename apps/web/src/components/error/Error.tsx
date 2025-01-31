@@ -1,6 +1,8 @@
-import { HTTP_ERROR_MESSAGE, HTTP_STATUS_CODE } from "../../constants/api";
-
 import { AlertCircle } from "lucide-react";
+import {
+  HTTP_ERROR_MESSAGE,
+  HTTP_STATUS_CODE,
+} from "../../shared/constants/api";
 export interface ErrorProps {
   statusCode?: number;
   message?: string; // message props 추가

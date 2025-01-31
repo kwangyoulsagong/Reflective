@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { usePost_idStore } from "../../provider/post_idProvider";
+
 import useFetchingComments from "../../hooks/Commnets/useFetchingComments";
 import useCommentsBuilder from "../../hooks/Commnets/useUpdateComments";
 import Comment from "./Comment/Comment";
 import TextArea from "./Common/TextArea/TextArea";
 import { CommentButton } from "@repo/ui/commentbutton";
+import { usePost_idStore } from "../../app/provider/post_idProvider";
 
 const Comments = () => {
   const { post_id } = usePost_idStore();

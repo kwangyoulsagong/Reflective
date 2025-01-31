@@ -5,6 +5,7 @@
   "exports": {
     "./button": "./src/Button/Button.tsx",
     "./commentbutton": "./src/CommentButton/CommentButton.tsx",
+    "./input": "./src/Input/Input.tsx",
     "./card": "./src/card.tsx",
     "./code": "./src/code.tsx"
   },
@@ -20,6 +21,9 @@
     "@types/node": "^22.12.0",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.13",
     "typescript": "5.7.3"
   },
   "dependencies": {

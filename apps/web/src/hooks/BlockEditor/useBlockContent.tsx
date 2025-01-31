@@ -3,7 +3,7 @@ import { Block, blockContentProps } from "../../types/BlockEditor/BlockEditor";
 import { blockContentState } from "../../recoil/atoms/blockContentState";
 import { useEffect, useRef } from "react";
 import { debounce } from "lodash";
-import { EDITOR_CONFIG } from "../../constants/blockEditor";
+import { EDITOR_CONFIG } from "../../shared/constants/blockEditor";
 
 const useBlockContent = ({ block, updateBlock }: blockContentProps) => {
   // 컨텐츠 관리 리코일로 관리를 한다

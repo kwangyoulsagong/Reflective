@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Block } from "../../../types/BlockEditor/BlockEditor";
 import { ChartData } from "../../../types/BlockEditor/Chart";
-import { getRandomColor } from "../../../constants/blockEditor";
+import { getRandomColor } from "../../../shared/constants/blockEditor";
 
 const useChartData = (block: Block) => {
   // 초기 상태를 block.content에서 파싱하도록 변경

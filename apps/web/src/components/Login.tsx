@@ -5,6 +5,7 @@ import { LoginReducer } from "../reducers/LoginReducer";
 import { ActionType, initialState } from "../reducers/LoginReducer";
 import useLoginMutation from "../hooks/api/useLoginMutation";
 import { Button } from "@repo/ui/button";
+import { Input } from "@repo/ui/input";
 const Login = () => {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(LoginReducer, initialState);
@@ -22,23 +23,22 @@ const Login = () => {
         <header>
           <img className="w-[150px] mt-10" src={logo} alt="logo" />
         </header>
-        <input
+        <Input
           value={state.email}
           onChange={(e) =>
             dispatch({ type: ActionType.SET_EMAIL, payload: e.target.value })
           }
           placeholder="이메일"
-          type="string"
-          className="mt-5 w-[340px] h-[40px] bg-custom-gray outline-none indent-4 text-sm "
+          className="mt-5"
         />
-        <input
+
+        <Input
           value={state.password}
           onChange={(e) =>
             dispatch({ type: ActionType.SET_PASSWORD, payload: e.target.value })
           }
           placeholder="비밀번호"
           type="password"
-          className="w-[340px] h-[40px] bg-custom-gray outline-none indent-4 text-sm "
         />
         <Button variant="auth" onClick={handleLogin}>
           로그인

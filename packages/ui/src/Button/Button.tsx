@@ -25,12 +25,12 @@ export const Button = ({
 }: ButtonProps) => {
   const variantsButton = {
     primary:
-      "w-[120px] sm:w-[130px] md:w-[140px] h-[35px] sm:h-[38px] md:h-[40px] border-[2px] sm:border-[3px] border-primary rounded-[20px] box-border text-primary text-sm sm:text-base",
+      "px-3 py-1 text-sm text-primary border border-primary rounded-full hover:bg-primary hover:text-white transition-colors",
     secondary:
       "bg-primary rounded-[20px] w-[150px] h-[40px] text-white font-bold",
     auth: "bg-primary rounded-[20px] w-[340px] h-[40px] text-white",
     favorite:
-      "w-[60px] sm:w-[80px] md:w-[100px] h-[35px] sm:h-[38px] md:h-[40px] border-[2px] sm:border-[3px] border-primary rounded-[20px] text-primary text-sm sm:text-base transition-colors hover:bg-primary hover:text-white",
+      "px-3 py-1 text-sm text-primary border border-primary rounded-full hover:bg-primary hover:text-white transition-colors",
     edit: "flex items-center gap-1 px-3 py-2 text-sm sm:text-base rounded-lg border border-gray-200 text-blue-600 hover:bg-blue-50 transition-colors",
     delete:
       "flex items-center gap-1 px-3 py-2 text-sm sm:text-base rounded-lg border border-gray-200 text-red-600 hover:bg-red-50 transition-colors",

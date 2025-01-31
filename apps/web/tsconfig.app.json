@@ -23,5 +23,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "../../packages/ui/src/CommentButton", "src/shared/Header"]
+  "include": [
+    "src",
+    "../../packages/ui/src/CommentButton",
+    "src/shared/Header",
+    "src/app/App.tsx"
+  ]
 }

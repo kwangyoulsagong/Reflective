@@ -5,11 +5,12 @@ import {
   UseListProps,
 } from "../../../types/BlockEditor/List";
 import { useLogger } from "./useLogger";
-import { DEFAULT_OPTIONS } from "../../../constants/blockEditor";
+
 import { FocusManager } from "../../../services/BlockEditor/list/focus";
 import { ListValidator } from "../../../services/BlockEditor/list/validation";
 import { ListNumberingStrategy } from "../../../services/BlockEditor/list/numbering";
 import useVirtualizer from "./useVirtualizer";
+import { DEFAULT_OPTIONS } from "../../../shared/constants/blockEditor";
 
 const useListItems = ({
   block,

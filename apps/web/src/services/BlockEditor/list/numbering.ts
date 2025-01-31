@@ -1,4 +1,4 @@
-import { EDITOR_CONFIG } from "../../../constants/blockEditor";
+import { EDITOR_CONFIG } from "../../../shared/constants/blockEditor";
 import { ListItem, ListType } from "../../../types/BlockEditor/List";
 
 export class ListNumberingStrategy {

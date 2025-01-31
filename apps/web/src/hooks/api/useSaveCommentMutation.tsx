@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import saveComment from "../../api/comment/saveComment";
-import { queryKeys } from "../../constants/queryKeys";
+import { queryKeys } from "../../shared/constants/queryKeys";
 import { commentState } from "../../types/types";
 
 const useSaveCommentMutation = (post_id: string) => {

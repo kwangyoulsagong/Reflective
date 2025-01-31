@@ -5,7 +5,7 @@ import useSaveFavoritesMutation from "../api/useSaveFavoritesMutation";
 import { useNavigate } from "react-router-dom";
 import useGetPostFavoritesQuery from "../api/useGetPostFavoritesQuery";
 import { getPostType } from "../../types/types";
-import { usePost_idStore } from "../../provider/post_idProvider";
+import { usePost_idStore } from "../../app/provider/post_idProvider";
 
 const usePost = ({ data }: { data: Partial<getPostType> }) => {
   const { post_id } = usePost_idStore();

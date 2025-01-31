@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import deletePostFavorite from "../../api/favorite/deletePostFavorite";
-import { queryKeys } from "../../constants/queryKeys";
+import { queryKeys } from "../../shared/constants/queryKeys";
 
 const useDeleteFavoriteMutation = (post_id: string) => {
   const queryClient = useQueryClient();

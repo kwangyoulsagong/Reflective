@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import SavePost from "../../api/post/savePost";
-import { usePost_idStore } from "../../provider/post_idProvider";
-import { usePostRouterStore } from "../../provider/postRouterProvider";
-import { queryKeys } from "../../constants/queryKeys";
+
+import { queryKeys } from "../../shared/constants/queryKeys";
+import { usePost_idStore } from "../../app/provider/post_idProvider";
+import { usePostRouterStore } from "../../app/provider/postRouterProvider";
 const useSaveMutation = () => {
   const navigate = useNavigate();
   const { setPost_id } = usePost_idStore();

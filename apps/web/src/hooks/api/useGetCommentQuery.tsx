@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { queryKeys } from "../../constants/queryKeys";
+import { queryKeys } from "../../shared/constants/queryKeys";
 import fetchComment from "../../api/comment/fetchComment";
 
 const useGetCommentQuery = (post_id: string) => {

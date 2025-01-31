@@ -1,4 +1,4 @@
-import { END_POINTS } from "../../constants/api";
+import { END_POINTS } from "../../shared/constants/api";
 import { axiosInstance } from "../axiosinstance";
 
 const fetchFavoriteStory = async () => {
