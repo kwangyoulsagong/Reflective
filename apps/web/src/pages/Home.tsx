@@ -1,10 +1,11 @@
 import React from "react";
-import Header from "../components/common/Header/Header";
+
 import MainRanks from "../components/MainRanks";
 import RecentPost from "../components/RecentPost/RecentPost";
 import Search from "../components/Search";
 import useRecentPostQuery from "../hooks/api/useRecentPostQuery";
 import Favorite from "../components/Favorite";
+import Header from "../shared/Header/Header";
 
 const Home = () => {
   const { data, isLoading, error } = useRecentPostQuery();

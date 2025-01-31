@@ -3,7 +3,7 @@ import "prismjs/themes/prism.css";
 import "prismjs/components/prism-javascript.min.js";
 import { getPostType } from "../../types/types";
 import { Block } from "../../types/BlockView/BlockView";
-import BlockView from "../common/BlockView/BlockView";
+import BlockView from "../../shared/BlockView/BlockView";
 import PostHeader from "./Header/Header";
 import Bars from "./Bars/Bars";
 import { PostValidation } from "../../services/Post/Post";

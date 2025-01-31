@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Layers, FileText, Bookmark, Settings } from "lucide-react";
-import MainHeader from "../components/common/Header/Header";
+
 import me from "../assets/me.jpeg";
 import TabButton from "../components/mypage/TabButton";
 import RankCard from "../components/mypage/RankCard";
 import IntroductionCard from "../components/mypage/IntroductionCard";
 import CategoryCard from "../components/mypage/CategoryCard";
 import PostCard from "../components/mypage/PostCard";
+import Header from "../shared/Header/Header";
 
 interface UserRankType {
   nickname: string;
@@ -84,7 +85,7 @@ const MyPage = () => {
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8">
-      <MainHeader />
+      <Header />
       <header className="mt-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">

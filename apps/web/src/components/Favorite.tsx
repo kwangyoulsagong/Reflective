@@ -7,7 +7,7 @@ import "prismjs/themes/prism.css";
 import "prismjs/components/prism-javascript.min.js";
 import styles from "./styles/favorite.module.css";
 import { Block } from "../types/BlockView/BlockView";
-import BlockView from "./common/BlockView/BlockView";
+import BlockView from "../shared/BlockView/BlockView";
 
 interface Story {
   _id: string;

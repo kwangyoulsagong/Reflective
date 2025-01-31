@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Block, ListItem } from "../../../types/BlockView/BlockView";
+import { Block, ListItem } from "../../types/BlockView/BlockView";
 import { Line } from "react-chartjs-2";
 import { ChartData } from "chart.js";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
