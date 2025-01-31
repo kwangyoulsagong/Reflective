@@ -1,4 +1,4 @@
-import { Block } from "../../../../features/Write/model/BlockEditor/BlockEditor";
+import { Block } from "./BlockEditor";
 
 export type TextBlockType = "paragraph" | "heading1" | "heading2" | "heading3";
 

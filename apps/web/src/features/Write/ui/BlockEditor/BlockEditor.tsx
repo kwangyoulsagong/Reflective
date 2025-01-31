@@ -16,7 +16,7 @@ import TextEditor from "./TextEditor/TextEditor";
 import CodeEditor from "./CodeEditor/CodeEditor";
 import ChartEditor from "./ChartEditor/ChartEditor";
 import useBlockContent from "../../libs/hooks/BlockEditor/useBlockContent";
-import { BlockEditorProps } from "../../model/BlockEditor/BlockEditor";
+import { BlockEditorProps } from "../../../../entities/BlockEditor/model/type/BlockEditor";
 ChartJS.register(
   CategoryScale,
   LinearScale,

@@ -1,5 +1,5 @@
 import React from "react";
-import { Block } from "../../../../features/Write/model/BlockEditor/BlockEditor";
+import { Block } from "./BlockEditor";
 
 export interface ChartEditorProps {
   block: Block;

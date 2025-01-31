@@ -3,7 +3,7 @@ import { useState } from "react";
 import useSaveCommentMutation from "../useSaveCommentMutation";
 import useDeleteCommentMutation from "../useDeleteCommentMutation";
 import useUpdateCommentMutation from "../useUpdateCommentMutation";
-import { commentState } from "../../../model/comment/type";
+import { commentState } from "../../../../../entities/Comments/model/comment/type";
 
 interface updateCommentState {
   post_id: string;

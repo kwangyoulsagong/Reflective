@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Block } from "../../../model/BlockEditor/BlockEditor";
+import { Block } from "../../../../../entities/BlockEditor/model/type/BlockEditor";
 import { DropResult } from "react-beautiful-dnd";
 
 interface UseBlocksProps {

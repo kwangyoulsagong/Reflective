@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useLocation } from "react-router-dom";
 import WriteUpload from "../features/Write/ui/upload/WriteUpload";
-import { SavePostType } from "../features/Write/model/BlockEditor/BlockEditor";
+import { SavePostType } from "../entities/BlockEditor/model/type/BlockEditor";
 import useBlocks from "../features/Write/libs/hooks/Blocks/useBlocks";
 import { Button } from "@repo/ui/button";
 import BlockMenu from "../features/Write/ui/BlockEditor/BlockMenu";

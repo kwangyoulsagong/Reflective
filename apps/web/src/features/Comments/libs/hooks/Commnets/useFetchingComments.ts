@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import useGetCommentQuery from "../useGetCommentQuery";
 import { CommentBuilder } from "../../validation/CommentsBuilder";
-import { commentState } from "../../../model/comment/type";
+import { commentState } from "../../../../../entities/Comments/model/comment/type";
 
 const useFetchingComments = (postId: string) => {
   const [comments, setComments] = useState<commentState[]>([]);

@@ -6,7 +6,7 @@ import Prism from "prismjs";
 import "prismjs/themes/prism.css";
 import "prismjs/components/prism-javascript.min.js";
 import styles from "../../../shared/styles/favorite.module.css";
-import { Block } from "../../Write/model/BlockEditor/BlockEditor";
+import { Block } from "../../../entities/BlockEditor/model/type/BlockEditor";
 import BlockView from "../../../shared/BlockView/ui/BlockView";
 import useGetFavoriteStory from "../libs/hooks/useGetFavoriteStoryQuery";
 

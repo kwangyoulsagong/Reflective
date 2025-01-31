@@ -2,7 +2,7 @@ import { useRecoilCallback, useRecoilState } from "recoil";
 import {
   Block,
   blockContentProps,
-} from "../../../model/BlockEditor/BlockEditor";
+} from "../../../../../entities/BlockEditor/model/type/BlockEditor";
 import { blockContentState } from "../../../../../entities/BlockEditor/model/recoil/atoms/blockContentState";
 import { useEffect, useRef } from "react";
 import { debounce } from "lodash";

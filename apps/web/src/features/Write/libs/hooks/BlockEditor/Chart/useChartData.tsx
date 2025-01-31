@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Block } from "../../../../model/BlockEditor/BlockEditor";
+import { Block } from "../../../../../../entities/BlockEditor/model/type/BlockEditor";
 import { ChartData } from "../../../../../../entities/BlockEditor/model/type/Chart";
 import { getRandomColor } from "../../../../../../shared/constants/blockEditor";
 

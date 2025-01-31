@@ -1,4 +1,4 @@
-import { commentState } from "../../../../features/Comments/model/comment/type";
+import { commentState } from "../comment/type";
 
 export interface commentActionProps {
   comment: commentState;

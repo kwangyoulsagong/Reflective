@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { ChartData } from "../../../../../../entities/BlockEditor/model/type/Chart";
-import { Block } from "../../../../model/BlockEditor/BlockEditor";
+import { Block } from "../../../../../../entities/BlockEditor/model/type/BlockEditor";
 import { getRandomColor } from "../../../../../../shared/constants/blockEditor";
 
 const useGridChart = (
