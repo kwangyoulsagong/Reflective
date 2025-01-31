@@ -3,8 +3,8 @@ import { usePost_idStore } from "../../provider/post_idProvider";
 import useFetchingComments from "../../hooks/Commnets/useFetchingComments";
 import useCommentsBuilder from "../../hooks/Commnets/useUpdateComments";
 import Comment from "./Comment/Comment";
-import Button from "./Common/Button/Button";
 import TextArea from "./Common/TextArea/TextArea";
+import { CommentButton } from "@repo/ui/commentbutton";
 
 const Comments = () => {
   const { post_id } = usePost_idStore();
@@ -40,9 +40,12 @@ const Comments = () => {
       />
 
       <div className="flex justify-end w-full">
-        <Button variant="primary" onClick={() => handleSaveComment(null)}>
+        <CommentButton
+          variant="primary"
+          onClick={() => handleSaveComment(null)}
+        >
           댓글 작성
-        </Button>
+        </CommentButton>
       </div>
       <section className="w-full space-y-6">
         {comments.map((comment) => (

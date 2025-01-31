@@ -6,7 +6,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { commentActionProps } from "../../../types/Comments/CommentAction/type";
-import Button from "../Common/Button/Button";
+import { CommentButton } from "@repo/ui/commentbutton";
 
 const CommentAction = ({
   comment,
@@ -27,7 +27,7 @@ const CommentAction = ({
       }`}
     >
       {!isReply && (
-        <Button
+        <CommentButton
           variant="action"
           onClick={() => toggleReplies(comment.comment_id)}
           className="text-primary"
@@ -39,20 +39,23 @@ const CommentAction = ({
           ) : (
             <ChevronDown size={16} />
           )}
-        </Button>
+        </CommentButton>
       )}
-      <Button variant="action" onClick={() => handleEditComment(comment)}>
+      <CommentButton
+        variant="action"
+        onClick={() => handleEditComment(comment)}
+      >
         <Edit2 size={16} className="mr-1" />
         수정
-      </Button>
-      <Button
+      </CommentButton>
+      <CommentButton
         variant="action"
         onClick={() => handleDeleteComment(comment.comment_id)}
         className="hover:text-red-500"
       >
         <Trash2 size={16} className="mr-1" />
         삭제
-      </Button>
+      </CommentButton>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import notification from "../../../assets/notification.svg";
 import me from "../../../assets/me.jpeg";
 import toggle from "../../../assets/toggle.svg";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@repo/ui/button";
 
 const MainHeader = () => {
   const nickname = localStorage.getItem("nickname");
@@ -21,12 +22,9 @@ const MainHeader = () => {
           className="w-6 sm:w-7 h-6 sm:h-7 bg-no-repeat bg-center bg-contain"
           style={{ backgroundImage: `url(${notification})` }}
         />
-        <button
-          onClick={() => navigate("/write")}
-          className="w-[120px] sm:w-[130px] md:w-[140px] h-[35px] sm:h-[38px] md:h-[40px] border-[2px] sm:border-[3px] border-primary rounded-[20px] box-border text-primary text-sm sm:text-base"
-        >
+        <Button onClick={() => navigate("/write")} variant="primary">
           게시물 작성하기
-        </button>
+        </Button>
         <div className="w-[50px] sm:w-[55px] md:w-[60px] h-[50px] sm:h-[55px] md:h-[60px] rounded-full overflow-hidden">
           <img src={me} alt="profile" className="w-full h-full object-cover" />
         </div>

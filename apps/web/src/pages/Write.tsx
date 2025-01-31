@@ -6,6 +6,7 @@ import BlockEditor from "../components/BlockEidtor/BlockEditor";
 import BlockMenu from "../components/BlockEidtor/BlockMenu";
 import { SavePostType } from "../types/BlockEditor/BlockEditor";
 import useBlocks from "../hooks/Blocks/useBlocks";
+import { Button } from "@repo/ui/button";
 
 const Write: React.FC = () => {
   const { state } = useLocation();
@@ -84,12 +85,9 @@ const Write: React.FC = () => {
           </Droppable>
         </DragDropContext>
         <div className="mt-5 flex justify-end">
-          <button
-            onClick={handleSubmit}
-            className="bg-primary rounded-[20px] w-[150px] h-[40px] text-white font-bold"
-          >
+          <Button variant="secondary" onClick={handleSubmit}>
             제출하기
-          </button>
+          </Button>
         </div>
       </section>
       {openModal && (

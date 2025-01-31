@@ -5,7 +5,7 @@ interface buttonProps {
   className?: string;
 }
 type VariantType = "primary" | "sm-primary" | "secondary" | "cancel" | "action";
-const Button = ({
+export const CommentButton = ({
   variant = "primary",
   onClick,
   children,
@@ -29,4 +29,3 @@ const Button = ({
     </button>
   );
 };
-export default Button;

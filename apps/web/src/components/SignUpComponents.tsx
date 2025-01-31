@@ -7,6 +7,7 @@ import {
   SignUpReducer,
 } from "../reducers/SignUpReducer";
 import useSignUpMutation from "../hooks/api/useSignUpMutation";
+import { Button } from "@repo/ui/button";
 const SignUpComponents = () => {
   const [state, dispatch] = useReducer(SignUpReducer, initialState);
   const navigate = useNavigate();
@@ -74,12 +75,9 @@ const SignUpComponents = () => {
           type="string"
           className="w-[340px] h-[40px] bg-custom-gray outline-none indent-4 text-sm "
         />
-        <button
-          onClick={handleSignUp}
-          className="mt-32 w-[340px] h-[40px] rounded-[20px] text-[#ffffff] bg-primary"
-        >
+        <Button variant="auth" onClick={handleSignUp}>
           회원가입
-        </button>
+        </Button>
       </div>
       <div className="box-border flex justify-center items-center w-[400px] h-[70px] border border-gray-300">
         <span>

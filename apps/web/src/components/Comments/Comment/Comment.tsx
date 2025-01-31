@@ -1,7 +1,7 @@
+import { CommentButton } from "@repo/ui/commentbutton";
 import { commentProps } from "../../../types/Comments/\btype";
 import CommentAction from "../CommentAction/CommentAction";
 import CommentContent from "../CommentContent/CommentContent";
-import Button from "../Common/Button/Button";
 import TextArea from "../Common/TextArea/TextArea";
 
 const Comment = ({
@@ -75,12 +75,12 @@ const Comment = ({
               rows={2}
             />
             <div className="flex justify-end mt-1">
-              <Button
+              <CommentButton
                 variant="secondary"
                 onClick={() => handleSaveComment(comment.comment_id)}
               >
                 답글 작성
-              </Button>
+              </CommentButton>
             </div>
           </div>
         </div>

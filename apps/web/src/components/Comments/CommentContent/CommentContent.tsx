@@ -1,6 +1,6 @@
+import { CommentButton } from "@repo/ui/commentbutton";
 import { commentContentProps } from "../../../types/Comments/CommentContent/type";
 import { formatRelativeTime } from "../../../utils/times";
-import Button from "../Common/Button/Button";
 import TextArea from "../Common/TextArea/TextArea";
 
 const CommentContent = ({
@@ -48,12 +48,15 @@ const CommentContent = ({
               rows={3}
             />
             <div className="flex justify-end mt-1 space-x-2">
-              <Button variant="sm-primary" onClick={handleUpdateComment}>
+              <CommentButton variant="sm-primary" onClick={handleUpdateComment}>
                 수정완료
-              </Button>
-              <Button variant="cancel" onClick={() => setEditingComment(null)}>
+              </CommentButton>
+              <CommentButton
+                variant="cancel"
+                onClick={() => setEditingComment(null)}
+              >
                 취소
-              </Button>
+              </CommentButton>
             </div>
           </div>
         ) : (
