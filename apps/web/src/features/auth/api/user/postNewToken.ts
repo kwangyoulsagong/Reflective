@@ -1,9 +1,9 @@
-import { axiosInstance } from "../axiosinstance";
+import { axiosInstance } from "../../../../api/axiosinstance";
 import {
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
   USER_ID_KEY,
-} from "../../shared/constants/api";
+} from "../../../../shared/constants/api";
 
 // 새 토큰 반환
 async function postNewToken() {

@@ -1,9 +1,10 @@
 import { useCallback } from "react";
-import { Block, ListItem } from "../../types/BlockView/BlockView";
+
 import { Line } from "react-chartjs-2";
 import { ChartData } from "chart.js";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { Block, ListItem } from "../model/BlockView/types";
 const BlockView: React.FC<{ block: Block }> = ({ block }) => {
   const renderContent = (text: string) => {
     return text.split("\n").map((line, index) => {

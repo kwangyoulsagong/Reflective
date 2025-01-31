@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { PostType } from "../../types/types";
+import { PostType } from "../../../../types/types";
 
 import PostCard from "./PostCard";
 import { useEffect, useRef } from "react";
-import useVirtualScroll from "../../features/Post/libs/hooks/recentPost/useVirtualScroll";
-import { usePost_idStore } from "../../app/provider/post_idProvider";
-import { usePostRouterStore } from "../../app/provider/postRouterProvider";
+import useVirtualScroll from "../../libs/hooks/recentPost/useVirtualScroll";
+import { usePost_idStore } from "../../../../app/provider/post_idProvider";
+import { usePostRouterStore } from "../../../../app/provider/postRouterProvider";
 
 const RecentPost = ({ data }: { data: PostType[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);

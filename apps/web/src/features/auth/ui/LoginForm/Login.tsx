@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { useReducer } from "react";
-import { LoginReducer } from "../reducers/LoginReducer";
-import { ActionType, initialState } from "../reducers/LoginReducer";
-import useLoginMutation from "../hooks/api/useLoginMutation";
+import { LoginReducer } from "../../model/reducers/LoginReducer";
+import { ActionType, initialState } from "../../model/reducers/LoginReducer";
+import useLoginMutation from "../../libs/hooks/useLoginMutation";
 import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
 const Login = () => {

@@ -1,11 +1,11 @@
 import { usePost_idStore } from "../app/provider/post_idProvider";
 import Comments from "../components/Comments/Comments";
+import PostView from "../features/Post/ui/Post/Post";
 
-import PostView from "../components/Post/Post";
 import usePostDetailQuery from "../hooks/api/usePostDetailQuery";
 
 import Header from "../shared/Header/Header";
-const PostDetail = () => {
+const PostPage = () => {
   const { post_id } = usePost_idStore();
   const { data, isLoading, error } = usePostDetailQuery(post_id);
   if (isLoading) return <p>Loading...</p>;
@@ -21,4 +21,4 @@ const PostDetail = () => {
     </div>
   );
 };
-export default PostDetail;
+export default PostPage;

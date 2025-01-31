@@ -1,6 +1,10 @@
 import { useState } from "react";
-import { useHeaderIDs, useToC } from "../../../hooks/usePostViewUtils";
-import { getPostType } from "../../../types/types";
+
+import {
+  useHeaderIDs,
+  useToC,
+} from "../../../libs/hooks/post/usePostViewUtils";
+import { getPostType } from "../../../model/post/type";
 
 interface barProps {
   contentRef: React.RefObject<HTMLDivElement>;

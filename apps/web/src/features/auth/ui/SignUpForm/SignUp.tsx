@@ -5,11 +5,11 @@ import {
   ActionType,
   initialState,
   SignUpReducer,
-} from "../reducers/SignUpReducer";
-import useSignUpMutation from "../hooks/api/useSignUpMutation";
+} from "../../model/reducers/SignUpReducer";
+import useSignUpMutation from "../../libs/hooks/useSignUpMutation";
 import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
-const SignUpComponents = () => {
+const SignUp = () => {
   const [state, dispatch] = useReducer(SignUpReducer, initialState);
   const navigate = useNavigate();
   const handleSignUp = () => {
@@ -91,4 +91,4 @@ const SignUpComponents = () => {
     </section>
   );
 };
-export default SignUpComponents;
+export default SignUp;

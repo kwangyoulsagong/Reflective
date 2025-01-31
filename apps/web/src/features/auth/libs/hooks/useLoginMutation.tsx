@@ -1,12 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
-import { LoginType } from "../../types/types";
+import { LoginType } from "../../../../types/types";
 import { useNavigate } from "react-router-dom";
 import { postLogin } from "../../api/user/postLogin";
 import {
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
   USER_ID_KEY,
-} from "../../shared/constants/api";
+} from "../../../../shared/constants/api";
 const useLoginMutation = () => {
   const navigate = useNavigate();
   return useMutation({

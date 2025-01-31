@@ -1,13 +1,14 @@
 import unheart from "../../../assets/unheart.png";
 import heart from "../../../assets/heart.png";
 
-import useLike from "../../../hooks/api/useLike";
-import { formatRelativeTime } from "../../../utils/times";
-import { getPostType } from "../../../types/types";
-import usePost from "../../../features/Post/libs/hooks/post/usePost";
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@repo/ui/button";
-import { USER_ID_KEY } from "../../../shared/constants/api";
+
+import usePost from "../../../libs/hooks/post/usePost";
+import { USER_ID_KEY } from "../../../../../shared/constants/api";
+import { formatRelativeTime } from "../../../../../utils/times";
+import useLike from "../../../libs/hooks/post/useLike";
+import { getPostType } from "../../../model/post/type";
 
 const PostHeader = ({ data }: { data: Partial<getPostType> }) => {
   const user_id = localStorage.getItem(USER_ID_KEY);

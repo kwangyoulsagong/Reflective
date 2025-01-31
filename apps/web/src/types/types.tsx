@@ -27,18 +27,6 @@ export type WriteMenuProps = {
   onCommand: (startTag: string) => void;
 };
 
-export interface getPostType {
-  post_id: string;
-  user_id: string;
-  nickname: string;
-  title: string;
-  contents: string;
-  category: string;
-  thumbnail: string;
-  like_count: number;
-  created_date: string;
-  refetch: () => void;
-}
 export interface post_idState {
   post_id: string;
   setPost_id: (post_id: string) => void;

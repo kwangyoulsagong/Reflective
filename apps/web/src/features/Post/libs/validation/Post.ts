@@ -1,5 +1,5 @@
-import { Block } from "../../types/BlockView/BlockView";
-import { getPostType } from "../../types/types";
+import { Block } from "../../../../types/BlockView/BlockView";
+import { getPostType } from "../../model/post/type";
 
 export class PostValidation {
   constructor(private isValid = false) {}

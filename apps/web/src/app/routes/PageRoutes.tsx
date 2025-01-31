@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import Write from "../../pages/Write";
-import PostDetail from "../../pages/PostDetail";
+import Write from "../../pages/WritePage";
+import PostDetail from "../../pages/PostPage";
 
 import MyPage from "../../pages/Mypage";
 import { usePostRouterStore } from "../provider/postRouterProvider";

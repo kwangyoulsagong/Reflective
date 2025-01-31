@@ -1,5 +1,5 @@
-import Login from "../components/Login";
-import StartBackground from "../components/StartBackground";
+import Login from "../features/auth/ui/LoginForm/Login";
+import StartBackground from "../features/auth/ui/StartBackground";
 
 const Start = () => {
   return (

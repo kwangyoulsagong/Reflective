@@ -1,7 +1,7 @@
 import React from "react";
 
 import MainRanks from "../components/MainRanks";
-import RecentPost from "../components/RecentPost/RecentPost";
+import RecentPost from "../features/Post/ui/RecentPost/RecentPost";
 import Search from "../components/Search";
 import useRecentPostQuery from "../hooks/api/useRecentPostQuery";
 import Favorite from "../components/Favorite";

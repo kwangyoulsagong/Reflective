@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import useDeleteFavoriteMutation from "../api/useDeleteFavoriteMutation";
-import useDeletePostMutation from "../api/useDeletePostMutation";
-import useSaveFavoritesMutation from "../api/useSaveFavoritesMutation";
+import useDeleteFavoriteMutation from "../../../../../hooks/api/useDeleteFavoriteMutation";
+import useDeletePostMutation from "../../../../../hooks/api/useDeletePostMutation";
+import useSaveFavoritesMutation from "../../../../../hooks/api/useSaveFavoritesMutation";
 import { useNavigate } from "react-router-dom";
-import useGetPostFavoritesQuery from "../api/useGetPostFavoritesQuery";
-import { getPostType } from "../../types/types";
-import { usePost_idStore } from "../../app/provider/post_idProvider";
+import useGetPostFavoritesQuery from "../../../../../hooks/api/useGetPostFavoritesQuery";
+
+import { usePost_idStore } from "../../../../../app/provider/post_idProvider";
+import { getPostType } from "../../../model/post/type";
 
 const usePost = ({ data }: { data: Partial<getPostType> }) => {
   const { post_id } = usePost_idStore();
