@@ -28,7 +28,7 @@ export const Button = ({
       "px-3 py-1 text-sm text-primary border border-primary rounded-full hover:bg-primary hover:text-white transition-colors",
     secondary:
       "bg-primary rounded-[20px] w-[150px] h-[40px] text-white font-bold",
-    auth: "bg-primary rounded-[20px] w-[340px] h-[40px] text-white",
+    auth: "bg-primary rounded-[20px] w-[300px] h-[40px] text-white font-bold",
     favorite:
       "px-3 py-1 text-sm text-primary border border-primary rounded-full hover:bg-primary hover:text-white transition-colors",
     edit: "flex items-center gap-1 px-3 py-2 text-sm sm:text-base rounded-lg border border-gray-200 text-blue-600 hover:bg-blue-50 transition-colors",

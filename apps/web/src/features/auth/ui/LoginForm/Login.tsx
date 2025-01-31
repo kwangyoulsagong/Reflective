@@ -4,8 +4,9 @@ import { useReducer } from "react";
 import { LoginReducer } from "../../model/reducers/LoginReducer";
 import { ActionType, initialState } from "../../model/reducers/LoginReducer";
 import useLoginMutation from "../../libs/hooks/useLoginMutation";
-import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
+import { Button } from "@repo/ui/button";
+
 const Login = () => {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(LoginReducer, initialState);

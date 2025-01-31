@@ -1,4 +1,3 @@
-// components/common/CustomInput.tsx
 import React from "react";
 
 interface InputProps {
@@ -22,7 +21,7 @@ export const Input = ({
       onChange={onChange}
       placeholder={placeholder}
       type={type}
-      className={`w-[340px] h-[40px] bg-custom-gray outline-none indent-4 text-sm ${className}`}
+      className={`w-[300px] h-[40px] bg-custom-gray outline-none indent-4 text-sm ${className}`}
     />
   );
 };
