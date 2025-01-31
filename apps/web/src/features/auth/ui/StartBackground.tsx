@@ -1,5 +1,5 @@
-import iphonex from "../assets/IPhoneX.png";
-import iphone14pro from "../assets/iphone14pro.svg";
+import iphonex from "../../../assets/IPhoneX.png";
+import iphone14pro from "../../../assets/iphone14pro.svg";
 const StartBackground = () => {
   return (
     <section className="flex justify-center ml-7 items-center w-[420px] h-100 hide-on-small">

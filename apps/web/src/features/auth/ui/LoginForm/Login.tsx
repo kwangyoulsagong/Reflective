@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/logo.svg";
+import logo from "../../../../assets/logo.svg";
 import { useReducer } from "react";
 import { LoginReducer } from "../../model/reducers/LoginReducer";
 import { ActionType, initialState } from "../../model/reducers/LoginReducer";

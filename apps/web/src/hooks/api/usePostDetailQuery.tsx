@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../../shared/constants/queryKeys";
-import fetchPostDetail from "../../api/post/fetchPostDetail";
+import fetchPostDetail from "../../features/Post/api/Post/fetchPostDetail";
 
 const usePostDetailQuery = (post_id: string) => {
   return useQuery({

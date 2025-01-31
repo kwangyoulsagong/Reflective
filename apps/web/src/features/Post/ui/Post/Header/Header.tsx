@@ -1,5 +1,5 @@
-import unheart from "../../../assets/unheart.png";
-import heart from "../../../assets/heart.png";
+import unheart from "../../../../../assets/unheart.png";
+import heart from "../../../../../assets/heart.png";
 
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@repo/ui/button";

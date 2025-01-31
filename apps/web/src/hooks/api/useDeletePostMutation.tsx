@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import deletePostDetail from "../../api/post/deletePostDetail";
+import deletePostDetail from "../../features/Post/api/Post/deletePostDetail";
 
 const useDeletePostMutation = () => {
   const navigate = useNavigate();

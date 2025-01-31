@@ -1,7 +1,7 @@
-import { PostType } from "../types/types";
+import { PostType } from "../../../../types/types";
 import "./styles/MainRanks.css";
 import { useEffect } from "react";
-import { mainAnimator } from "../hooks/mainAnimator";
+import { mainAnimator } from "../../../../hooks/mainAnimator";
 
 const MainRanks = ({ data }: { data: PostType[] }) => {
   useEffect(() => {
