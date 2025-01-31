@@ -3,7 +3,7 @@ import {
   Block,
   blockContentProps,
 } from "../../../model/BlockEditor/BlockEditor";
-import { blockContentState } from "../../../../../recoil/atoms/blockContentState";
+import { blockContentState } from "../../../../../entities/BlockEditor/model/recoil/atoms/blockContentState";
 import { useEffect, useRef } from "react";
 import { debounce } from "lodash";
 import { EDITOR_CONFIG } from "../../../../../shared/constants/blockEditor";

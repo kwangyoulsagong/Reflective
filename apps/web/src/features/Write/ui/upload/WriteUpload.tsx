@@ -1,6 +1,6 @@
 import { usePost_idStore } from "../../../../app/provider/post_idProvider";
-import useSaveMutation from "../../../../hooks/api/useSavePostMutation";
-import useUpdatePostMutaion from "../../../../hooks/api/useUpdatePostMutation";
+import useSaveMutation from "../../libs/hooks/useSavePostMutation";
+import useUpdatePostMutaion from "../../libs/hooks/useUpdatePostMutation";
 import { WriteUploadProps } from "../../model/BlockEditor/BlockEditor";
 
 const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {

@@ -1,8 +1,8 @@
 import { usePost_idStore } from "../app/provider/post_idProvider";
-import Comments from "../components/Comments/Comments";
+import Comments from "../features/Comments/ui/Comments";
 import PostView from "../features/Post/ui/Post/Post";
 
-import usePostDetailQuery from "../hooks/api/usePostDetailQuery";
+import usePostDetailQuery from "../features/Post/libs/hooks/post/usePostDetailQuery";
 
 import Header from "../shared/Header/Header";
 const PostPage = () => {

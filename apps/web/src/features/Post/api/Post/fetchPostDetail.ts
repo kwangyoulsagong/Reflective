@@ -1,5 +1,5 @@
 import { END_POINTS } from "../../../../shared/constants/api";
-import { axiosInstance } from "../../../../api/axiosinstance";
+import { axiosInstance } from "../../../../shared/api/axiosinstance";
 
 const fetchPostDetail = async (post_id: string) => {
   const { data } = await axiosInstance.get(END_POINTS.POST(post_id), {

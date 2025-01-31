@@ -3,9 +3,10 @@ import React from "react";
 import MainRanks from "../features/Post/ui/RecentPost/MainRanks";
 import RecentPost from "../features/Post/ui/RecentPost/RecentPost";
 import Search from "../components/Search";
-import useRecentPostQuery from "../hooks/api/useRecentPostQuery";
-import Favorite from "../components/Favorite";
+import useRecentPostQuery from "../features/Post/libs/hooks/recentPost/useRecentPostQuery";
+
 import Header from "../shared/Header/Header";
+import FavoriteStories from "../features/favorite/ui/Favorite";
 
 const Home = () => {
   const { data, isLoading, error } = useRecentPostQuery();
@@ -35,7 +36,7 @@ const Home = () => {
   return (
     <div className="flex justify-center">
       <div className="flex flex-col items-center w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Favorite />
+        <FavoriteStories />
         <Header />
         <Search />
         <MainRanks data={topFour} />

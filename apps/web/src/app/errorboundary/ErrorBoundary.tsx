@@ -1,9 +1,8 @@
 import * as Sentry from "@sentry/react";
 import { Component, ComponentType, PropsWithChildren } from "react";
-
+import { ErrorProps } from "../error/Error";
 import { HTTPError } from "../../shared/api/HTTPError";
 import { HTTP_STATUS_CODE } from "../../shared/constants/api";
-import { ErrorProps } from "../../app/error/Error";
 
 interface ErrorBoundaryProps {
   Fallback: ComponentType<ErrorProps>;

@@ -1,4 +1,4 @@
-import { axiosInstance } from "../../../../api/axiosinstance";
+import { axiosInstance } from "../../../../shared/api/axiosinstance";
 import {
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_KEY,

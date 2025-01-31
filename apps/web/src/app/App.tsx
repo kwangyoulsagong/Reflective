@@ -1,11 +1,12 @@
 import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 import { RecoilRoot } from "recoil";
-import ErrorBoundary from "../components/errorboundary/ErrorBoundary";
-import Error from "../components/error/Error";
+import ErrorBoundary from "./errorboundary/ErrorBoundary";
+
 import QueryClientProvider from "./provider/QueryClientProvider/QueryClientProvider";
 import StartRoutes from "./routes/StartRoutes";
 import PageRoutes from "./routes/PageRoutes";
+import Error from "./error/Error";
 
 function App() {
   return (

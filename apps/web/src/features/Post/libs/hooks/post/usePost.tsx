@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import useDeleteFavoriteMutation from "../../../../../hooks/api/useDeleteFavoriteMutation";
-import useDeletePostMutation from "../../../../../hooks/api/useDeletePostMutation";
-import useSaveFavoritesMutation from "../../../../../hooks/api/useSaveFavoritesMutation";
+import useDeleteFavoriteMutation from "./useDeleteFavoriteMutation";
+import useDeletePostMutation from "./useDeletePostMutation";
+import useSaveFavoritesMutation from "./useSaveFavoritesMutation";
 import { useNavigate } from "react-router-dom";
-import useGetPostFavoritesQuery from "../../../../../hooks/api/useGetPostFavoritesQuery";
+import useGetPostFavoritesQuery from "./useGetPostFavoritesQuery";
 
 import { usePost_idStore } from "../../../../../app/provider/post_idProvider";
 import { getPostType } from "../../../model/post/type";

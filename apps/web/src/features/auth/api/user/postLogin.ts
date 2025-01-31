@@ -1,5 +1,5 @@
 import { END_POINTS } from "../../../../shared/constants/api";
-import { axiosInstance } from "../../../../api/axiosinstance";
+import { axiosInstance } from "../../../../shared/api/axiosinstance";
 
 export const postLogin = async (body: object) => {
   console.log(body);
