@@ -1,4 +1,4 @@
-import { ListOptions } from "../../types/BlockEditor/List";
+import { ListOptions } from "../../entities/BlockEditor/model/type/List";
 
 export const EDITOR_CONFIG = {
   DEBOUNCE_DELAY: 300,

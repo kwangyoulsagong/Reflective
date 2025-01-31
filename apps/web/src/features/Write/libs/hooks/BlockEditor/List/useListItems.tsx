@@ -3,15 +3,14 @@ import {
   ListError,
   ListItem,
   UseListProps,
-} from "../../../entities/BlockEditor/model/type/List";
+} from "../../../../../../entities/BlockEditor/model/type/List";
+import { useLogger } from "./useLogger";
 
-import { FocusManager } from "../../../features/Write/libs/vallidation/list/focus";
-import { ListValidator } from "../../../features/Write/libs/vallidation/list/validation";
-import { ListNumberingStrategy } from "../../../features/Write/libs/vallidation/list/numbering";
-
-import { DEFAULT_OPTIONS } from "../../../shared/constants/blockEditor";
-import { useLogger } from "../../../features/Write/libs/hooks/BlockEditor/List/useLogger";
-import useVirtualizer from "../../../features/Write/libs/hooks/BlockEditor/List/useVirtualizer";
+import { FocusManager } from "../../../vallidation/list/focus";
+import { ListValidator } from "../../../vallidation/list/validation";
+import { ListNumberingStrategy } from "../../../vallidation/list/numbering";
+import useVirtualizer from "./useVirtualizer";
+import { DEFAULT_OPTIONS } from "../../../../../../shared/constants/blockEditor";
 
 const useListItems = ({
   block,

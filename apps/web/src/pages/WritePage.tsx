@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useLocation } from "react-router-dom";
-import WriteUpload from "../components/WriteUpload";
-import BlockEditor from "../components/BlockEidtor/BlockEditor";
-import BlockMenu from "../components/BlockEidtor/BlockMenu";
-import { SavePostType } from "../types/BlockEditor/BlockEditor";
-import useBlocks from "../hooks/Blocks/useBlocks";
+import WriteUpload from "../features/Write/ui/upload/WriteUpload";
+import { SavePostType } from "../features/Write/model/BlockEditor/BlockEditor";
+import useBlocks from "../features/Write/libs/hooks/Blocks/useBlocks";
 import { Button } from "@repo/ui/button";
+import BlockMenu from "../features/Write/ui/BlockEditor/BlockMenu";
+import BlockEditor from "../features/Write/ui/BlockEditor/BlockEditor";
 
 const Write: React.FC = () => {
   const { state } = useLocation();
