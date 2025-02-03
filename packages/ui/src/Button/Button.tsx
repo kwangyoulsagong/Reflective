@@ -8,7 +8,7 @@ type styles =
   | "delete"
   | "like";
 
-interface ButtonProps {
+export interface ButtonProps {
   children: ReactNode;
   variant?: styles;
   onClick: () => void;

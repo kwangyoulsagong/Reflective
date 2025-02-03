@@ -1,6 +1,5 @@
 import React from "react";
-
-interface InputProps {
+export interface InputProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder: string;
@@ -21,7 +20,7 @@ export const Input = ({
       onChange={onChange}
       placeholder={placeholder}
       type={type}
-      className={`w-[300px] h-[40px] bg-custom-gray outline-none indent-4 text-sm ${className}`}
+      className={`w-[300px] h-[40px] bg-input outline-none indent-4 text-sm bg-input`}
     />
   );
 };

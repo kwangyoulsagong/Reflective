@@ -6,7 +6,6 @@ const config: Config = {
     extend: {
       colors: {
         primary: "var(--primary-color)",
-        "custom-gray": "var(--custom-gray)",
       },
       borderWidth: {
         "0.5": "0.5px",
