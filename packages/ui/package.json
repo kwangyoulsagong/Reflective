@@ -6,7 +6,8 @@
     "./button": "./src/Button/Button.tsx",
     "./commentbutton": "./src/CommentButton/CommentButton.tsx",
     "./input": "./src/Input/Input.tsx",
-    "./card": "./src/card.tsx",
+    "./card": "./src/Card/Card.tsx",
+    "./time": "./src/utils/times.ts",
     "./code": "./src/code.tsx",
     "./style": "./src/styles/global.css"
   },
@@ -50,6 +51,7 @@
     "lucide-react": "^0.441.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.26.1"
+    "react-router-dom": "^6.26.1",
+    "react-spring": "^9.7.4"
   }
 }

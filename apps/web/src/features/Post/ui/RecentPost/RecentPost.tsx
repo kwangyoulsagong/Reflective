@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { PostType } from "../../../../types/types";
-
-import PostCard from "./PostCard";
+import { PostCard } from "@repo/ui/card";
 import { useEffect, useRef } from "react";
 import useVirtualScroll from "../../libs/hooks/recentPost/useVirtualScroll";
 import { usePost_idStore } from "../../../../app/provider/post_idProvider";

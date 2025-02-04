@@ -1,8 +1,8 @@
 import { CommentButton } from "@repo/ui/commentbutton";
 
-import { formatRelativeTime } from "../../../../utils/times";
 import TextArea from "../Common/TextArea/TextArea";
 import { commentContentProps } from "../../../../entities/Comments/model/CommentContent/type";
+import { formatRelativeTime } from "@repo/ui/time";
 
 const CommentContent = ({
   comment,

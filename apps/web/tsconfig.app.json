@@ -27,6 +27,7 @@
     "src",
     "../../packages/ui/src/CommentButton",
     "src/shared/Header",
-    "src/app/App.tsx"
+    "src/app/App.tsx",
+    "../../packages/ui/src/utils"
   ]
 }

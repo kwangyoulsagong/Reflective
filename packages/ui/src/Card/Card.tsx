@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { PostCardProps } from "../../../../types/RecentPost/RecentPost";
 import { Clock, Heart, Eye } from "lucide-react";
 import { useSpring, animated } from "react-spring";
-import { formatRelativeTime } from "../../../../utils/times";
 
-const PostCard = ({ post, index, handlePost }: PostCardProps) => {
+import { PostCardProps } from "./types";
+import { formatRelativeTime } from "@repo/ui/time";
+
+export const PostCard = ({ post, index, handlePost }: PostCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const cardSpring = useSpring({
@@ -69,4 +70,3 @@ const PostCard = ({ post, index, handlePost }: PostCardProps) => {
     </animated.article>
   );
 };
-export default PostCard;
