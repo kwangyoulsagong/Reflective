@@ -9,16 +9,24 @@ import {
 import useSignUpMutation from "../../libs/hooks/useSignUpMutation";
 import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
+import { SignUpValidator } from "../../libs/validation/SignUpValidation";
 const SignUp = () => {
   const [state, dispatch] = useReducer(SignUpReducer, initialState);
   const navigate = useNavigate();
   const handleSignUp = () => {
+    const sv = new SignUpValidator();
     const body = {
       email: state.email,
       password: state.password,
       nickname: state.nickname,
       phone_number: state.phone_number,
     };
+    const validation = sv.validateForm(body);
+    // 유효성 검사 오류가 있으면 에러 상태를 업데이트하고 리턴
+    if (!validation.isValid) {
+      dispatch({ type: ActionType.SET_ERRORS, payload: validation.errors });
+      return;
+    }
     mutate(body);
   };
   const { mutate } = useSignUpMutation();
@@ -39,7 +47,11 @@ const SignUp = () => {
           }
           className="mt-5"
         />
-
+        {state.errors.email && (
+          <span className="text-red-500 text-sm mt-1">
+            {state.errors.email}
+          </span>
+        )}
         <Input
           value={state.password}
           placeholder="비밀번호"
@@ -51,7 +63,11 @@ const SignUp = () => {
             })
           }
         />
-
+        {state.errors.password && (
+          <span className="text-red-500 text-sm mt-1">
+            {state.errors.password}
+          </span>
+        )}
         <Input
           value={state.nickname}
           placeholder="닉네임"
@@ -62,7 +78,11 @@ const SignUp = () => {
             })
           }
         />
-
+        {state.errors.nickname && (
+          <span className="text-red-500 text-sm mt-1">
+            {state.errors.nickname}
+          </span>
+        )}
         <Input
           value={state.phone_number}
           placeholder="전화번호"
@@ -73,6 +93,11 @@ const SignUp = () => {
             })
           }
         />
+        {state.errors.phone_number && (
+          <span className="text-red-500 text-sm mt-1">
+            {state.errors.phone_number}
+          </span>
+        )}
         <Button variant="auth" onClick={handleSignUp}>
           회원가입
         </Button>
