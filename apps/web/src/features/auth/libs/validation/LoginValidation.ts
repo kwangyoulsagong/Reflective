@@ -17,7 +17,7 @@ export class LoginValidator {
     }
     return "";
   }
-  valdiatePassword(password: string): string {
+  validatePassword(password: string): string {
     if (!password) {
       return "비밀번호를 입력해주세요";
     }
@@ -26,7 +26,7 @@ export class LoginValidator {
   valdiateForm(formData: FormData): ValidationResult {
     const errors = {
       email: this.validateEmail(formData.email),
-      password: this.valdiatePassword(formData.password),
+      password: this.validatePassword(formData.password),
     };
     return {
       isValid: !Object.values(errors).some((error) => error !== ""),
