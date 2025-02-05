@@ -48,9 +48,7 @@ const SignUp = () => {
           className="mt-5"
         />
         {state.errors.email && (
-          <span className="text-red-500 text-sm mt-1">
-            {state.errors.email}
-          </span>
+          <span className="text-red-500 text-sm ">{state.errors.email}</span>
         )}
         <Input
           value={state.password}
@@ -64,9 +62,7 @@ const SignUp = () => {
           }
         />
         {state.errors.password && (
-          <span className="text-red-500 text-sm mt-1">
-            {state.errors.password}
-          </span>
+          <span className="text-red-500 text-sm ">{state.errors.password}</span>
         )}
         <Input
           value={state.nickname}
@@ -79,9 +75,7 @@ const SignUp = () => {
           }
         />
         {state.errors.nickname && (
-          <span className="text-red-500 text-sm mt-1">
-            {state.errors.nickname}
-          </span>
+          <span className="text-red-500 text-sm ">{state.errors.nickname}</span>
         )}
         <Input
           value={state.phone_number}
@@ -94,7 +88,7 @@ const SignUp = () => {
           }
         />
         {state.errors.phone_number && (
-          <span className="text-red-500 text-sm mt-1">
+          <span className="text-red-500 text-sm ">
             {state.errors.phone_number}
           </span>
         )}

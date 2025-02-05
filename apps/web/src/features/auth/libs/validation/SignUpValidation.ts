@@ -22,7 +22,7 @@ export class SignUpValidator {
   constructor() {
     this.emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     this.phoneRegex = /^01[0-9]{8,9}$/;
-    this.passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    this.passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
   }
   validateEmail(email: string): string {
     if (!email) {
