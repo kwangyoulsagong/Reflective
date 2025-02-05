@@ -23,6 +23,7 @@ const Login = () => {
     const validation = lv.valdiateForm(body);
     if (!validation.isValid) {
       dispatch({ type: ActionType.SET_ERRORS, payload: validation.errors });
+      return;
     }
     mutate(body);
   };
