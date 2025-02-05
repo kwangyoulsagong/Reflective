@@ -29,7 +29,7 @@ const SignUp = () => {
     }
     mutate(body);
   };
-  const { mutate } = useSignUpMutation();
+  const { mutate, error } = useSignUpMutation();
   return (
     <section className="flex flex-col gap-8 justify-center items-center ">
       <div className="box-border flex flex-col gap-6 items-center w-[400px] h-[600px] border border-gray-300">
@@ -90,6 +90,11 @@ const SignUp = () => {
         {state.errors.phone_number && (
           <span className="text-red-500 text-sm ">
             {state.errors.phone_number}
+          </span>
+        )}
+        {error && (
+          <span className="text-red-500 text-sm">
+            {error instanceof Error ? error.message : "회원가입에 실패했습니다"}
           </span>
         )}
         <Button variant="auth" onClick={handleSignUp}>

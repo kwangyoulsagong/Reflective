@@ -9,6 +9,8 @@ const config: Config = {
     "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/src/__mocks__/fileMock.ts",
     "^@/(.*)$": "<rootDir>/src/$1",
     "^@repo/(.*)$": "<rootDir>/../../packages/$1", // 모노레포 패키지 경로 추가
+    "^@repo/ui/button$": "<rootDir>/src/__mocks__/@repo/ui/button.tsx",
+    "^@repo/ui/input$": "<rootDir>/src/__mocks__/@repo/ui/input.tsx",
   },
   transform: {
     "^.+\\.tsx?$": [

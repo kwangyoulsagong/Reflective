@@ -45,13 +45,29 @@ export const SignUpReducer = (
 ): SignUpState => {
   switch (action.type) {
     case ActionType.SET_EMAIL:
-      return { ...state, email: action.payload };
+      return {
+        ...state,
+        email: action.payload,
+        errors: { ...state.errors, email: "" },
+      };
     case ActionType.SET_PASSWORD:
-      return { ...state, password: action.payload };
+      return {
+        ...state,
+        password: action.payload,
+        errors: { ...state.errors, password: "" },
+      };
     case ActionType.SET_NICKNAME:
-      return { ...state, nickname: action.payload };
+      return {
+        ...state,
+        nickname: action.payload,
+        errors: { ...state.errors, nickname: "" },
+      };
     case ActionType.SET_PHONE_NUMBER:
-      return { ...state, phone_number: action.payload };
+      return {
+        ...state,
+        phone_number: action.payload,
+        errors: { ...state.errors, phone_number: "" },
+      };
     case ActionType.SET_ERRORS:
       return { ...state, errors: action.payload };
     default:
