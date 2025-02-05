@@ -9,21 +9,27 @@ import {
 import useLoginMutation from "../../libs/hooks/useLoginMutation";
 import { Input } from "@repo/ui/input";
 import { Button } from "@repo/ui/button";
+import { LoginValidator } from "../../libs/validation/LoginValidation";
 
 const Login = () => {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(LoginReducer, initialState);
   const handleLogin = () => {
+    const lv = new LoginValidator();
     const body = {
       email: state.email,
       password: state.password,
     };
+    const validation = lv.valdiateForm(body);
+    if (!validation.isValid) {
+      dispatch({ type: ActionType.SET_ERRORS, payload: validation.errors });
+    }
     mutate(body);
   };
-  const { mutate } = useLoginMutation();
+  const { mutate, error } = useLoginMutation();
   return (
     <section className="flex flex-col gap-8 justify-center items-center ">
-      <div className="box-border flex flex-col gap-6 items-center w-[400px] h-[420px] border border-gray-300">
+      <div className="box-border flex flex-col gap-6 items-center w-[400px] h-[450px] border border-gray-300">
         <header>
           <img className="w-[150px] mt-10" src={logo} alt="logo" />
         </header>
@@ -35,7 +41,9 @@ const Login = () => {
           placeholder="이메일"
           className="mt-5"
         />
-
+        {state.errors.email && (
+          <span className="text-red-500 text-sm ">{state.errors.email}</span>
+        )}
         <Input
           value={state.password}
           onChange={(e) =>
@@ -44,6 +52,14 @@ const Login = () => {
           placeholder="비밀번호"
           type="password"
         />
+        {state.errors.password && (
+          <span className="text-red-500 text-sm ">{state.errors.password}</span>
+        )}
+        {error && (
+          <span className="text-red-500 text-sm">
+            {error instanceof Error ? error.message : "로그인에 실패했습니다"}
+          </span>
+        )}
         <Button variant="auth" onClick={handleLogin}>
           로그인
         </Button>
