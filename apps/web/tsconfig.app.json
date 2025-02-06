@@ -21,13 +21,25 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Test 관련 추가 설정 */
+    "esModuleInterop": true,
+    "types": ["jest", "@testing-library/jest-dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": [
     "src",
     "../../packages/ui/src/CommentButton",
     "src/shared/Header",
     "src/app/App.tsx",
-    "../../packages/ui/src/utils"
+    "../../packages/ui/src/utils",
+    "**/*.ts",
+    "**/*.tsx",
+    "jest.config.ts",
+    "jest.setup.ts"
   ]
 }
