@@ -46,4 +46,11 @@ describe("VirtualizedList", () => {
 
     expect(mockOnScroll).toHaveBeenCalledWith(100);
   });
+
+  it("totalSize에 따라 올바른 높이가 설정되어야 함", () => {
+    const { container } = render(<VirtualizedList {...defaultProps} />);
+
+    const virtualContainer = container.querySelector('[style*="height"]');
+    expect(virtualContainer).toHaveStyle({ height: "100%" });
+  });
 });
