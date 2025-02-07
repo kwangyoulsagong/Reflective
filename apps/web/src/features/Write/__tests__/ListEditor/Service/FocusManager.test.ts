@@ -51,4 +51,20 @@ describe("FocusManager", () => {
       );
     });
   });
+  describe("focusPrevious", () => {
+    const items = [
+      { id: "item-1", content: "Item 1", level: 0, isCollapsed: false },
+      { id: "item-2", content: "Item 2", level: 0, isCollapsed: false },
+      { id: "item-3", content: "Item 3", level: 0, isCollapsed: false },
+    ];
+    it("이전 아이템으로 포커스가 이동해야 함", () => {
+      focusManager.focusPrevious("item-2", items);
+      expect(refs.current["item-1"].focus).toHaveBeenCalled();
+    });
+
+    it("첫 번째 아이템에서는 이전 포커스 이동이 발생하지 않아야 함", () => {
+      focusManager.focusPrevious("item-1", items);
+      expect(refs.current["item-1"].focus).not.toHaveBeenCalled();
+    });
+  });
 });
