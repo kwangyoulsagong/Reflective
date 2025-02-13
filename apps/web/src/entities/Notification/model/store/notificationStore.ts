@@ -22,7 +22,7 @@ const useNotificationStore = create<NotificationStore>((set) => ({
   markAsRead: async (notification_id) => {
     try {
       const { data } = await axiosInstance.patch(
-        `/notifications/${notification_id}/read`
+        `api/v1/notifications/${notification_id}/read`
       );
 
       set((state) => ({
@@ -45,7 +45,9 @@ const useNotificationStore = create<NotificationStore>((set) => ({
 
   markAllAsRead: async () => {
     try {
-      const { data } = await axiosInstance.patch("/notifications/read-all");
+      const { data } = await axiosInstance.patch(
+        "api/v1/notifications/read-all"
+      );
 
       set((state) => ({
         notifications: state.notifications.map((notification) => ({
@@ -66,7 +68,7 @@ const useNotificationStore = create<NotificationStore>((set) => ({
 
   deleteNotification: async (notification_id) => {
     try {
-      await axiosInstance.delete(`/notifications/${notification_id}`);
+      await axiosInstance.delete(`api/v1/notifications/${notification_id}`);
 
       set((state) => {
         const notification = state.notifications.find(
@@ -93,7 +95,7 @@ const useNotificationStore = create<NotificationStore>((set) => ({
   fetchNotifications: async () => {
     set({ isLoading: true });
     try {
-      const { data } = await axiosInstance.get("/notifications");
+      const { data } = await axiosInstance.get("api/v1/notifications");
 
       set({
         notifications: data.notifications,

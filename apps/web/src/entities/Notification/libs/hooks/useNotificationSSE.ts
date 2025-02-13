@@ -9,10 +9,7 @@ export const useNotificationSSE = () => {
 
   useEffect(() => {
     const eventSource = new EventSource(
-      `${AXIOS_BASE_URL}/notifications/subscribe`,
-      {
-        withCredentials: true,
-      }
+      `${AXIOS_BASE_URL}/api/v1/notifications/subscribe`
     );
 
     eventSource.onmessage = (event) => {

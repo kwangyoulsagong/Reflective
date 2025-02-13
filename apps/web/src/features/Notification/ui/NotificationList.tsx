@@ -21,7 +21,7 @@ export const NotificationList = ({ onClose }: NotificationListProps) => {
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
-
+  console.log(notifications);
   const getNotificationText = (notification: any) => {
     switch (notification.type) {
       case "LIKE":
@@ -53,16 +53,9 @@ export const NotificationList = ({ onClose }: NotificationListProps) => {
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center">
-                <img
-                  src={notification.sender_id.profile_image}
-                  alt={notification.sender_id.username}
-                  className="w-10 h-10 rounded-full mr-3"
-                />
                 <div>
                   <p className="text-sm">
-                    <span className="font-bold">
-                      {notification.sender_id.username}
-                    </span>
+                    <span className="font-bold"></span>
                     {getNotificationText(notification)}
                   </p>
                   <p className="text-xs text-gray-500">

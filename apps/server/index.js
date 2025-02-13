@@ -13,6 +13,7 @@ const postRouter_1 = __importDefault(require("./router/postRouter"));
 const commentRouter_1 = __importDefault(require("./router/commentRouter"));
 const likeRouter_1 = __importDefault(require("./router/likeRouter"));
 const favoriteRouter_1 = __importDefault(require("./router/favoriteRouter"));
+const notificationRouter_1 = __importDefault(require("./router/notificationRouter"));
 const { swaggerUi, specs } = require("./module/swagger.js");
 const cors = require("cors");
 //express 이용
@@ -28,6 +29,7 @@ app.use("/api/v1/post", postRouter_1.default);
 app.use("/api/v1/comments", commentRouter_1.default);
 app.use("/api/v1/like", likeRouter_1.default);
 app.use("/api/v1/favorite", favoriteRouter_1.default);
+app.use("/api/v1/notifications", notificationRouter_1.default);
 mongoose_1.default.connect(process.env.MONGODB_URI);
 var db = mongoose_1.default.connection;
 // 4. 연결 실패

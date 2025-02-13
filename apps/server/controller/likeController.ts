@@ -1,5 +1,6 @@
 import likeService from "../service/likeService";
 import { Request, Response } from "express";
+import notificationService from "../service/notificationService";
 
 interface DecodedToken {
   user_id: string;
@@ -16,10 +17,7 @@ class LikeController {
   public async toggleLike(req: AuthRequest, res: Response): Promise<void> {
     try {
       const { post_id } = req.params;
-      console.log(post_id);
-
       const { is_liked } = req.body;
-      console.log(is_liked);
 
       if (!req.user) {
         res.status(401).json({ message: "인증 권한 없음" });
@@ -27,14 +25,45 @@ class LikeController {
       }
 
       const userId = req.user.user_id;
-      const result = await likeService.IsLike(post_id, userId, is_liked);
+      console.log("좋아요 시도:", { userId, post_id, is_liked });
 
-      if (result) {
-        res.status(200).json({ message: "좋아요 업데이트 성공", result });
+      const result = await likeService.IsLike(post_id, userId, is_liked);
+      console.log("좋아요 결과:", result);
+
+      if (result.like && result.author_id) {
+        console.log("조건 체크:", {
+          is_liked,
+          userId,
+          author_id: result.author_id,
+          shouldNotify: is_liked && userId !== result.author_id,
+        });
+
+        if (is_liked && userId !== result.author_id) {
+          console.log("알림 생성 시도", {
+            type: "LIKE",
+            sender_id: userId,
+            receiver_id: result.author_id,
+            post_id: post_id,
+          });
+
+          const notification = await notificationService.sendNotification({
+            type: "LIKE",
+            sender_id: userId,
+            receiver_id: result.author_id,
+            post_id: post_id,
+          });
+          console.log("생성된 알림:", notification);
+        }
+
+        res
+          .status(200)
+          .json({ message: "좋아요 업데이트 성공", result: result.like });
       } else {
+        console.log("좋아요 업데이트 실패:", result);
         res.status(404).json({ message: "좋아요 업데이트 실패" });
       }
     } catch (error: any) {
+      console.error("좋아요 처리 중 에러:", error);
       res.status(500).json({ error: error.message });
     }
   }
