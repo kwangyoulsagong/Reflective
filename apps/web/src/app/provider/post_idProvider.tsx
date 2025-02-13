@@ -1,6 +1,6 @@
+import { post_idState } from "@/types/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { post_idState } from "../../../types/types";
 
 // post_id 저장
 export const usePost_idStore = create<post_idState>()(
