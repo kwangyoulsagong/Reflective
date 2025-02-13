@@ -1,10 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
-import "prismjs/themes/prism.css";
-import "prismjs/components/prism-javascript.min.js";
-
+import { useEffect, useState, useRef } from "react";
 import PostHeader from "./Header/Header";
 import Bars from "./Bars/Bars";
-
 import { getPostType } from "../../model/post/type";
 import { Block } from "../../../../shared/BlockView/model/BlockView/types";
 import BlockView from "../../../../shared/BlockView/ui/BlockView";
