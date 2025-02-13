@@ -6,9 +6,10 @@ import { Button } from "@repo/ui/button";
 
 import usePost from "../../../libs/hooks/post/usePost";
 import { USER_ID_KEY } from "../../../../../shared/constants/api";
-import { formatRelativeTime } from "@repo/ui/time";
+
 import useLike from "../../../libs/hooks/post/useLike";
 import { getPostType } from "../../../model/post/type";
+import { formatRelativeTime } from "@repo/ui/time";
 
 const PostHeader = ({ data }: { data: Partial<getPostType> }) => {
   const user_id = localStorage.getItem(USER_ID_KEY);
