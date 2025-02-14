@@ -17,37 +17,52 @@ class NotificationController {
     // SSE 연결 설정
     subscribe(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const user_id = req.user.user_id;
+            console.log("SSE 연결 시도 - User ID:", user_id);
+            // SSE 헤더 설정
+            res.writeHead(200, {
+                "Content-Type": "text/event-stream",
+                Connection: "keep-alive",
+                "Cache-Control": "no-cache",
+                "X-Accel-Buffering": "no",
+            });
             try {
-                if (!req.user) {
-                    // SSE에서는 일반적인 JSON 응답 대신 event 형식으로 에러를 보내야 함
-                    res.writeHead(200, {
-                        "Content-Type": "text/event-stream",
-                        Connection: "keep-alive",
-                        "Cache-Control": "no-cache",
-                    });
-                    res.write(`data: ${JSON.stringify({ error: "인증 권한 없음" })}\n\n`);
-                    res.end();
-                    return;
-                }
-                const user_id = req.user.user_id;
-                console.log("알림 유저 아이디", user_id);
-                // SSE 헤더 설정
-                res.writeHead(200, {
-                    "Content-Type": "text/event-stream",
-                    Connection: "keep-alive",
-                    "Cache-Control": "no-cache",
-                });
+                // 연결 성공 메시지 전송
+                res.write(`data: ${JSON.stringify({
+                    type: "CONNECT",
+                    message: "SSE 연결 성공",
+                    user_id: user_id,
+                })}\n\n`);
                 // 클라이언트 연결 등록
                 notificationService_1.default.addClient(user_id, res);
-                // 연결 종료 시 클라이언트 제거
+                // 연결 유지를 위한 주기적 하트비트
+                const heartbeatInterval = setInterval(() => {
+                    if (!res.writableEnded) {
+                        try {
+                            res.write(`: heartbeat\n\n`);
+                        }
+                        catch (error) {
+                            console.error("하트비트 전송 중 에러:", error);
+                            clearInterval(heartbeatInterval);
+                        }
+                    }
+                }, 30000);
+                // 연결 종료 처리
                 req.on("close", () => {
+                    console.log(`SSE 연결 종료 - User ID: ${user_id}`);
+                    clearInterval(heartbeatInterval);
                     notificationService_1.default.removeClient(user_id);
                 });
             }
             catch (error) {
-                // 에러도 event 형식으로 전송
-                res.write(`data: ${JSON.stringify({ error: error.message })}\n\n`);
-                res.end();
+                console.error("SSE 연결 중 전체 에러:", error);
+                if (!res.writableEnded) {
+                    res.write(`data: ${JSON.stringify({
+                        type: "ERROR",
+                        message: error.message,
+                    })}\n\n`);
+                    res.end();
+                }
             }
         });
     }

@@ -13,15 +13,22 @@ interface NotificationData {
 
 class NotificationService {
   private clients: Map<string, Response> = new Map();
-
   // 클라이언트 연결 등록
   public addClient(user_id: string, res: Response): void {
-    res.writeHead(200, {
-      "Content-Type": "text/event-stream",
-      Connection: "keep-alive",
-      "Cache-Control": "no-cache",
-    });
+    // 기존 연결 종료 로직 수정
+    const existingClient = this.clients.get(user_id);
+    if (existingClient && !existingClient.writableEnded) {
+      try {
+        existingClient.write(
+          `data: ${JSON.stringify({ type: "DISCONNECT" })}\n\n`
+        );
+        existingClient.end();
+      } catch (error) {
+        console.error("기존 클라이언트 종료 중 에러:", error);
+      }
+    }
 
+    // 클라이언트 맵에 추가
     this.clients.set(user_id, res);
   }
 
@@ -35,14 +42,21 @@ class NotificationService {
     data: NotificationData
   ): Promise<INotification> {
     // DB에 알림 저장
-    console.log("저장", data);
     const notification = await this.saveNotificationToDB(data);
 
     // 실시간 알림 전송
     const client = this.clients.get(data.receiver_id);
-    if (client) {
-      const eventData = JSON.stringify(notification);
-      client.write(`data: ${eventData}\n\n`);
+    if (client && !client.writableEnded) {
+      try {
+        const eventData = JSON.stringify({
+          ...notification.toObject(),
+          type: "NOTIFICATION",
+        });
+        client.write(`data: ${eventData}\n\n`);
+      } catch (error) {
+        console.error("알림 전송 중 에러:", error);
+        this.removeClient(data.receiver_id);
+      }
     }
 
     return notification;

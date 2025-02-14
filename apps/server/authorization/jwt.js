@@ -62,14 +62,35 @@ function verifyTokenMiddleware(req, res, next) {
 }
 function verifySSETokenMiddleware(req, res, next) {
     var _a;
+    // SSE는 query parameter로 토큰을 받음
     const token = (_a = req.query.authorization) === null || _a === void 0 ? void 0 : _a.toString().split("Bearer ")[1];
     if (!token) {
-        res.status(403).json({ message: "토큰이 없습니다." });
+        // SSE의 특성을 고려한 에러 응답
+        res.writeHead(401, {
+            "Content-Type": "text/event-stream",
+            Connection: "keep-alive",
+            "Cache-Control": "no-cache",
+        });
+        res.write(`data: ${JSON.stringify({
+            type: "ERROR",
+            message: "토큰이 없습니다.",
+        })}\n\n`);
+        res.end();
         return;
     }
     const decoded = verifyToken(token);
     if (!decoded) {
-        res.status(401).json({ message: "인증 권한이 없음" });
+        // SSE의 특성을 고려한 에러 응답
+        res.writeHead(401, {
+            "Content-Type": "text/event-stream",
+            Connection: "keep-alive",
+            "Cache-Control": "no-cache",
+        });
+        res.write(`data: ${JSON.stringify({
+            type: "ERROR",
+            message: "인증 권한이 없음",
+        })}\n\n`);
+        res.end();
         return;
     }
     req.user = decoded;

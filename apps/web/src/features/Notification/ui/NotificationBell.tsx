@@ -11,7 +11,7 @@ const NotificationBell = () => {
   // 알림 관련 상태와 함수 가져오기
   const { unreadCount, fetchNotifications } = useNotificationStore();
 
-  // SSE 연결 및 초기 알림 로드
+  // SSE 연결 (전역적으로 유지)
   useNotificationSSE();
 
   // 컴포넌트 마운트 시 즉시 알림 로드

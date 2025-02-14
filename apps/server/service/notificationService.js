@@ -20,11 +20,18 @@ class NotificationService {
     }
     // 클라이언트 연결 등록
     addClient(user_id, res) {
-        res.writeHead(200, {
-            "Content-Type": "text/event-stream",
-            Connection: "keep-alive",
-            "Cache-Control": "no-cache",
-        });
+        // 기존 연결 종료 로직 수정
+        const existingClient = this.clients.get(user_id);
+        if (existingClient && !existingClient.writableEnded) {
+            try {
+                existingClient.write(`data: ${JSON.stringify({ type: "DISCONNECT" })}\n\n`);
+                existingClient.end();
+            }
+            catch (error) {
+                console.error("기존 클라이언트 종료 중 에러:", error);
+            }
+        }
+        // 클라이언트 맵에 추가
         this.clients.set(user_id, res);
     }
     // 클라이언트 연결 해제
@@ -35,13 +42,18 @@ class NotificationService {
     sendNotification(data) {
         return __awaiter(this, void 0, void 0, function* () {
             // DB에 알림 저장
-            console.log("저장", data);
             const notification = yield this.saveNotificationToDB(data);
             // 실시간 알림 전송
             const client = this.clients.get(data.receiver_id);
-            if (client) {
-                const eventData = JSON.stringify(notification);
-                client.write(`data: ${eventData}\n\n`);
+            if (client && !client.writableEnded) {
+                try {
+                    const eventData = JSON.stringify(Object.assign(Object.assign({}, notification.toObject()), { type: "NOTIFICATION" }));
+                    client.write(`data: ${eventData}\n\n`);
+                }
+                catch (error) {
+                    console.error("알림 전송 중 에러:", error);
+                    this.removeClient(data.receiver_id);
+                }
             }
             return notification;
         });
