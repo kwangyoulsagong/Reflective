@@ -27,7 +27,7 @@ const useNotificationStore = create<NotificationStore>((set) => ({
 
       set((state) => ({
         notifications: state.notifications.map((notification) =>
-          notification.notification_id === notification_id
+          notification._id === notification_id
             ? { ...notification, is_read: true }
             : notification
         ),
@@ -72,11 +72,11 @@ const useNotificationStore = create<NotificationStore>((set) => ({
 
       set((state) => {
         const notification = state.notifications.find(
-          (n) => n.notification_id === notification_id
+          (n) => n._id === notification_id
         );
         return {
           notifications: state.notifications.filter(
-            (n) => n.notification_id !== notification_id
+            (n) => n._id !== notification_id
           ),
           unreadCount:
             notification && !notification.is_read
