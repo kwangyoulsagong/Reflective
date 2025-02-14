@@ -1,9 +1,10 @@
 export interface Notification {
+  _id: string;
   notification_id: string;
   type: "LIKE" | "COMMENT" | "FOLLOW";
   sender_id: {
     user_id: string;
-    username: string;
+    nickname: string;
     profile_image: string;
   };
   post_id?: {

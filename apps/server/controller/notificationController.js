@@ -19,10 +19,18 @@ class NotificationController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 if (!req.user) {
-                    res.status(401).json({ message: "인증 권한 없음" });
+                    // SSE에서는 일반적인 JSON 응답 대신 event 형식으로 에러를 보내야 함
+                    res.writeHead(200, {
+                        "Content-Type": "text/event-stream",
+                        Connection: "keep-alive",
+                        "Cache-Control": "no-cache",
+                    });
+                    res.write(`data: ${JSON.stringify({ error: "인증 권한 없음" })}\n\n`);
+                    res.end();
                     return;
                 }
                 const user_id = req.user.user_id;
+                console.log("알림 유저 아이디", user_id);
                 // SSE 헤더 설정
                 res.writeHead(200, {
                     "Content-Type": "text/event-stream",
@@ -37,7 +45,9 @@ class NotificationController {
                 });
             }
             catch (error) {
-                res.status(500).json({ error: error.message });
+                // 에러도 event 형식으로 전송
+                res.write(`data: ${JSON.stringify({ error: error.message })}\n\n`);
+                res.end();
             }
         });
     }

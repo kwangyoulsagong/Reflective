@@ -71,10 +71,32 @@ function verifyTokenMiddleware(
   req.user = decoded;
   next();
 }
+function verifySSETokenMiddleware(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): void {
+  const token = req.query.authorization?.toString().split("Bearer ")[1];
+
+  if (!token) {
+    res.status(403).json({ message: "토큰이 없습니다." });
+    return;
+  }
+
+  const decoded = verifyToken(token);
+  if (!decoded) {
+    res.status(401).json({ message: "인증 권한이 없음" });
+    return;
+  }
+
+  req.user = decoded;
+  next();
+}
 export {
   generateToken,
   generateRefreshToken,
   verifyToken,
   verifyRefreshToken,
   verifyTokenMiddleware,
+  verifySSETokenMiddleware, // SSE용 미들웨어 추가
 };

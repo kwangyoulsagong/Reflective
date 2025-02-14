@@ -1,11 +1,14 @@
 import express from "express";
 const router = express.Router();
-import { verifyTokenMiddleware } from "../authorization/jwt";
+import {
+  verifyTokenMiddleware,
+  verifySSETokenMiddleware,
+} from "../authorization/jwt";
 import notificationController from "../controller/notificationController";
 
 router.get(
   "/subscribe",
-  verifyTokenMiddleware,
+  verifySSETokenMiddleware,
   notificationController.subscribe
 );
 

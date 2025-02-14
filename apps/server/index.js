@@ -20,7 +20,12 @@ const cors = require("cors");
 const app = (0, express_1.default)();
 app.use(express_1.default.json()); // JSON 바디 파서 추가
 dotenv_1.default.config();
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:5173", // 클라이언트 주소
+    credentials: true, // credentials 허용
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // 허용할 HTTP 메서드
+    allowedHeaders: ["*"], // 모든 헤더 허용
+}));
 const port = process.env.PORT;
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use("/api/v1/auth", userRouter_1.default);

@@ -17,11 +17,9 @@ export const NotificationList = ({ onClose }: NotificationListProps) => {
   } = useNotificationStore();
 
   useNotificationSSE();
-
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
-  console.log(notifications);
   const getNotificationText = (notification: any) => {
     switch (notification.type) {
       case "LIKE":
@@ -56,6 +54,10 @@ export const NotificationList = ({ onClose }: NotificationListProps) => {
                 <div>
                   <p className="text-sm">
                     <span className="font-bold"></span>
+                    <span className="font-bold">
+                      {notification.sender_id.nickname}
+                    </span>
+
                     {getNotificationText(notification)}
                   </p>
                   <p className="text-xs text-gray-500">
@@ -66,16 +68,14 @@ export const NotificationList = ({ onClose }: NotificationListProps) => {
               <div className="flex space-x-2">
                 {!notification.is_read && (
                   <button
-                    onClick={() => markAsRead(notification.notification_id)}
+                    onClick={() => markAsRead(notification._id)}
                     className="text-xs text-blue-500 hover:text-blue-600"
                   >
                     읽음
                   </button>
                 )}
                 <button
-                  onClick={() =>
-                    deleteNotification(notification.notification_id)
-                  }
+                  onClick={() => deleteNotification(notification._id)}
                   className="text-xs text-red-500 hover:text-red-600"
                 >
                   삭제

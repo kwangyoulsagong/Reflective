@@ -36,11 +36,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 // 알림 스키마 정의
 const notificationSchema = new mongoose_1.Schema({
-    notification_id: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        required: true,
-        auto: true,
-    },
     type: {
         type: String,
         required: true,
@@ -50,15 +45,21 @@ const notificationSchema = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
         ref: "User",
+        localField: "sender_id",
+        foreignField: "user_id", // User 모델의 user_id와 매칭
     },
     receiver_id: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
         ref: "User",
+        localField: "receiver_id",
+        foreignField: "user_id", // User 모델의 user_id와 매칭
     },
     post_id: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "Post",
+        localField: "post_id",
+        foreignField: "post_id", // Post 모델의 post_id와 매칭
     },
     comment_id: {
         type: mongoose_1.Schema.Types.ObjectId,

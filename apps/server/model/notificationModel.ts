@@ -2,7 +2,6 @@ import mongoose, { Document, Schema, Types } from "mongoose";
 
 // 인터페이스 정의
 export interface INotification extends Document {
-  notification_id: Types.ObjectId;
   type: "LIKE" | "COMMENT" | "FOLLOW";
   sender_id: Types.ObjectId;
   receiver_id: Types.ObjectId;
@@ -16,11 +15,6 @@ export interface INotification extends Document {
 
 // 알림 스키마 정의
 const notificationSchema: Schema<INotification> = new Schema({
-  notification_id: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    auto: true,
-  },
   type: {
     type: String,
     required: true,
@@ -30,15 +24,21 @@ const notificationSchema: Schema<INotification> = new Schema({
     type: Schema.Types.ObjectId,
     required: true,
     ref: "User",
+    localField: "sender_id",
+    foreignField: "user_id", // User 모델의 user_id와 매칭
   },
   receiver_id: {
     type: Schema.Types.ObjectId,
     required: true,
     ref: "User",
+    localField: "receiver_id",
+    foreignField: "user_id", // User 모델의 user_id와 매칭
   },
   post_id: {
     type: Schema.Types.ObjectId,
     ref: "Post",
+    localField: "post_id",
+    foreignField: "post_id", // Post 모델의 post_id와 매칭
   },
   comment_id: {
     type: Schema.Types.ObjectId,

@@ -8,6 +8,7 @@ exports.generateRefreshToken = generateRefreshToken;
 exports.verifyToken = verifyToken;
 exports.verifyRefreshToken = verifyRefreshToken;
 exports.verifyTokenMiddleware = verifyTokenMiddleware;
+exports.verifySSETokenMiddleware = verifySSETokenMiddleware;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -52,6 +53,21 @@ function verifyTokenMiddleware(req, res, next) {
     }
     const decoded = verifyToken(token);
     console.log(decoded);
+    if (!decoded) {
+        res.status(401).json({ message: "인증 권한이 없음" });
+        return;
+    }
+    req.user = decoded;
+    next();
+}
+function verifySSETokenMiddleware(req, res, next) {
+    var _a;
+    const token = (_a = req.query.authorization) === null || _a === void 0 ? void 0 : _a.toString().split("Bearer ")[1];
+    if (!token) {
+        res.status(403).json({ message: "토큰이 없습니다." });
+        return;
+    }
+    const decoded = verifyToken(token);
     if (!decoded) {
         res.status(401).json({ message: "인증 권한이 없음" });
         return;
