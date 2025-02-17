@@ -27,30 +27,15 @@ class LikeController {
                     return;
                 }
                 const userId = req.user.user_id;
-                console.log("좋아요 시도:", { userId, post_id, is_liked });
                 const result = yield likeService_1.default.IsLike(post_id, userId, is_liked);
-                console.log("좋아요 결과:", result);
                 if (result.like && result.author_id) {
-                    console.log("조건 체크:", {
-                        is_liked,
-                        userId,
-                        author_id: result.author_id,
-                        shouldNotify: is_liked && userId !== result.author_id,
-                    });
                     if (is_liked && userId !== result.author_id) {
-                        console.log("알림 생성 시도", {
+                        yield notificationService_1.default.sendNotification({
                             type: "LIKE",
                             sender_id: userId,
                             receiver_id: result.author_id,
                             post_id: post_id,
                         });
-                        const notification = yield notificationService_1.default.sendNotification({
-                            type: "LIKE",
-                            sender_id: userId,
-                            receiver_id: result.author_id,
-                            post_id: post_id,
-                        });
-                        console.log("생성된 알림:", notification);
                     }
                     res
                         .status(200)

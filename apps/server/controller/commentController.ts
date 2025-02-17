@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import commentService from "../service/commentService";
+import notificationService from "../service/notificationService";
 
 interface DecodedToken {
   user_id: string;
@@ -22,7 +23,13 @@ class CommentController {
 
       const userId = req.user.user_id;
       const result = await commentService.saveComment(userId, data);
-      if (result) {
+      if (result?.post_id && result.author_id) {
+        await notificationService.sendNotification({
+          type: "COMMENT",
+          sender_id: userId,
+          receiver_id: result.author_id,
+          post_id: result.post_id,
+        });
         res.status(200).json({ message: "댓글 저장 성공" });
         return;
       }
