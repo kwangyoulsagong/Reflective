@@ -40,7 +40,11 @@ class LikeController {
 
         res
           .status(200)
-          .json({ message: "좋아요 업데이트 성공", result: result.like });
+          .json({
+            message: "좋아요 업데이트 성공",
+            result: result.like,
+            post_id: post_id,
+          });
       } else {
         console.log("좋아요 업데이트 실패:", result);
         res.status(404).json({ message: "좋아요 업데이트 실패" });

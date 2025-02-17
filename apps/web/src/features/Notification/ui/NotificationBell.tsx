@@ -41,7 +41,7 @@ const NotificationBell = () => {
 
       {isOpen && (
         <div className="absolute right-0 mt-2 w-80 md:w-96 bg-white rounded-lg shadow-lg z-50 max-h-[80vh] overflow-y-auto">
-          <NotificationList onClose={() => setIsOpen(false)} />
+          <NotificationList />
         </div>
       )}
     </div>

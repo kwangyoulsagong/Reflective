@@ -3,10 +3,14 @@ import useNotificationStore from "../../../entities/Notification/model/store/not
 
 import { useNotificationSSE } from "../../../entities/Notification/libs/hooks/useNotificationSSE";
 import { formatRelativeTime } from "@repo/ui/time";
-interface NotificationListProps {
-  onClose: () => void;
-}
-export const NotificationList = ({ onClose }: NotificationListProps) => {
+import { usePost_idStore } from "../../../app/provider/post_idProvider";
+import { usePostRouterStore } from "../../../app/provider/postRouterProvider";
+import { useNavigate } from "react-router-dom";
+
+export const NotificationList = () => {
+  const navigate = useNavigate();
+  const { setPost_id } = usePost_idStore();
+  const { setTitle } = usePostRouterStore();
   const {
     notifications,
     markAsRead,
@@ -15,7 +19,7 @@ export const NotificationList = ({ onClose }: NotificationListProps) => {
     isLoading,
     error,
   } = useNotificationStore();
-
+  console.log(notifications);
   useNotificationSSE();
   useEffect(() => {
     fetchNotifications();
@@ -32,6 +36,30 @@ export const NotificationList = ({ onClose }: NotificationListProps) => {
         return "";
     }
   };
+  const handleNavigate = (
+    post_id: {
+      _id?: string;
+      post_id?: string;
+      title?: string;
+      user_id?: {
+        _id: string;
+        user_id: string;
+        nickname: string;
+      };
+    },
+    type: string
+  ) => {
+    console.log(post_id);
+    if (type == "FOLLOW") {
+    } else {
+      const hyphenatedTitle = post_id.title?.replace(/\s+/g, "-");
+      if (post_id.post_id) {
+        setPost_id(post_id.post_id);
+        setTitle(hyphenatedTitle);
+        navigate(`/${post_id.user_id?.nickname}/${hyphenatedTitle}`);
+      }
+    }
+  };
 
   if (isLoading) return <div className="p-4 text-center">Loading...</div>;
   if (error)
@@ -44,6 +72,12 @@ export const NotificationList = ({ onClose }: NotificationListProps) => {
       ) : (
         notifications.map((notification) => (
           <div
+            onClick={() => {
+              if (notification.post_id) {
+                // post_id가 존재하는지 확인
+                handleNavigate(notification.post_id, notification.type);
+              }
+            }}
             key={notification.notification_id}
             className={`p-4 hover:bg-gray-50 ${
               notification.is_read ? "bg-white" : "bg-blue-50"

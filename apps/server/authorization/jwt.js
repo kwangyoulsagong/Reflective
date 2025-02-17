@@ -18,7 +18,7 @@ const secretKey = process.env.JWT_SECRET;
 const refreshSecretKey = process.env.JWT_REFRESH_SECRET;
 // 토큰 생성 함수
 function generateToken(payload) {
-    return jsonwebtoken_1.default.sign(payload, secretKey, { expiresIn: "1800s" });
+    return jsonwebtoken_1.default.sign(payload, secretKey, { expiresIn: "3d" });
 }
 // 리프레쉬 토큰 생성 함수
 function generateRefreshToken(payload) {

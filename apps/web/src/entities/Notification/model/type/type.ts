@@ -8,8 +8,9 @@ export interface Notification {
     profile_image: string;
   };
   post_id?: {
-    post_id: string;
-    title: string;
+    _id?: string;
+    post_id?: string;
+    title?: string;
   };
   content?: string;
   is_read: boolean;
