@@ -1,17 +1,18 @@
 import { END_POINTS } from "../../../shared/constants/api";
 import { axiosInstance } from "../../../shared/api/axiosinstance";
 
-export const fetchMyPageData = async () => {
+const fetchMyPage = async () => {
   try {
     // Promise.all을 사용해 두 요청을 동시에 보냄
+    console.log("hello");
     const [myPostsResponse, favoritePostsResponse] = await Promise.all([
       axiosInstance.get(END_POINTS.MYPOST),
-      axiosInstance.get(END_POINTS.FAVORITE_POSTS),
+      axiosInstance.get(END_POINTS.MYFAVORITEPOST),
     ]);
 
     return {
-      myPosts: myPostsResponse.data?.data || [],
-      favoritePosts: favoritePostsResponse.data?.data || [],
+      myPosts: myPostsResponse.data || [],
+      favoritePosts: favoritePostsResponse.data || [],
       success: true,
     };
   } catch (error) {
@@ -24,3 +25,4 @@ export const fetchMyPageData = async () => {
     };
   }
 };
+export default fetchMyPage;

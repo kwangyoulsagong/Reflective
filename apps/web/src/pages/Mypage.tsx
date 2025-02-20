@@ -9,6 +9,7 @@ import IntroductionCard from "../features/MyPage/ui/IntroductionCard";
 import CategoryCard from "../features/MyPage/ui/CategoryCard";
 import PostCard from "../features/MyPage/ui/PostCard";
 import Header from "../shared/Header/Header";
+import useGetPostMyPage from "../features/MyPage/libs/hooks/useGetPostMyPage";
 
 interface UserRankType {
   nickname: string;
@@ -26,47 +27,13 @@ const MyPage = () => {
     "안녕하세요! 여기에 자기소개를 작성해주세요."
   );
   const [isEditingIntro, setIsEditingIntro] = useState<boolean>(false);
-  const dummyPosts = [
-    {
-      post_id: "1",
-      title: "React Hooks Introduction",
-      created_date: "2024-10-01",
-      like_count: 10,
-      category: "React",
-      nickname: "user1",
-      thumbnail: "image_url",
-    },
-    {
-      post_id: "2",
-      title: "Advanced React Patterns",
-      created_date: "2024-10-02",
-      like_count: 20,
-      category: "React",
-      nickname: "user1",
-      thumbnail: "image_url",
-    },
-    {
-      post_id: "3",
-      title: "CSS Grid Layout",
-      created_date: "2024-10-03",
-      like_count: 5,
-      category: "CSS",
-      nickname: "user1",
-      thumbnail: "image_url",
-    },
-    {
-      post_id: "4",
-      title: "Responsive Design Techniques",
-      created_date: "2024-10-04",
-      like_count: 15,
-      category: "CSS",
-      nickname: "user1",
-      thumbnail: "image_url",
-    },
-  ];
+  const { data, isLoading, isError } = useGetPostMyPage();
+  const posts = data?.myPosts || [];
+  const favoritesPosts = data?.favoritePosts || [];
+  console.log(posts);
 
   const categories: string[] = Array.from(
-    new Set(dummyPosts.map((post) => post.category))
+    new Set(posts.map((post) => post.category))
   );
 
   const handlePost = (post_id: string, nickname: string, title: string) => {
@@ -81,7 +48,17 @@ const MyPage = () => {
     log: 195,
     progress: 97.1,
   };
+  if (isLoading) {
+    return <div className="w-full max-w-6xl mx-auto px-4 py-8">Loading...</div>;
+  }
 
+  if (isError) {
+    return (
+      <div className="w-full max-w-6xl mx-auto px-4 py-8">
+        Error loading data. Please try again.
+      </div>
+    );
+  }
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8">
       <Header />
@@ -149,7 +126,7 @@ const MyPage = () => {
               key={category}
               category={category}
               postCount={
-                dummyPosts.filter((post) => post.category === category).length
+                posts.filter((post) => post.category === category).length
               }
               onClick={() => setSelectedCategory(category)}
             />
@@ -168,7 +145,7 @@ const MyPage = () => {
           </button>
           <h3 className="text-2xl font-bold mb-4">{selectedCategory} 포스트</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {dummyPosts
+            {posts
               .filter((post) => post.category === selectedCategory)
               .map((post, index) => (
                 <PostCard
@@ -184,7 +161,7 @@ const MyPage = () => {
 
       {activeTab === "posts" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {dummyPosts.map((post, index) => (
+          {posts.map((post, index) => (
             <PostCard
               key={post.post_id}
               post={post}
@@ -196,13 +173,21 @@ const MyPage = () => {
       )}
 
       {activeTab === "favorites" && (
-        <div className="text-center py-12">
-          <img
-            src="/path/to/empty-state-image.svg"
-            alt="No favorites"
-            className="mx-auto mb-4"
-          />
-          <p className="text-gray-600">아직 즐겨찾기한 글이 없습니다.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {favoritesPosts.length > 0 ? (
+            favoritesPosts.map((post, index) => (
+              <PostCard
+                key={post.post_id}
+                post={post}
+                index={index}
+                handlePost={handlePost}
+              />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <p className="text-gray-600">아직 즐겨찾기한 글이 없습니다.</p>
+            </div>
+          )}
         </div>
       )}
     </div>

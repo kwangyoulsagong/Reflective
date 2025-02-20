@@ -2,6 +2,9 @@ import { Router } from "express";
 import postController from "../controller/postController";
 import { verifyTokenMiddleware } from "../authorization/jwt";
 const router: Router = Router();
+
+router.get("/mypost", verifyTokenMiddleware, postController.myPost);
+router.get("/favorite", verifyTokenMiddleware, postController.myFavoritePost);
 /**
  * @swagger
  * /api/v1/post:
@@ -220,8 +223,5 @@ router.put("/:post_id", verifyTokenMiddleware, postController.updatePost);
  */
 
 router.delete("/:post_id", verifyTokenMiddleware, postController.deletePost);
-
-router.get("/mypost", verifyTokenMiddleware, postController.myPost);
-router.get("/favorite", verifyTokenMiddleware, postController.myFavoritePost);
 
 export default router;

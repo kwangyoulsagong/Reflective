@@ -127,6 +127,7 @@ class PostController {
                     return;
                 }
                 const userId = req.user.user_id;
+                console.log("/ghfhjalksjlksj");
                 const myPost = yield postService_1.default.myPost(userId);
                 if (myPost) {
                     res.status(200).json(myPost);
@@ -159,9 +160,7 @@ class PostController {
                 }
             }
             catch (error) {
-                res
-                    .status(500)
-                    .json({
+                res.status(500).json({
                     message: "내 즐겨찾기 한 게시물 조회 에러",
                     error: error.message,
                 });

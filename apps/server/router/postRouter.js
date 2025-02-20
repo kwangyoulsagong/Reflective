@@ -7,6 +7,8 @@ const express_1 = require("express");
 const postController_1 = __importDefault(require("../controller/postController"));
 const jwt_1 = require("../authorization/jwt");
 const router = (0, express_1.Router)();
+router.get("/mypost", jwt_1.verifyTokenMiddleware, postController_1.default.myPost);
+router.get("/favorite", jwt_1.verifyTokenMiddleware, postController_1.default.myFavoritePost);
 /**
  * @swagger
  * /api/v1/post:
@@ -219,6 +221,4 @@ router.put("/:post_id", jwt_1.verifyTokenMiddleware, postController_1.default.up
  *                   type: string
  */
 router.delete("/:post_id", jwt_1.verifyTokenMiddleware, postController_1.default.deletePost);
-router.get("/mypost", jwt_1.verifyTokenMiddleware, postController_1.default.myPost);
-router.get("/favorite", jwt_1.verifyTokenMiddleware, postController_1.default.myFavoritePost);
 exports.default = router;
