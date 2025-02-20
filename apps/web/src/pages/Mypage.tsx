@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Layers, FileText, Bookmark, Settings } from "lucide-react";
-
+import { FileText, Bookmark, Settings } from "lucide-react";
 import me from "../assets/me.jpeg";
 import TabButton from "../features/MyPage/ui/TabButton";
 import RankCard from "../features/MyPage/ui/RankCard";
 import IntroductionCard from "../features/MyPage/ui/IntroductionCard";
-import CategoryCard from "../features/MyPage/ui/CategoryCard";
 import PostCard from "../features/MyPage/ui/PostCard";
 import Header from "../shared/Header/Header";
 import useGetPostMyPage from "../features/MyPage/libs/hooks/useGetPostMyPage";
-
+import { usePost_idStore } from "../app/provider/post_idProvider";
 interface UserRankType {
   nickname: string;
   rank: string;
@@ -21,8 +19,8 @@ interface UserRankType {
 
 const MyPage = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<string>("categories");
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const { setPost_id } = usePost_idStore();
+  const [activeTab, setActiveTab] = useState<string>("posts");
   const [introduction, setIntroduction] = useState<string>(
     "안녕하세요! 여기에 자기소개를 작성해주세요."
   );
@@ -30,14 +28,9 @@ const MyPage = () => {
   const { data, isLoading, isError } = useGetPostMyPage();
   const posts = data?.myPosts || [];
   const favoritesPosts = data?.favoritePosts || [];
-  console.log(posts);
-
-  const categories: string[] = Array.from(
-    new Set(posts.map((post) => post.category))
-  );
-
   const handlePost = (post_id: string, nickname: string, title: string) => {
     const hyphenatedTitle = title.replace(/\s+/g, "-");
+    setPost_id(post_id);
     navigate(`/${nickname}/${hyphenatedTitle}`);
   };
 
@@ -97,15 +90,6 @@ const MyPage = () => {
       </section>
       <nav className="flex space-x-4 mt-10">
         <TabButton
-          icon={<Layers size={20} />}
-          label="카테고리 뷰"
-          isActive={activeTab === "categories"}
-          onClick={() => {
-            setActiveTab("categories");
-            setSelectedCategory(null);
-          }}
-        />
-        <TabButton
           icon={<FileText size={20} />}
           label="내 게시물"
           isActive={activeTab === "posts"}
@@ -118,46 +102,6 @@ const MyPage = () => {
           onClick={() => setActiveTab("favorites")}
         />
       </nav>
-
-      {activeTab === "categories" && !selectedCategory && (
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categories.map((category) => (
-            <CategoryCard
-              key={category}
-              category={category}
-              postCount={
-                posts.filter((post) => post.category === category).length
-              }
-              onClick={() => setSelectedCategory(category)}
-            />
-          ))}
-        </div>
-      )}
-
-      {activeTab === "categories" && selectedCategory && (
-        <div>
-          <button
-            onClick={() => setSelectedCategory(null)}
-            className="flex items-center text-blue-500 mb-4"
-          >
-            <ArrowLeft size={20} className="mr-2" />
-            카테고리로 돌아가기
-          </button>
-          <h3 className="text-2xl font-bold mb-4">{selectedCategory} 포스트</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts
-              .filter((post) => post.category === selectedCategory)
-              .map((post, index) => (
-                <PostCard
-                  key={post.post_id}
-                  post={post}
-                  index={index}
-                  handlePost={handlePost}
-                />
-              ))}
-          </div>
-        </div>
-      )}
 
       {activeTab === "posts" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
