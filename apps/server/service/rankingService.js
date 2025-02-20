@@ -1,0 +1,107 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const userModel_1 = __importDefault(require("../model/userModel"));
+const postModel_1 = __importDefault(require("../model/postModel"));
+class RankingService {
+    // 특정 유저의 랭킹 조회
+    getUserRank(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield userModel_1.default.findOne({ user_id }).exec();
+                if (!user) {
+                    return null;
+                }
+                // 유저의 게시물 수와 좋아요 수 계산
+                const posts = yield postModel_1.default.find({ user_id }).exec();
+                const totalPosts = posts.length;
+                const totalLikes = posts.reduce((sum, post) => sum + (post.like_count || 0), 0);
+                // 활동 점수 계산
+                const activityScore = totalPosts * 10 + totalLikes;
+                // 기본 랭크 결정
+                const baseRank = this.determineRank(activityScore);
+                // 세부 랭크 결정 (Gold4, Silver2 등)
+                const detailedRank = this.getDetailedRank(baseRank, activityScore);
+                // 진행률 계산
+                const progress = this.calculateProgress(activityScore, detailedRank);
+                return {
+                    user_id,
+                    nickname: user.nickname,
+                    rank: detailedRank,
+                    rate: activityScore,
+                    log: totalPosts,
+                    progress: progress,
+                };
+            }
+            catch (error) {
+                console.error("유저 랭킹 조회 에러", error);
+                return null;
+            }
+        });
+    }
+    // 랭크 결정 함수
+    determineRank(score) {
+        if (score >= 1000)
+            return "Diamond";
+        if (score >= 800)
+            return "Platinum";
+        if (score >= 120)
+            return "Gold";
+        if (score >= 50)
+            return "Silver";
+        if (score >= 20)
+            return "Bronze";
+        return "Iron";
+    }
+    // 세부 랭크 결정 (예: Gold4, Gold3 등)
+    getDetailedRank(baseRank, score) {
+        const rankLevels = {
+            Diamond: [1000, 1200, 1400, 1600],
+            Platinum: [800, 850, 900, 950],
+            Gold: [120, 180, 250, 450],
+            Silver: [50, 65, 80, 95],
+            Bronze: [20, 30, 35, 45],
+            Iron: [0, 5, 10, 15],
+        };
+        const levels = rankLevels[baseRank];
+        // 랭크 내 티어 결정 (4가 가장 낮고, 1이 가장 높음)
+        for (let i = 0; i < levels.length; i++) {
+            if (score < levels[i]) {
+                return `${baseRank}${4 - i}`;
+            }
+        }
+        return `${baseRank}1`;
+    }
+    // 진행률 계산 (현재 랭크에서 다음 랭크까지의 진행 정도)
+    calculateProgress(score, currentRank) {
+        const baseRank = currentRank.replace(/[0-9]/g, "");
+        const tier = parseInt(currentRank.replace(/[^0-9]/g, "") || "4");
+        const rankThresholds = {
+            Diamond: [1000, 1200, 1400, 1600],
+            Platinum: [800, 850, 900, 950],
+            Gold: [120, 180, 250, 450],
+            Silver: [50, 65, 80, 95],
+            Bronze: [20, 30, 35, 45],
+            Iron: [0, 5, 10, 15],
+        };
+        const thresholds = rankThresholds[baseRank];
+        const currentTierIndex = 4 - tier;
+        const currentTierMin = thresholds[currentTierIndex];
+        const nextTierMin = thresholds[currentTierIndex + 1];
+        // 진행률 계산 (소수점 한 자리까지)
+        const progress = ((score - currentTierMin) / (nextTierMin - currentTierMin)) * 100;
+        return Math.min(Math.round(progress * 10) / 10, 99.9); // 최대 99.9%로 제한
+    }
+}
+exports.default = new RankingService();

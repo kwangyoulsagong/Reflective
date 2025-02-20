@@ -10,7 +10,7 @@ interface UserRankProps {
   };
 }
 
-const RankCard = ({ userRank }: UserRankProps) => {
+const RankCard = () => {
   return (
     <div className="w-[300px] bg-gradient-to-r from-yellow-400 to-yellow-600 p-4 rounded-lg text-white shadow-lg">
       <div className="flex justify-between items-center">

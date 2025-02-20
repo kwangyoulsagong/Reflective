@@ -9,13 +9,6 @@ import PostCard from "../features/MyPage/ui/PostCard";
 import Header from "../shared/Header/Header";
 import useGetPostMyPage from "../features/MyPage/libs/hooks/useGetPostMyPage";
 import { usePost_idStore } from "../app/provider/post_idProvider";
-interface UserRankType {
-  nickname: string;
-  rank: string;
-  rate: number;
-  log: number;
-  progress: number;
-}
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -34,13 +27,6 @@ const MyPage = () => {
     navigate(`/${nickname}/${hyphenatedTitle}`);
   };
 
-  const userRank: UserRankType = {
-    nickname: "hardy",
-    rank: "Gold4",
-    rate: 971,
-    log: 195,
-    progress: 97.1,
-  };
   if (isLoading) {
     return <div className="w-full max-w-6xl mx-auto px-4 py-8">Loading...</div>;
   }
@@ -76,7 +62,7 @@ const MyPage = () => {
       <section className="mt-10 flex flex-col items-center md:flex-row md:items-center gap-8">
         <div>
           <h2 className="text-xl font-semibold text-black mb-4">등급</h2>
-          <RankCard userRank={userRank} />
+          <RankCard />
         </div>
         <div>
           <h2 className="text-xl font-semibold mb-4">소개글</h2>
