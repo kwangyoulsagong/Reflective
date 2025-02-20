@@ -12,8 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("mongoose");
 const postModel_1 = __importDefault(require("../model/postModel"));
 const userModel_1 = __importDefault(require("../model/userModel"));
+const favoriteModel_1 = __importDefault(require("../model/favoriteModel"));
 class PostService {
     // 게시물 저장
     savePost(user_id, data) {
@@ -119,6 +121,63 @@ class PostService {
                 return deletePost;
             }
             return null;
+        });
+    }
+    // 내포스트 조회
+    myPost(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const myPosts = (yield postModel_1.default.find({ user_id: user_id })
+                    .sort({ created_date: -1 })
+                    .exec());
+                if (myPosts.length === 0) {
+                    return [];
+                }
+                const user = yield userModel_1.default.findOne({ user_id });
+                const nickname = user ? user.nickname : null;
+                const postsWithNickname = myPosts.map((post) => {
+                    return Object.assign(Object.assign({}, post.toObject()), { nickname: nickname });
+                });
+                return postsWithNickname;
+            }
+            catch (error) {
+                console.error("내 게시물 조회 에러", error);
+                return null;
+            }
+        });
+    }
+    // 즐겨찾기한 포스트 조회
+    getFavoritePosts(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // Favorite 모델 동적 임포트
+                const userObjectId = new mongoose_1.Types.ObjectId(user_id);
+                // 즐겨찾기한 유저 목록 가져오기
+                const favoriteUsers = yield favoriteModel_1.default.find({
+                    user_id: userObjectId,
+                    is_favorite: true,
+                }).select("favorite_user_id");
+                if (!favoriteUsers || favoriteUsers.length === 0) {
+                    return [];
+                }
+                const favoriteUserIds = favoriteUsers.map((fav) => fav.favorite_user_id);
+                // 즐겨찾기한 유저들의 포스트 조회
+                const favoritePosts = (yield postModel_1.default.find({
+                    user_id: { $in: favoriteUserIds },
+                })
+                    .sort({ created_date: -1 })
+                    .exec());
+                // 닉네임 추가
+                const postsWithDetails = yield Promise.all(favoritePosts.map((post) => __awaiter(this, void 0, void 0, function* () {
+                    const postUser = yield userModel_1.default.findOne({ user_id: post.user_id });
+                    return Object.assign(Object.assign({}, post.toObject()), { nickname: postUser ? postUser.nickname : null, is_favorite: true });
+                })));
+                return postsWithDetails;
+            }
+            catch (error) {
+                console.error("즐겨찾기 포스트 조회 에러", error);
+                return null;
+            }
         });
     }
 }

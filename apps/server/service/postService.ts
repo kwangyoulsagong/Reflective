@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import Post, { IPost } from "../model/postModel";
 import User from "../model/userModel";
+import Favorite from "../model/favoriteModel";
 
 class PostService {
   // 게시물 저장
@@ -119,6 +120,78 @@ class PostService {
       return deletePost;
     }
     return null;
+  }
+
+  // 내포스트 조회
+  public async myPost(user_id: string): Promise<IPost[] | null> {
+    try {
+      const myPosts = (await Post.find({ user_id: user_id })
+        .sort({ created_date: -1 })
+        .exec()) as IPost[];
+
+      if (myPosts.length === 0) {
+        return [];
+      }
+
+      const user = await User.findOne({ user_id });
+      const nickname = user ? user.nickname : null;
+
+      const postsWithNickname = myPosts.map((post) => {
+        return {
+          ...post.toObject(),
+          nickname: nickname,
+        };
+      });
+
+      return postsWithNickname;
+    } catch (error) {
+      console.error("내 게시물 조회 에러", error);
+      return null;
+    }
+  }
+
+  // 즐겨찾기한 포스트 조회
+  public async getFavoritePosts(user_id: string): Promise<IPost[] | null> {
+    try {
+      // Favorite 모델 동적 임포트
+      const userObjectId = new Types.ObjectId(user_id);
+
+      // 즐겨찾기한 유저 목록 가져오기
+      const favoriteUsers = await Favorite.find({
+        user_id: userObjectId,
+        is_favorite: true,
+      }).select("favorite_user_id");
+
+      if (!favoriteUsers || favoriteUsers.length === 0) {
+        return [];
+      }
+
+      const favoriteUserIds = favoriteUsers.map((fav) => fav.favorite_user_id);
+
+      // 즐겨찾기한 유저들의 포스트 조회
+      const favoritePosts = (await Post.find({
+        user_id: { $in: favoriteUserIds },
+      })
+        .sort({ created_date: -1 })
+        .exec()) as IPost[];
+
+      // 닉네임 추가
+      const postsWithDetails = await Promise.all(
+        favoritePosts.map(async (post) => {
+          const postUser = await User.findOne({ user_id: post.user_id });
+          return {
+            ...post.toObject(),
+            nickname: postUser ? postUser.nickname : null,
+            is_favorite: true,
+          };
+        })
+      );
+
+      return postsWithDetails;
+    } catch (error) {
+      console.error("즐겨찾기 포스트 조회 에러", error);
+      return null;
+    }
   }
 }
 

@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Layers, FileText, Bookmark, Settings } from "lucide-react";
 
 import me from "../assets/me.jpeg";
-import TabButton from "../components/mypage/TabButton";
-import RankCard from "../components/mypage/RankCard";
-import IntroductionCard from "../components/mypage/IntroductionCard";
-import CategoryCard from "../components/mypage/CategoryCard";
-import PostCard from "../components/mypage/PostCard";
+import TabButton from "../features/MyPage/ui/TabButton";
+import RankCard from "../features/MyPage/ui/RankCard";
+import IntroductionCard from "../features/MyPage/ui/IntroductionCard";
+import CategoryCard from "../features/MyPage/ui/CategoryCard";
+import PostCard from "../features/MyPage/ui/PostCard";
 import Header from "../shared/Header/Header";
 
 interface UserRankType {
@@ -26,7 +26,6 @@ const MyPage = () => {
     "안녕하세요! 여기에 자기소개를 작성해주세요."
   );
   const [isEditingIntro, setIsEditingIntro] = useState<boolean>(false);
-
   const dummyPosts = [
     {
       post_id: "1",

@@ -4,4 +4,5 @@ export const queryKeys = {
   FetchComment: ["FetchComment"] as const,
   PostFavorite: ["PostFavorite"] as const,
   FavoriteStory: ["FavoriteStory"] as const,
+  MyPost: ["MyPost"] as const,
 } as const;

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import postController from "../controller/postController";
 import { verifyTokenMiddleware } from "../authorization/jwt";
-const router:Router=Router()
+const router: Router = Router();
 /**
  * @swagger
  * /api/v1/post:
@@ -20,7 +20,7 @@ const router:Router=Router()
  *              $ref: '#/components/schemas/SavePost'
  *     responses:
  *       200:
- *         description: 게시물 작성 성공 
+ *         description: 게시물 작성 성공
  *       403:
  *         description: 토큰이 없음
  *       404:
@@ -29,7 +29,7 @@ const router:Router=Router()
  *         description: 인증 권한이 없음
  */
 
-router.post("/",verifyTokenMiddleware,postController.savePost)
+router.post("/", verifyTokenMiddleware, postController.savePost);
 /**
  * @swagger
  * /api/v1/post:
@@ -53,7 +53,7 @@ router.post("/",verifyTokenMiddleware,postController.savePost)
  *         description: 인증 권한이 없음
  */
 
-router.get("/",postController.getRecentPost)
+router.get("/", postController.getRecentPost);
 /**
  * @swagger
  * /api/v1/post/{post_id}:
@@ -83,7 +83,7 @@ router.get("/",postController.getRecentPost)
  *       401:
  *         description: 인증 권한이 없음
  */
-router.get("/:post_id",postController.getPostDetail)
+router.get("/:post_id", postController.getPostDetail);
 
 /**
  * @swagger
@@ -155,8 +155,7 @@ router.get("/:post_id",postController.getPostDetail)
  *                   type: string
  */
 
-router.put("/:post_id",verifyTokenMiddleware,postController.updatePost)
-
+router.put("/:post_id", verifyTokenMiddleware, postController.updatePost);
 
 /**
  * @swagger
@@ -220,7 +219,9 @@ router.put("/:post_id",verifyTokenMiddleware,postController.updatePost)
  *                   type: string
  */
 
+router.delete("/:post_id", verifyTokenMiddleware, postController.deletePost);
 
-router.delete("/:post_id",verifyTokenMiddleware,postController.deletePost)
+router.get("/mypost", verifyTokenMiddleware, postController.myPost);
+router.get("/favorite", verifyTokenMiddleware, postController.myFavoritePost);
 
-export default router
+export default router;

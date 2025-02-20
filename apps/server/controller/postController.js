@@ -119,5 +119,54 @@ class PostController {
             }
         });
     }
+    myPost(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (!req.user) {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                    return;
+                }
+                const userId = req.user.user_id;
+                const myPost = yield postService_1.default.myPost(userId);
+                if (myPost) {
+                    res.status(200).json(myPost);
+                }
+                else {
+                    res.status(404).json({ message: "게시물 없음" });
+                }
+            }
+            catch (error) {
+                res
+                    .status(500)
+                    .json({ message: "내 게시물 조회 에러", error: error.message });
+            }
+        });
+    }
+    myFavoritePost(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (!req.user) {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                    return;
+                }
+                const userId = req.user.user_id;
+                const myPost = yield postService_1.default.getFavoritePosts(userId);
+                if (myPost) {
+                    res.status(200).json(myPost);
+                }
+                else {
+                    res.status(404).json({ message: "게시물 없음" });
+                }
+            }
+            catch (error) {
+                res
+                    .status(500)
+                    .json({
+                    message: "내 즐겨찾기 한 게시물 조회 에러",
+                    error: error.message,
+                });
+            }
+        });
+    }
 }
 exports.default = new PostController();

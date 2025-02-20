@@ -219,4 +219,6 @@ router.put("/:post_id", jwt_1.verifyTokenMiddleware, postController_1.default.up
  *                   type: string
  */
 router.delete("/:post_id", jwt_1.verifyTokenMiddleware, postController_1.default.deletePost);
+router.get("/mypost", jwt_1.verifyTokenMiddleware, postController_1.default.myPost);
+router.get("/favorite", jwt_1.verifyTokenMiddleware, postController_1.default.myFavoritePost);
 exports.default = router;
