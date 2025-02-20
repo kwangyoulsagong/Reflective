@@ -7,6 +7,7 @@ import usePostDetailQuery from "../features/Post/libs/hooks/post/usePostDetailQu
 import Header from "../shared/Header/Header";
 const PostPage = () => {
   const { post_id } = usePost_idStore();
+  console.log(post_id);
   const { data, isLoading, error } = usePostDetailQuery(post_id);
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;

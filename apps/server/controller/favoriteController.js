@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const favoriteService_1 = __importDefault(require("../service/favoriteService"));
+const notificationService_1 = __importDefault(require("../service/notificationService"));
 class FavoriteController {
     // 즐겨찾기 추가 메서드
     saveFavorite(req, res) {
@@ -26,6 +27,11 @@ class FavoriteController {
                 const userId = req.user.user_id;
                 const result = yield favoriteService_1.default.addFavorite(userId, favorite_id);
                 if (result) {
+                    yield notificationService_1.default.sendNotification({
+                        type: "FOLLOW",
+                        sender_id: userId,
+                        receiver_id: favorite_id,
+                    });
                     res.status(200).json({ message: "즐겨찾기 추가 성공" });
                     return;
                 }

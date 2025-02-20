@@ -8,6 +8,7 @@ exports.generateRefreshToken = generateRefreshToken;
 exports.verifyToken = verifyToken;
 exports.verifyRefreshToken = verifyRefreshToken;
 exports.verifyTokenMiddleware = verifyTokenMiddleware;
+exports.verifySSETokenMiddleware = verifySSETokenMiddleware;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -17,7 +18,7 @@ const secretKey = process.env.JWT_SECRET;
 const refreshSecretKey = process.env.JWT_REFRESH_SECRET;
 // 토큰 생성 함수
 function generateToken(payload) {
-    return jsonwebtoken_1.default.sign(payload, secretKey, { expiresIn: "1800s" });
+    return jsonwebtoken_1.default.sign(payload, secretKey, { expiresIn: "3d" });
 }
 // 리프레쉬 토큰 생성 함수
 function generateRefreshToken(payload) {
@@ -54,6 +55,42 @@ function verifyTokenMiddleware(req, res, next) {
     console.log(decoded);
     if (!decoded) {
         res.status(401).json({ message: "인증 권한이 없음" });
+        return;
+    }
+    req.user = decoded;
+    next();
+}
+function verifySSETokenMiddleware(req, res, next) {
+    var _a;
+    // SSE는 query parameter로 토큰을 받음
+    const token = (_a = req.query.authorization) === null || _a === void 0 ? void 0 : _a.toString().split("Bearer ")[1];
+    if (!token) {
+        // SSE의 특성을 고려한 에러 응답
+        res.writeHead(401, {
+            "Content-Type": "text/event-stream",
+            Connection: "keep-alive",
+            "Cache-Control": "no-cache",
+        });
+        res.write(`data: ${JSON.stringify({
+            type: "ERROR",
+            message: "토큰이 없습니다.",
+        })}\n\n`);
+        res.end();
+        return;
+    }
+    const decoded = verifyToken(token);
+    if (!decoded) {
+        // SSE의 특성을 고려한 에러 응답
+        res.writeHead(401, {
+            "Content-Type": "text/event-stream",
+            Connection: "keep-alive",
+            "Cache-Control": "no-cache",
+        });
+        res.write(`data: ${JSON.stringify({
+            type: "ERROR",
+            message: "인증 권한이 없음",
+        })}\n\n`);
+        res.end();
         return;
     }
     req.user = decoded;

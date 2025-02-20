@@ -8,40 +8,43 @@ class LikeService {
     post_id: string,
     user_id: string,
     is_liked: boolean
-  ): Promise<ILike | null> {
+  ): Promise<{ like: ILike | null; author_id: string | null }> {
     try {
-      // 기존의 좋아요 기록을 찾음
+      // 게시글 작성자 정보 조회
+      const post = await Post.findOne({ post_id: post_id }).exec();
+      if (!post) return { like: null, author_id: null };
+
       const existingLike = await Like.findOne({
         post_id: post_id,
         user_id: user_id,
       }).exec();
-      console.log(existingLike);
+
+      let resultLike = null;
+
       if (is_liked) {
         if (!existingLike) {
           // 좋아요 추가
           const newLike = new Like({ post_id, user_id, is_liked: true });
           await newLike.save();
 
-          // 게시물의 좋아요 수 증가
           await Post.findOneAndUpdate(
             { post_id: post_id },
             { $inc: { like_count: 1 } }
           ).exec();
 
-          return newLike;
+          resultLike = newLike;
         } else if (!existingLike.is_liked) {
           // 이미 존재하는 좋아요를 활성화
           existingLike.is_liked = true;
           existingLike.updated_date = new Date();
           await existingLike.save();
 
-          // 게시물의 좋아요 수 증가
           await Post.findOneAndUpdate(
             { post_id: post_id },
             { $inc: { like_count: 1 } }
           ).exec();
 
-          return existingLike;
+          resultLike = existingLike;
         }
       } else {
         if (existingLike && existingLike.is_liked) {
@@ -50,20 +53,22 @@ class LikeService {
           existingLike.updated_date = new Date();
           await existingLike.save();
 
-          // 게시물의 좋아요 수 감소
           await Post.findOneAndUpdate(
             { post_id: post_id },
             { $inc: { like_count: -1 } }
           ).exec();
 
-          return existingLike;
+          resultLike = existingLike;
         }
       }
 
-      return null;
+      return {
+        like: resultLike,
+        author_id: post.user_id.toString(), // Post의 user_id가 작성자 ID입니다
+      };
     } catch (error) {
       console.error("좋아요 업데이트 에러", error);
-      return null;
+      return { like: null, author_id: null };
     }
   }
 

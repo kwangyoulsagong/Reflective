@@ -22,7 +22,7 @@ const secretKey = process.env.JWT_SECRET as string;
 const refreshSecretKey = process.env.JWT_REFRESH_SECRET as string;
 // 토큰 생성 함수
 function generateToken(payload: object): string {
-  return jwt.sign(payload, secretKey, { expiresIn: "1800s" });
+  return jwt.sign(payload, secretKey, { expiresIn: "3d" });
 }
 
 // 리프레쉬 토큰 생성 함수
@@ -71,10 +71,57 @@ function verifyTokenMiddleware(
   req.user = decoded;
   next();
 }
+function verifySSETokenMiddleware(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): void {
+  // SSE는 query parameter로 토큰을 받음
+  const token = req.query.authorization?.toString().split("Bearer ")[1];
+
+  if (!token) {
+    // SSE의 특성을 고려한 에러 응답
+    res.writeHead(401, {
+      "Content-Type": "text/event-stream",
+      Connection: "keep-alive",
+      "Cache-Control": "no-cache",
+    });
+    res.write(
+      `data: ${JSON.stringify({
+        type: "ERROR",
+        message: "토큰이 없습니다.",
+      })}\n\n`
+    );
+    res.end();
+    return;
+  }
+
+  const decoded = verifyToken(token);
+  if (!decoded) {
+    // SSE의 특성을 고려한 에러 응답
+    res.writeHead(401, {
+      "Content-Type": "text/event-stream",
+      Connection: "keep-alive",
+      "Cache-Control": "no-cache",
+    });
+    res.write(
+      `data: ${JSON.stringify({
+        type: "ERROR",
+        message: "인증 권한이 없음",
+      })}\n\n`
+    );
+    res.end();
+    return;
+  }
+
+  req.user = decoded;
+  next();
+}
 export {
   generateToken,
   generateRefreshToken,
   verifyToken,
   verifyRefreshToken,
   verifyTokenMiddleware,
+  verifySSETokenMiddleware, // SSE용 미들웨어 추가
 };

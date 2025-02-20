@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const commentService_1 = __importDefault(require("../service/commentService"));
+const notificationService_1 = __importDefault(require("../service/notificationService"));
 class CommentController {
     // 댓글 작성 컨트롤러
     saveComment(req, res) {
@@ -25,7 +26,13 @@ class CommentController {
                 }
                 const userId = req.user.user_id;
                 const result = yield commentService_1.default.saveComment(userId, data);
-                if (result) {
+                if ((result === null || result === void 0 ? void 0 : result.post_id) && result.author_id) {
+                    yield notificationService_1.default.sendNotification({
+                        type: "COMMENT",
+                        sender_id: userId,
+                        receiver_id: result.author_id,
+                        post_id: result.post_id,
+                    });
                     res.status(200).json({ message: "댓글 저장 성공" });
                     return;
                 }
