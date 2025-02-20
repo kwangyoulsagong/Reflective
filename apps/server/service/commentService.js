@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const commentModel_1 = __importDefault(require("../model/commentModel"));
+const postModel_1 = __importDefault(require("../model/postModel"));
 const profileModel_1 = __importDefault(require("../model/profileModel"));
 const userModel_1 = __importDefault(require("../model/userModel"));
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -27,7 +28,12 @@ class CommentService {
             const body = Object.assign(Object.assign({}, data), { user_id: user_id });
             try {
                 const comment = new commentModel_1.default(body);
-                return yield comment.save();
+                const response = yield comment.save();
+                const postUser = yield postModel_1.default.findOne({ post_id: response.post_id }).exec();
+                return {
+                    post_id: response.post_id.toString(),
+                    author_id: postUser === null || postUser === void 0 ? void 0 : postUser.user_id.toString(),
+                };
             }
             catch (error) {
                 console.error("댓글 저장 에러:", error);

@@ -1,9 +1,11 @@
 import logo from "../../assets/logo.svg";
-import notification from "../../assets/notification.svg";
+
 import me from "../../assets/me.jpeg";
 import toggle from "../../assets/toggle.svg";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@repo/ui/button";
+import NotificationBell from "../../features/Notification/ui/NotificationBell";
+
 const Header = () => {
   const nickname = localStorage.getItem("nickname");
   const navigate = useNavigate();
@@ -17,10 +19,7 @@ const Header = () => {
         className="w-32 sm:w-36 md:w-40"
       />
       <nav className="flex items-center gap-3 sm:gap-4 md:gap-5 flex-wrap sm:flex-nowrap">
-        <button
-          className="w-6 sm:w-7 h-6 sm:h-7 bg-no-repeat bg-center bg-contain"
-          style={{ backgroundImage: `url(${notification})` }}
-        />
+        <NotificationBell />
         <Button onClick={() => navigate("/write")} variant="primary">
           게시물 작성하기
         </Button>

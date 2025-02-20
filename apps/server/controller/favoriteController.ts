@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import favoriteService from "../service/favoriteService";
+import notificationService from "../service/notificationService";
 
 interface DecodedToken {
   user_id: string;
@@ -23,6 +24,11 @@ class FavoriteController {
       const userId = req.user.user_id;
       const result = await favoriteService.addFavorite(userId, favorite_id);
       if (result) {
+        await notificationService.sendNotification({
+          type: "FOLLOW",
+          sender_id: userId,
+          receiver_id: favorite_id,
+        });
         res.status(200).json({ message: "즐겨찾기 추가 성공" });
         return;
       }
@@ -43,6 +49,7 @@ class FavoriteController {
 
       const userId = req.user.user_id;
       const result = await favoriteService.removeFavorite(userId, favorite_id);
+
       if (result) {
         res.status(200).json({ message: "즐겨찾기 삭제 성공" });
         return;

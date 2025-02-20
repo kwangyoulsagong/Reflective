@@ -1,14 +1,18 @@
 import Comment, { IComment } from "../model/commentModel";
+import Post from "../model/postModel";
 import Profile from "../model/profileModel";
 import User from "../model/userModel";
 import mongoose from "mongoose";
-
+interface CommentResponse {
+  post_id: string | undefined;
+  author_id: string | undefined;
+}
 class CommentService {
   // 댓글 저장 서비스
   public async saveComment(
     user_id: string,
     data: IComment
-  ): Promise<IComment | null> {
+  ): Promise<CommentResponse | null> {
     if (!mongoose.Types.ObjectId.isValid(user_id)) {
       console.error("유효하지 않은 user_id입니다.");
       return null;
@@ -20,7 +24,13 @@ class CommentService {
     };
     try {
       const comment = new Comment(body);
-      return await comment.save();
+      const response = await comment.save();
+      const postUser = await Post.findOne({ post_id: response.post_id }).exec();
+
+      return {
+        post_id: response.post_id.toString(),
+        author_id: postUser?.user_id.toString(),
+      };
     } catch (error) {
       console.error("댓글 저장 에러:", error);
       return null;
