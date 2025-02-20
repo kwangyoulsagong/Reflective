@@ -52,27 +52,27 @@ class RankingService {
     }
     // 랭크 결정 함수
     determineRank(score) {
-        if (score >= 1000)
+        if (score >= 5000)
             return "Diamond";
-        if (score >= 800)
+        if (score >= 3000)
             return "Platinum";
-        if (score >= 120)
+        if (score >= 1500)
             return "Gold";
-        if (score >= 50)
+        if (score >= 800)
             return "Silver";
-        if (score >= 20)
+        if (score >= 300)
             return "Bronze";
         return "Iron";
     }
     // 세부 랭크 결정 (예: Gold4, Gold3 등)
     getDetailedRank(baseRank, score) {
         const rankLevels = {
-            Diamond: [1000, 1200, 1400, 1600],
-            Platinum: [800, 850, 900, 950],
-            Gold: [120, 180, 250, 450],
-            Silver: [50, 65, 80, 95],
-            Bronze: [20, 30, 35, 45],
-            Iron: [0, 5, 10, 15],
+            Diamond: [5000, 6000, 7000, 8000],
+            Platinum: [3000, 3500, 4000, 4500],
+            Gold: [1500, 1800, 2200, 2600],
+            Silver: [800, 1000, 1200, 1350],
+            Bronze: [300, 400, 500, 650],
+            Iron: [0, 80, 150, 220],
         };
         const levels = rankLevels[baseRank];
         // 랭크 내 티어 결정 (4가 가장 낮고, 1이 가장 높음)
@@ -88,18 +88,25 @@ class RankingService {
         const baseRank = currentRank.replace(/[0-9]/g, "");
         const tier = parseInt(currentRank.replace(/[^0-9]/g, "") || "4");
         const rankThresholds = {
-            Diamond: [1000, 1200, 1400, 1600],
-            Platinum: [800, 850, 900, 950],
-            Gold: [120, 180, 250, 450],
-            Silver: [50, 65, 80, 95],
-            Bronze: [20, 30, 35, 45],
-            Iron: [0, 5, 10, 15],
+            Diamond: [5000, 6000, 7000, 8000, 10000],
+            Platinum: [3000, 3500, 4000, 4500, 5000],
+            Gold: [1500, 1800, 2200, 2600, 3000],
+            Silver: [800, 1000, 1200, 1350, 1500],
+            Bronze: [300, 400, 500, 650, 800],
+            Iron: [0, 80, 150, 220, 300],
         };
         const thresholds = rankThresholds[baseRank];
         const currentTierIndex = 4 - tier;
+        // 현재 티어의 최소값과 최대값(다음 티어의 최소값) 가져오기
         const currentTierMin = thresholds[currentTierIndex];
         const nextTierMin = thresholds[currentTierIndex + 1];
-        // 진행률 계산 (소수점 한 자리까지)
+        // 현재 티어의 범위(시작점)을 정확히 계산하기 위해 이전 티어의 최대값 가져오기
+        const prevTierMax = currentTierIndex > 0 ? thresholds[currentTierIndex - 1] : 0;
+        // 점수가 현재 티어 최소값보다 작으면(비정상), 이전 티어와의 경계에서 계산
+        if (score < currentTierMin) {
+            return ((score - prevTierMax) / (currentTierMin - prevTierMax)) * 100;
+        }
+        // 정상적인 경우: 현재 티어 내에서 진행률 계산
         const progress = ((score - currentTierMin) / (nextTierMin - currentTierMin)) * 100;
         return Math.min(Math.round(progress * 10) / 10, 99.9); // 최대 99.9%로 제한
     }

@@ -16,6 +16,7 @@ export const END_POINTS = {
   DELETEFAVORITE: (favorite_id: string) => `/api/v1/favorite/${favorite_id}`,
   MYPOST: "/api/v1/post/mypost",
   MYFAVORITEPOST: "/api/v1/post/favorite",
+  RANKING: "/api/v1/rank",
 } as const;
 
 export const NETWORK = {

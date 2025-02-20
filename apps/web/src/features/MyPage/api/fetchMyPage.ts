@@ -4,7 +4,6 @@ import { axiosInstance } from "../../../shared/api/axiosinstance";
 const fetchMyPage = async () => {
   try {
     // Promise.all을 사용해 두 요청을 동시에 보냄
-    console.log("hello");
     const [myPostsResponse, favoritePostsResponse] = await Promise.all([
       axiosInstance.get(END_POINTS.MYPOST),
       axiosInstance.get(END_POINTS.MYFAVORITEPOST),
@@ -17,12 +16,6 @@ const fetchMyPage = async () => {
     };
   } catch (error) {
     console.error("마이페이지 데이터 로딩 오류:", error);
-    return {
-      myPosts: [],
-      favoritePosts: [],
-      success: false,
-      error: error,
-    };
   }
 };
 export default fetchMyPage;
