@@ -1,5 +1,6 @@
 import { queryKeys } from "../../../../shared/constants/queryKeys";
 import { useQuery } from "@tanstack/react-query";
+import fetchProfile from "../../api/fetchProfile";
 
 const useGetProfile = () => {
   return useQuery({
@@ -7,3 +8,4 @@ const useGetProfile = () => {
     queryFn: fetchProfile,
   });
 };
+export default useGetProfile;

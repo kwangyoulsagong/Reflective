@@ -4,7 +4,6 @@ import Post, { IPost } from "../model/postModel";
 import Profile, { IProfile } from "../model/profileModel";
 
 interface ProfileWithCounts {
-  profile: IProfile | null;
   followers: number;
   following: number;
   isFollowing?: boolean;
@@ -147,11 +146,6 @@ class FavoriteService {
     try {
       const userObjectId = new Types.ObjectId(user_id);
 
-      // 프로필 정보 조회
-      const profile = await Profile.findOne({
-        user_id: userObjectId,
-      });
-
       // 팔로워/팔로잉 수 조회
       const [followersCount, followingCount] = await Promise.all([
         Favorite.countDocuments({
@@ -165,7 +159,6 @@ class FavoriteService {
       ]);
 
       return {
-        profile,
         followers: followersCount,
         following: followingCount,
       };
@@ -183,11 +176,6 @@ class FavoriteService {
     try {
       const targetObjectId = new Types.ObjectId(target_user_id);
       const currentUserObjectId = new Types.ObjectId(current_user_id);
-
-      // 프로필 정보 조회
-      const profile = await Profile.findOne({
-        user_id: targetObjectId,
-      });
 
       // 팔로워/팔로잉 수와 팔로우 여부 동시 조회
       const [followersCount, followingCount, followStatus] = await Promise.all([
@@ -207,7 +195,6 @@ class FavoriteService {
       ]);
 
       return {
-        profile,
         followers: followersCount,
         following: followingCount,
         isFollowing: !!followStatus,

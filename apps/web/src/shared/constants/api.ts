@@ -18,6 +18,7 @@ export const END_POINTS = {
   MYFAVORITEPOST: "/api/v1/post/favorite",
   RANKING: "/api/v1/rank",
   MYPROFILE: "/api/v1/profile/mine",
+  MYFAVORITES: "/api/v1/favorite/mypage/profile",
 } as const;
 
 export const NETWORK = {

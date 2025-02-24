@@ -130,10 +130,6 @@ class FavoriteService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const userObjectId = new mongoose_1.Types.ObjectId(user_id);
-                // 프로필 정보 조회
-                const profile = yield profileModel_1.default.findOne({
-                    user_id: userObjectId,
-                });
                 // 팔로워/팔로잉 수 조회
                 const [followersCount, followingCount] = yield Promise.all([
                     favoriteModel_1.default.countDocuments({
@@ -146,7 +142,6 @@ class FavoriteService {
                     }),
                 ]);
                 return {
-                    profile,
                     followers: followersCount,
                     following: followingCount,
                 };
@@ -163,10 +158,6 @@ class FavoriteService {
             try {
                 const targetObjectId = new mongoose_1.Types.ObjectId(target_user_id);
                 const currentUserObjectId = new mongoose_1.Types.ObjectId(current_user_id);
-                // 프로필 정보 조회
-                const profile = yield profileModel_1.default.findOne({
-                    user_id: targetObjectId,
-                });
                 // 팔로워/팔로잉 수와 팔로우 여부 동시 조회
                 const [followersCount, followingCount, followStatus] = yield Promise.all([
                     favoriteModel_1.default.countDocuments({
@@ -184,7 +175,6 @@ class FavoriteService {
                     }),
                 ]);
                 return {
-                    profile,
                     followers: followersCount,
                     following: followingCount,
                     isFollowing: !!followStatus,
