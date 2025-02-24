@@ -125,54 +125,110 @@ class FavoriteService {
             }
         });
     }
-    getProfileWithCounts(profile_user_id, current_user_id) {
+    // 마이페이지 프로필 정보 조회
+    getMyProfile(user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const profileObjectId = new mongoose_1.Types.ObjectId(profile_user_id);
+                const userObjectId = new mongoose_1.Types.ObjectId(user_id);
                 // 프로필 정보 조회
                 const profile = yield profileModel_1.default.findOne({
-                    user_id: profileObjectId,
+                    user_id: userObjectId,
                 });
-                // 팔로워 수 조회
-                const followersCount = yield favoriteModel_1.default.countDocuments({
-                    favorite_user_id: profileObjectId,
-                    is_favorite: true,
-                });
-                // 팔로잉 수 조회
-                const followingCount = yield favoriteModel_1.default.countDocuments({
-                    user_id: profileObjectId,
-                    is_favorite: true,
-                });
-                // 현재 사용자의 팔로우 여부 확인
-                let isFollowing = undefined;
-                if (current_user_id) {
-                    const currentUserObjectId = new mongoose_1.Types.ObjectId(current_user_id);
-                    const followStatus = yield favoriteModel_1.default.findOne({
-                        user_id: currentUserObjectId,
-                        favorite_user_id: profileObjectId,
+                // 팔로워/팔로잉 수 조회
+                const [followersCount, followingCount] = yield Promise.all([
+                    favoriteModel_1.default.countDocuments({
+                        favorite_user_id: userObjectId,
                         is_favorite: true,
-                    });
-                    isFollowing = !!followStatus;
-                }
-                return Object.assign({ profile, followers: followersCount, following: followingCount }, (current_user_id && { isFollowing }));
+                    }),
+                    favoriteModel_1.default.countDocuments({
+                        user_id: userObjectId,
+                        is_favorite: true,
+                    }),
+                ]);
+                return {
+                    profile,
+                    followers: followersCount,
+                    following: followingCount,
+                };
             }
             catch (error) {
-                console.error("프로필 정보 조회 중 오류 발생:", error);
+                console.error("마이페이지 프로필 정보 조회 중 오류 발생:", error);
                 return null;
             }
         });
     }
-    // 팔로워 목록 조회 메서드
+    // 다른 사용자 프로필 정보 조회
+    getUserProfile(target_user_id, current_user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const targetObjectId = new mongoose_1.Types.ObjectId(target_user_id);
+                const currentUserObjectId = new mongoose_1.Types.ObjectId(current_user_id);
+                // 프로필 정보 조회
+                const profile = yield profileModel_1.default.findOne({
+                    user_id: targetObjectId,
+                });
+                // 팔로워/팔로잉 수와 팔로우 여부 동시 조회
+                const [followersCount, followingCount, followStatus] = yield Promise.all([
+                    favoriteModel_1.default.countDocuments({
+                        favorite_user_id: targetObjectId,
+                        is_favorite: true,
+                    }),
+                    favoriteModel_1.default.countDocuments({
+                        user_id: targetObjectId,
+                        is_favorite: true,
+                    }),
+                    favoriteModel_1.default.findOne({
+                        user_id: currentUserObjectId,
+                        favorite_user_id: targetObjectId,
+                        is_favorite: true,
+                    }),
+                ]);
+                return {
+                    profile,
+                    followers: followersCount,
+                    following: followingCount,
+                    isFollowing: !!followStatus,
+                };
+            }
+            catch (error) {
+                console.error("사용자 프로필 정보 조회 중 오류 발생:", error);
+                return null;
+            }
+        });
+    }
+    // 내 팔로워 목록 조회
+    getMyFollowers(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.getFollowers(user_id);
+        });
+    }
+    // 내 팔로잉 목록 조회
+    getMyFollowing(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.getFollowing(user_id);
+        });
+    }
+    // 다른 사용자의 팔로워 목록 조회
+    getUserFollowers(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.getFollowers(user_id);
+        });
+    }
+    // 다른 사용자의 팔로잉 목록 조회
+    getUserFollowing(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.getFollowing(user_id);
+        });
+    }
+    // 팔로워 목록 조회 (공통 로직)
     getFollowers(user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const userObjectId = new mongoose_1.Types.ObjectId(user_id);
-                // 타입 단언을 사용하여 timestamps 필드 접근
                 const followers = (yield favoriteModel_1.default.find({
                     favorite_user_id: userObjectId,
                     is_favorite: true,
                 }).lean());
-                // 각 팔로워의 프로필 이미지 조회
                 const followerInfos = yield Promise.all(followers.map((follower) => __awaiter(this, void 0, void 0, function* () {
                     const profile = yield profileModel_1.default.findOne({
                         user_id: follower.user_id,
@@ -181,7 +237,7 @@ class FavoriteService {
                         user_id: follower.user_id.toString(),
                         profile_image: (profile === null || profile === void 0 ? void 0 : profile.image_url) || null,
                         favorite_id: follower.favorite_id.toString(),
-                        created_at: follower.createdAt, // 이제 타입 에러가 발생하지 않습니다
+                        created_at: follower.createdAt,
                     };
                 })));
                 return followerInfos;
@@ -192,17 +248,15 @@ class FavoriteService {
             }
         });
     }
-    // 팔로잉 목록 조회 메서드
+    // 팔로잉 목록 조회 (공통 로직)
     getFollowing(user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const userObjectId = new mongoose_1.Types.ObjectId(user_id);
-                // 타입 단언을 사용하여 timestamps 필드 접근
                 const following = (yield favoriteModel_1.default.find({
                     user_id: userObjectId,
                     is_favorite: true,
                 }).lean());
-                // 각 팔로잉 유저의 프로필 이미지 조회
                 const followingInfos = yield Promise.all(following.map((follow) => __awaiter(this, void 0, void 0, function* () {
                     const profile = yield profileModel_1.default.findOne({
                         user_id: follow.favorite_user_id,

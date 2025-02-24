@@ -140,66 +140,118 @@ class FavoriteService {
     }
   }
 
-  public async getProfileWithCounts(
-    profile_user_id: string,
-    current_user_id?: string
+  // 마이페이지 프로필 정보 조회
+  public async getMyProfile(
+    user_id: string
   ): Promise<ProfileWithCounts | null> {
     try {
-      const profileObjectId = new Types.ObjectId(profile_user_id);
+      const userObjectId = new Types.ObjectId(user_id);
 
       // 프로필 정보 조회
       const profile = await Profile.findOne({
-        user_id: profileObjectId,
+        user_id: userObjectId,
       });
 
-      // 팔로워 수 조회
-      const followersCount = await Favorite.countDocuments({
-        favorite_user_id: profileObjectId,
-        is_favorite: true,
-      });
-
-      // 팔로잉 수 조회
-      const followingCount = await Favorite.countDocuments({
-        user_id: profileObjectId,
-        is_favorite: true,
-      });
-
-      // 현재 사용자의 팔로우 여부 확인
-      let isFollowing = undefined;
-      if (current_user_id) {
-        const currentUserObjectId = new Types.ObjectId(current_user_id);
-        const followStatus = await Favorite.findOne({
-          user_id: currentUserObjectId,
-          favorite_user_id: profileObjectId,
+      // 팔로워/팔로잉 수 조회
+      const [followersCount, followingCount] = await Promise.all([
+        Favorite.countDocuments({
+          favorite_user_id: userObjectId,
           is_favorite: true,
-        });
-        isFollowing = !!followStatus;
-      }
+        }),
+        Favorite.countDocuments({
+          user_id: userObjectId,
+          is_favorite: true,
+        }),
+      ]);
 
       return {
         profile,
         followers: followersCount,
         following: followingCount,
-        ...(current_user_id && { isFollowing }),
       };
     } catch (error) {
-      console.error("프로필 정보 조회 중 오류 발생:", error);
+      console.error("마이페이지 프로필 정보 조회 중 오류 발생:", error);
       return null;
     }
   }
 
-  // 팔로워 목록 조회 메서드
-  public async getFollowers(user_id: string): Promise<FollowerInfo[] | null> {
+  // 다른 사용자 프로필 정보 조회
+  public async getUserProfile(
+    target_user_id: string,
+    current_user_id: string
+  ): Promise<ProfileWithCounts | null> {
+    try {
+      const targetObjectId = new Types.ObjectId(target_user_id);
+      const currentUserObjectId = new Types.ObjectId(current_user_id);
+
+      // 프로필 정보 조회
+      const profile = await Profile.findOne({
+        user_id: targetObjectId,
+      });
+
+      // 팔로워/팔로잉 수와 팔로우 여부 동시 조회
+      const [followersCount, followingCount, followStatus] = await Promise.all([
+        Favorite.countDocuments({
+          favorite_user_id: targetObjectId,
+          is_favorite: true,
+        }),
+        Favorite.countDocuments({
+          user_id: targetObjectId,
+          is_favorite: true,
+        }),
+        Favorite.findOne({
+          user_id: currentUserObjectId,
+          favorite_user_id: targetObjectId,
+          is_favorite: true,
+        }),
+      ]);
+
+      return {
+        profile,
+        followers: followersCount,
+        following: followingCount,
+        isFollowing: !!followStatus,
+      };
+    } catch (error) {
+      console.error("사용자 프로필 정보 조회 중 오류 발생:", error);
+      return null;
+    }
+  }
+
+  // 내 팔로워 목록 조회
+  public async getMyFollowers(user_id: string): Promise<FollowerInfo[] | null> {
+    return this.getFollowers(user_id);
+  }
+
+  // 내 팔로잉 목록 조회
+  public async getMyFollowing(user_id: string): Promise<FollowerInfo[] | null> {
+    return this.getFollowing(user_id);
+  }
+
+  // 다른 사용자의 팔로워 목록 조회
+  public async getUserFollowers(
+    user_id: string
+  ): Promise<FollowerInfo[] | null> {
+    return this.getFollowers(user_id);
+  }
+
+  // 다른 사용자의 팔로잉 목록 조회
+  public async getUserFollowing(
+    user_id: string
+  ): Promise<FollowerInfo[] | null> {
+    return this.getFollowing(user_id);
+  }
+
+  // 팔로워 목록 조회 (공통 로직)
+  private async getFollowers(user_id: string): Promise<FollowerInfo[] | null> {
     try {
       const userObjectId = new Types.ObjectId(user_id);
 
-      // 타입 단언을 사용하여 timestamps 필드 접근
       const followers = (await Favorite.find({
         favorite_user_id: userObjectId,
         is_favorite: true,
       }).lean()) as FavoriteDocument[];
 
-      // 각 팔로워의 프로필 이미지 조회
       const followerInfos = await Promise.all(
         followers.map(async (follower) => {
           const profile = await Profile.findOne({
@@ -210,7 +262,7 @@ class FavoriteService {
             user_id: follower.user_id.toString(),
             profile_image: profile?.image_url || null,
             favorite_id: follower.favorite_id.toString(),
-            created_at: follower.createdAt, // 이제 타입 에러가 발생하지 않습니다
+            created_at: follower.createdAt,
           };
         })
       );
@@ -222,18 +274,16 @@ class FavoriteService {
     }
   }
 
-  // 팔로잉 목록 조회 메서드
-  public async getFollowing(user_id: string): Promise<FollowerInfo[] | null> {
+  // 팔로잉 목록 조회 (공통 로직)
+  private async getFollowing(user_id: string): Promise<FollowerInfo[] | null> {
     try {
       const userObjectId = new Types.ObjectId(user_id);
 
-      // 타입 단언을 사용하여 timestamps 필드 접근
       const following = (await Favorite.find({
         user_id: userObjectId,
         is_favorite: true,
       }).lean()) as FavoriteDocument[];
 
-      // 각 팔로잉 유저의 프로필 이미지 조회
       const followingInfos = await Promise.all(
         following.map(async (follow) => {
           const profile = await Profile.findOne({

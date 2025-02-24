@@ -103,5 +103,111 @@ class FavoriteController {
             }
         });
     }
+    getMyProfileInfo(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (!req.user) {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                    return;
+                }
+                const userId = req.user.user_id;
+                const profileInfo = yield favoriteService_1.default.getMyProfile(userId);
+                if (!profileInfo) {
+                    res.status(404).json({ message: "프로필 정보를 찾을 수 없습니다." });
+                    return;
+                }
+                res.status(200).json(profileInfo);
+            }
+            catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });
+    }
+    getMyFollowers(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (!req.user) {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                    return;
+                }
+                const userId = req.user.user_id;
+                const followers = yield favoriteService_1.default.getMyFollowers(userId);
+                res.status(200).json(followers || []);
+            }
+            catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });
+    }
+    getMyFollowing(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (!req.user) {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                    return;
+                }
+                const userId = req.user.user_id;
+                const following = yield favoriteService_1.default.getMyFollowing(userId);
+                res.status(200).json(following || []);
+            }
+            catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });
+    }
+    // 다른 사용자 프로필 조회 메서드
+    getUserProfileInfo(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { user_id } = req.params;
+                if (!req.user) {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                    return;
+                }
+                const currentUserId = req.user.user_id;
+                const profileInfo = yield favoriteService_1.default.getUserProfile(user_id, currentUserId);
+                if (!profileInfo) {
+                    res.status(404).json({ message: "프로필 정보를 찾을 수 없습니다." });
+                    return;
+                }
+                res.status(200).json(profileInfo);
+            }
+            catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });
+    }
+    getUserFollowers(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { user_id } = req.params;
+                if (!req.user) {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                    return;
+                }
+                const followers = yield favoriteService_1.default.getUserFollowers(user_id);
+                res.status(200).json(followers || []);
+            }
+            catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });
+    }
+    getUserFollowing(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { user_id } = req.params;
+                if (!req.user) {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                    return;
+                }
+                const following = yield favoriteService_1.default.getUserFollowing(user_id);
+                res.status(200).json(following || []);
+            }
+            catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });
+    }
 }
 exports.default = new FavoriteController();
