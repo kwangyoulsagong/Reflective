@@ -1,6 +1,26 @@
 import { Types } from "mongoose"; // Import Types from mongoose
 import Favorite, { IFavorite } from "../model/favoriteModel"; // Favorite 모델 import
 import Post, { IPost } from "../model/postModel";
+import Profile, { IProfile } from "../model/profileModel";
+
+interface ProfileWithCounts {
+  profile: IProfile | null;
+  followers: number;
+  following: number;
+  isFollowing?: boolean;
+}
+
+interface FollowerInfo {
+  user_id: string;
+  profile_image: string | null;
+  favorite_id: string;
+  created_at: Date;
+}
+
+interface FavoriteDocument extends IFavorite {
+  createdAt: Date;
+  updatedAt: Date;
+}
 class FavoriteService {
   // 즐겨찾기 추가 메서드
   public async addFavorite(
@@ -117,6 +137,122 @@ class FavoriteService {
     } catch (error) {
       console.error("즐겨찾기한 유저의 포스트 조회 중 오류 발생:", error);
       return null; // 오류 발생 시 null 반환
+    }
+  }
+
+  public async getProfileWithCounts(
+    profile_user_id: string,
+    current_user_id?: string
+  ): Promise<ProfileWithCounts | null> {
+    try {
+      const profileObjectId = new Types.ObjectId(profile_user_id);
+
+      // 프로필 정보 조회
+      const profile = await Profile.findOne({
+        user_id: profileObjectId,
+      });
+
+      // 팔로워 수 조회
+      const followersCount = await Favorite.countDocuments({
+        favorite_user_id: profileObjectId,
+        is_favorite: true,
+      });
+
+      // 팔로잉 수 조회
+      const followingCount = await Favorite.countDocuments({
+        user_id: profileObjectId,
+        is_favorite: true,
+      });
+
+      // 현재 사용자의 팔로우 여부 확인
+      let isFollowing = undefined;
+      if (current_user_id) {
+        const currentUserObjectId = new Types.ObjectId(current_user_id);
+        const followStatus = await Favorite.findOne({
+          user_id: currentUserObjectId,
+          favorite_user_id: profileObjectId,
+          is_favorite: true,
+        });
+        isFollowing = !!followStatus;
+      }
+
+      return {
+        profile,
+        followers: followersCount,
+        following: followingCount,
+        ...(current_user_id && { isFollowing }),
+      };
+    } catch (error) {
+      console.error("프로필 정보 조회 중 오류 발생:", error);
+      return null;
+    }
+  }
+
+  // 팔로워 목록 조회 메서드
+  public async getFollowers(user_id: string): Promise<FollowerInfo[] | null> {
+    try {
+      const userObjectId = new Types.ObjectId(user_id);
+
+      // 타입 단언을 사용하여 timestamps 필드 접근
+      const followers = (await Favorite.find({
+        favorite_user_id: userObjectId,
+        is_favorite: true,
+      }).lean()) as FavoriteDocument[];
+
+      // 각 팔로워의 프로필 이미지 조회
+      const followerInfos = await Promise.all(
+        followers.map(async (follower) => {
+          const profile = await Profile.findOne({
+            user_id: follower.user_id,
+          }).lean();
+
+          return {
+            user_id: follower.user_id.toString(),
+            profile_image: profile?.image_url || null,
+            favorite_id: follower.favorite_id.toString(),
+            created_at: follower.createdAt, // 이제 타입 에러가 발생하지 않습니다
+          };
+        })
+      );
+
+      return followerInfos;
+    } catch (error) {
+      console.error("팔로워 목록 조회 중 오류 발생:", error);
+      return null;
+    }
+  }
+
+  // 팔로잉 목록 조회 메서드
+  public async getFollowing(user_id: string): Promise<FollowerInfo[] | null> {
+    try {
+      const userObjectId = new Types.ObjectId(user_id);
+
+      // 타입 단언을 사용하여 timestamps 필드 접근
+      const following = (await Favorite.find({
+        user_id: userObjectId,
+        is_favorite: true,
+      }).lean()) as FavoriteDocument[];
+
+      // 각 팔로잉 유저의 프로필 이미지 조회
+      const followingInfos = await Promise.all(
+        following.map(async (follow) => {
+          const profile = await Profile.findOne({
+            user_id: follow.favorite_user_id,
+          }).lean();
+
+          return {
+            user_id: follow.favorite_user_id.toString(),
+            profile_image: profile?.image_url || null,
+            favorite_id: follow.favorite_id.toString(),
+            created_at: follow.createdAt,
+          };
+        })
+      );
+
+      return followingInfos;
+    } catch (error) {
+      console.error("팔로잉 목록 조회 중 오류 발생:", error);
+      return null;
     }
   }
 }

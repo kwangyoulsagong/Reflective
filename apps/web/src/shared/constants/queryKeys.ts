@@ -6,4 +6,5 @@ export const queryKeys = {
   FavoriteStory: ["FavoriteStory"] as const,
   MyPost: ["MyPost"] as const,
   Ranking: ["Ranking"] as const,
+  MyProfile: ["MyProfile"] as const,
 } as const;

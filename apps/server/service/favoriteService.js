@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose"); // Import Types from mongoose
 const favoriteModel_1 = __importDefault(require("../model/favoriteModel")); // Favorite 모델 import
 const postModel_1 = __importDefault(require("../model/postModel"));
+const profileModel_1 = __importDefault(require("../model/profileModel"));
 class FavoriteService {
     // 즐겨찾기 추가 메서드
     addFavorite(user_id, favorite_id) {
@@ -121,6 +122,103 @@ class FavoriteService {
             catch (error) {
                 console.error("즐겨찾기한 유저의 포스트 조회 중 오류 발생:", error);
                 return null; // 오류 발생 시 null 반환
+            }
+        });
+    }
+    getProfileWithCounts(profile_user_id, current_user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const profileObjectId = new mongoose_1.Types.ObjectId(profile_user_id);
+                // 프로필 정보 조회
+                const profile = yield profileModel_1.default.findOne({
+                    user_id: profileObjectId,
+                });
+                // 팔로워 수 조회
+                const followersCount = yield favoriteModel_1.default.countDocuments({
+                    favorite_user_id: profileObjectId,
+                    is_favorite: true,
+                });
+                // 팔로잉 수 조회
+                const followingCount = yield favoriteModel_1.default.countDocuments({
+                    user_id: profileObjectId,
+                    is_favorite: true,
+                });
+                // 현재 사용자의 팔로우 여부 확인
+                let isFollowing = undefined;
+                if (current_user_id) {
+                    const currentUserObjectId = new mongoose_1.Types.ObjectId(current_user_id);
+                    const followStatus = yield favoriteModel_1.default.findOne({
+                        user_id: currentUserObjectId,
+                        favorite_user_id: profileObjectId,
+                        is_favorite: true,
+                    });
+                    isFollowing = !!followStatus;
+                }
+                return Object.assign({ profile, followers: followersCount, following: followingCount }, (current_user_id && { isFollowing }));
+            }
+            catch (error) {
+                console.error("프로필 정보 조회 중 오류 발생:", error);
+                return null;
+            }
+        });
+    }
+    // 팔로워 목록 조회 메서드
+    getFollowers(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userObjectId = new mongoose_1.Types.ObjectId(user_id);
+                // 타입 단언을 사용하여 timestamps 필드 접근
+                const followers = (yield favoriteModel_1.default.find({
+                    favorite_user_id: userObjectId,
+                    is_favorite: true,
+                }).lean());
+                // 각 팔로워의 프로필 이미지 조회
+                const followerInfos = yield Promise.all(followers.map((follower) => __awaiter(this, void 0, void 0, function* () {
+                    const profile = yield profileModel_1.default.findOne({
+                        user_id: follower.user_id,
+                    }).lean();
+                    return {
+                        user_id: follower.user_id.toString(),
+                        profile_image: (profile === null || profile === void 0 ? void 0 : profile.image_url) || null,
+                        favorite_id: follower.favorite_id.toString(),
+                        created_at: follower.createdAt, // 이제 타입 에러가 발생하지 않습니다
+                    };
+                })));
+                return followerInfos;
+            }
+            catch (error) {
+                console.error("팔로워 목록 조회 중 오류 발생:", error);
+                return null;
+            }
+        });
+    }
+    // 팔로잉 목록 조회 메서드
+    getFollowing(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userObjectId = new mongoose_1.Types.ObjectId(user_id);
+                // 타입 단언을 사용하여 timestamps 필드 접근
+                const following = (yield favoriteModel_1.default.find({
+                    user_id: userObjectId,
+                    is_favorite: true,
+                }).lean());
+                // 각 팔로잉 유저의 프로필 이미지 조회
+                const followingInfos = yield Promise.all(following.map((follow) => __awaiter(this, void 0, void 0, function* () {
+                    const profile = yield profileModel_1.default.findOne({
+                        user_id: follow.favorite_user_id,
+                    }).lean();
+                    return {
+                        user_id: follow.favorite_user_id.toString(),
+                        profile_image: (profile === null || profile === void 0 ? void 0 : profile.image_url) || null,
+                        favorite_id: follow.favorite_id.toString(),
+                        created_at: follow.createdAt,
+                    };
+                })));
+                return followingInfos;
+            }
+            catch (error) {
+                console.error("팔로잉 목록 조회 중 오류 발생:", error);
+                return null;
             }
         });
     }

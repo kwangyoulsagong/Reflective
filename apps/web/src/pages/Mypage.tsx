@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileText, Bookmark, Settings } from "lucide-react";
-import me from "../assets/me.jpeg";
+import { FileText, Bookmark } from "lucide-react";
 import TabButton from "../features/MyPage/ui/TabButton";
 import RankCard from "../features/MyPage/ui/RankCard";
 import IntroductionCard from "../features/MyPage/ui/IntroductionCard";
@@ -9,6 +8,7 @@ import PostCard from "../features/MyPage/ui/PostCard";
 import Header from "../shared/Header/Header";
 import useGetPostMyPage from "../features/MyPage/libs/hooks/useGetPostMyPage";
 import { usePost_idStore } from "../app/provider/post_idProvider";
+import Profile from "../features/MyPage/ui/Profile";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -41,24 +41,7 @@ const MyPage = () => {
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8">
       <Header />
-      <header className="mt-10">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <img src={me} alt="Profile" className="w-20 h-20 rounded-full" />
-            <div>
-              <h1 className="text-2xl font-bold">hardy</h1>
-              <p className="text-gray-600">0 팔로워 · 0 팔로잉</p>
-            </div>
-          </div>
-          <button
-            onClick={() => navigate("/settings")}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 flex items-center"
-          >
-            <Settings size={20} className="mr-2" />
-            프로필 수정
-          </button>
-        </div>
-      </header>
+      <Profile />
       <section className="mt-10 flex flex-col items-center md:flex-row md:items-center gap-8">
         <div>
           <h2 className="text-xl font-semibold text-black mb-4">등급</h2>
