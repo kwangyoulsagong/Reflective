@@ -2,6 +2,7 @@ import { Types } from "mongoose"; // Import Types from mongoose
 import Favorite, { IFavorite } from "../model/favoriteModel"; // Favorite 모델 import
 import Post, { IPost } from "../model/postModel";
 import Profile, { IProfile } from "../model/profileModel";
+import User from "../model/userModel";
 
 interface ProfileWithCounts {
   followers: number;
@@ -13,6 +14,7 @@ interface FollowerInfo {
   user_id: string;
   profile_image: string | null;
   favorite_id: string;
+  nickname: string;
   created_at: Date;
 }
 
@@ -241,13 +243,20 @@ class FavoriteService {
 
       const followerInfos = await Promise.all(
         followers.map(async (follower) => {
-          const profile = await Profile.findOne({
-            user_id: follower.user_id,
-          }).lean();
+          // Profile과 User 정보를 함께 조회
+          const [profile, user] = await Promise.all([
+            Profile.findOne({
+              user_id: follower.user_id,
+            }).lean(),
+            User.findOne({
+              user_id: follower.user_id,
+            }).lean(),
+          ]);
 
           return {
             user_id: follower.user_id.toString(),
             profile_image: profile?.image_url || null,
+            nickname: user?.nickname || "사용자", // User 모델에서 nickname 가져오기
             favorite_id: follower.favorite_id.toString(),
             created_at: follower.createdAt,
           };
@@ -273,13 +282,20 @@ class FavoriteService {
 
       const followingInfos = await Promise.all(
         following.map(async (follow) => {
-          const profile = await Profile.findOne({
-            user_id: follow.favorite_user_id,
-          }).lean();
+          // Profile과 User 정보를 함께 조회
+          const [profile, user] = await Promise.all([
+            Profile.findOne({
+              user_id: follow.favorite_user_id,
+            }).lean(),
+            User.findOne({
+              user_id: follow.favorite_user_id,
+            }).lean(),
+          ]);
 
           return {
             user_id: follow.favorite_user_id.toString(),
             profile_image: profile?.image_url || null,
+            nickname: user?.nickname || "사용자", // User 모델에서 nickname 가져오기
             favorite_id: follow.favorite_id.toString(),
             created_at: follow.createdAt,
           };

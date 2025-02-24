@@ -15,7 +15,7 @@ router.get(
   favoriteController.getMyFollowers
 );
 router.get(
-  "/mypage/following",
+  "/mypage/followings",
   verifyTokenMiddleware,
   favoriteController.getMyFollowing
 );

@@ -19,6 +19,8 @@ export const END_POINTS = {
   RANKING: "/api/v1/rank",
   MYPROFILE: "/api/v1/profile/mine",
   MYFAVORITES: "/api/v1/favorite/mypage/profile",
+  MYFOLLOWERS: "/api/v1/favorite/mypage/followers",
+  MYFOLLOWINGS: "/api/v1/favorite/mypage/followings",
 } as const;
 
 export const NETWORK = {

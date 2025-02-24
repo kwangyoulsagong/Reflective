@@ -16,6 +16,7 @@ const mongoose_1 = require("mongoose"); // Import Types from mongoose
 const favoriteModel_1 = __importDefault(require("../model/favoriteModel")); // Favorite 모델 import
 const postModel_1 = __importDefault(require("../model/postModel"));
 const profileModel_1 = __importDefault(require("../model/profileModel"));
+const userModel_1 = __importDefault(require("../model/userModel"));
 class FavoriteService {
     // 즐겨찾기 추가 메서드
     addFavorite(user_id, favorite_id) {
@@ -220,12 +221,19 @@ class FavoriteService {
                     is_favorite: true,
                 }).lean());
                 const followerInfos = yield Promise.all(followers.map((follower) => __awaiter(this, void 0, void 0, function* () {
-                    const profile = yield profileModel_1.default.findOne({
-                        user_id: follower.user_id,
-                    }).lean();
+                    // Profile과 User 정보를 함께 조회
+                    const [profile, user] = yield Promise.all([
+                        profileModel_1.default.findOne({
+                            user_id: follower.user_id,
+                        }).lean(),
+                        userModel_1.default.findOne({
+                            user_id: follower.user_id,
+                        }).lean(),
+                    ]);
                     return {
                         user_id: follower.user_id.toString(),
                         profile_image: (profile === null || profile === void 0 ? void 0 : profile.image_url) || null,
+                        nickname: (user === null || user === void 0 ? void 0 : user.nickname) || "사용자", // User 모델에서 nickname 가져오기
                         favorite_id: follower.favorite_id.toString(),
                         created_at: follower.createdAt,
                     };
@@ -248,12 +256,19 @@ class FavoriteService {
                     is_favorite: true,
                 }).lean());
                 const followingInfos = yield Promise.all(following.map((follow) => __awaiter(this, void 0, void 0, function* () {
-                    const profile = yield profileModel_1.default.findOne({
-                        user_id: follow.favorite_user_id,
-                    }).lean();
+                    // Profile과 User 정보를 함께 조회
+                    const [profile, user] = yield Promise.all([
+                        profileModel_1.default.findOne({
+                            user_id: follow.favorite_user_id,
+                        }).lean(),
+                        userModel_1.default.findOne({
+                            user_id: follow.favorite_user_id,
+                        }).lean(),
+                    ]);
                     return {
                         user_id: follow.favorite_user_id.toString(),
                         profile_image: (profile === null || profile === void 0 ? void 0 : profile.image_url) || null,
+                        nickname: (user === null || user === void 0 ? void 0 : user.nickname) || "사용자", // User 모델에서 nickname 가져오기
                         favorite_id: follow.favorite_id.toString(),
                         created_at: follow.createdAt,
                     };
