@@ -9,4 +9,5 @@ export const queryKeys = {
   MyProfile: ["MyProfile"] as const,
   MyFollowers: ["MyFollowers"] as const,
   MyFollowings: ["MyFollowings"] as const,
+  MyStatusMessage: ["MyStatusMessage"] as const,
 } as const;

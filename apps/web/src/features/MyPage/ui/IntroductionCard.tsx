@@ -1,28 +1,21 @@
 import React, { useState } from "react";
 import { Edit } from "lucide-react";
-interface IntroductionCardProps {
-  introduction: string;
-  setIntroduction: (intro: string) => void;
-  isEditing: boolean;
-  setIsEditing: (isEditing: boolean) => void;
-}
 
-const IntroductionCard = ({
-  introduction,
-  setIntroduction,
-  isEditing,
-  setIsEditing,
-}: IntroductionCardProps) => {
+const IntroductionCard = () => {
+  const [introduction, setIntroduction] = useState<string>(
+    "안녕하세요! 여기에 자기소개를 작성해주세요."
+  );
+  const [isEditingIntro, setIsEditingIntro] = useState<boolean>(false);
   const [draft, setDraft] = useState<string>(introduction);
 
   const handleSave = () => {
     setIntroduction(draft);
-    setIsEditing(false);
+    setIsEditingIntro(false);
   };
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-lg">
-      {isEditing ? (
+      {isEditingIntro ? (
         <>
           <textarea
             value={draft}
@@ -31,7 +24,7 @@ const IntroductionCard = ({
           />
           <div className="mt-2 flex justify-end space-x-2">
             <button
-              onClick={() => setIsEditing(false)}
+              onClick={() => setIsEditingIntro(false)}
               className="px-3 py-1 bg-gray-200 rounded-md"
             >
               취소
@@ -48,7 +41,7 @@ const IntroductionCard = ({
         <>
           <p className="text-gray-700">{introduction}</p>
           <button
-            onClick={() => setIsEditing(true)}
+            onClick={() => setIsEditingIntro(true)}
             className="mt-2 flex items-center text-blue-500"
           >
             <Edit size={16} className="mr-1" />

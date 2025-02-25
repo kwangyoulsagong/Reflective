@@ -21,6 +21,7 @@ export const END_POINTS = {
   MYFAVORITES: "/api/v1/favorite/mypage/profile",
   MYFOLLOWERS: "/api/v1/favorite/mypage/followers",
   MYFOLLOWINGS: "/api/v1/favorite/mypage/followings",
+  MYSTATUSMESSAGE: "/api/v1/profile/status",
 } as const;
 
 export const NETWORK = {

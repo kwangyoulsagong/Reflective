@@ -14,10 +14,7 @@ const MyPage = () => {
   const navigate = useNavigate();
   const { setPost_id } = usePost_idStore();
   const [activeTab, setActiveTab] = useState<string>("posts");
-  const [introduction, setIntroduction] = useState<string>(
-    "안녕하세요! 여기에 자기소개를 작성해주세요."
-  );
-  const [isEditingIntro, setIsEditingIntro] = useState<boolean>(false);
+
   const { data, isLoading, isError } = useGetPostMyPage();
   const posts = data?.myPosts || [];
   const favoritesPosts = data?.favoritePosts || [];
@@ -49,12 +46,7 @@ const MyPage = () => {
         </div>
         <div>
           <h2 className="text-xl font-semibold mb-4">소개글</h2>
-          <IntroductionCard
-            introduction={introduction}
-            setIntroduction={setIntroduction}
-            isEditing={isEditingIntro}
-            setIsEditing={setIsEditingIntro}
-          />
+          <IntroductionCard />
         </div>
       </section>
       <nav className="flex space-x-4 mt-10">
