@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { UserMinus } from "lucide-react";
 import useGetFollowers from "../../libs/hooks/useGetFollowers";
 import useGetFollowings from "../../libs/hooks/useGetFollowings";
+import useDeleteFavoriteMutation from "../../libs/hooks/useDeleteFavoriteMutation";
 
 const FavoritesModal = ({ isOpen, onClose, initialTab, data }: any) => {
+  const { mutate: deleteFavoriteMutate } = useDeleteFavoriteMutation();
   const [activeTab, setActiveTab] = useState(initialTab);
   const { data: followersData, isLoading: followersLoading } =
     useGetFollowers();
@@ -11,6 +13,10 @@ const FavoritesModal = ({ isOpen, onClose, initialTab, data }: any) => {
     useGetFollowings();
 
   if (!isOpen) return null;
+
+  const handleUnfollow = async (user_id: string) => {
+    deleteFavoriteMutate(user_id);
+  };
 
   const renderLoadingState = () => (
     <div className="flex items-center justify-center h-full">
@@ -86,7 +92,7 @@ const FavoritesModal = ({ isOpen, onClose, initialTab, data }: any) => {
             </div>
             <button
               className="text-red-600 hover:text-red-700"
-              onClick={() => handleUnfollow(following.id)}
+              onClick={() => handleUnfollow(following.user_id)}
             >
               <UserMinus size={20} />
             </button>
@@ -94,11 +100,6 @@ const FavoritesModal = ({ isOpen, onClose, initialTab, data }: any) => {
         ))}
       </div>
     );
-  };
-
-  const handleUnfollow = (userId: string) => {
-    // Implement unfollow functionality
-    console.log("Unfollow user:", userId);
   };
 
   return (
