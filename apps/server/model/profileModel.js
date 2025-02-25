@@ -39,6 +39,7 @@ const profileSchema = new mongoose_1.Schema({
     profile_id: { type: mongoose_1.Schema.Types.ObjectId, required: true, auto: true },
     user_id: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "User" },
     image_url: { type: String, default: null },
+    status_message: { type: String, default: null },
     created_date: { type: Date, required: true, default: Date.now },
     updated_date: { type: Date, required: true, default: Date.now },
 });

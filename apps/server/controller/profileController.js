@@ -19,7 +19,7 @@ class ProfileController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 if (!req.user) {
-                    res.status(401).json({ message: '인증 권한 없음' });
+                    res.status(401).json({ message: "인증 권한 없음" });
                     return;
                 }
                 const userId = req.user.user_id;
@@ -30,7 +30,6 @@ class ProfileController {
                 else {
                     res.status(401).json({ message: "인증 권한 없음" });
                 }
-                ;
             }
             catch (error) {
                 res.status(401).json({ error: error.message });
@@ -43,7 +42,7 @@ class ProfileController {
             try {
                 const { image_url } = req.body;
                 if (!req.user) {
-                    res.status(401).json({ message: '인증 권한 없음' });
+                    res.status(401).json({ message: "인증 권한 없음" });
                     return;
                 }
                 const userId = req.user.user_id;
@@ -54,7 +53,6 @@ class ProfileController {
                 else {
                     res.status(401).json({ message: "인증 권한 없음" });
                 }
-                ;
             }
             catch (error) {
                 res.status(401).json({ error: error.message });
@@ -67,7 +65,7 @@ class ProfileController {
             try {
                 const data = req.body;
                 if (!req.user) {
-                    res.status(401).json({ message: '인증 권한 없음' });
+                    res.status(401).json({ message: "인증 권한 없음" });
                     return;
                 }
                 const userId = req.user.user_id;
@@ -78,7 +76,29 @@ class ProfileController {
                 else {
                     res.status(401).json({ message: "인증 권한 없음" });
                 }
-                ;
+            }
+            catch (error) {
+                res.status(401).json({ error: error.message });
+            }
+        });
+    }
+    // 상태 메시지 업데이트
+    UpdateStatusMessage(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { status_message } = req.body;
+                if (!req.user) {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                    return;
+                }
+                const userId = req.user.user_id;
+                const result = yield profileService_1.default.UpdateStatusMessage(userId, status_message);
+                if (result) {
+                    res.status(200).json({ message: "상태 메시지가 변경되었습니다." });
+                }
+                else {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                }
             }
             catch (error) {
                 res.status(401).json({ error: error.message });
@@ -86,4 +106,4 @@ class ProfileController {
         });
     }
 }
-exports.default = new ProfileController;
+exports.default = new ProfileController();

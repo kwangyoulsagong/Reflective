@@ -82,7 +82,7 @@ const FavoritesModal = ({ isOpen, onClose, initialTab, data }: any) => {
           >
             <div className="flex items-center space-x-3">
               <img
-                src={following.image_url || "/api/placeholder/40/40"}
+                src={following.image_url ?? "null"}
                 alt={following.nickname}
                 className="w-10 h-10 rounded-full object-cover"
               />

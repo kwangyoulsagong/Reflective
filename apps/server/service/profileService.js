@@ -22,11 +22,11 @@ class ProfileService {
             const profile = yield profileModel_1.default.findOne({ user_id: user_id });
             console.log(profile);
             if (!profile) {
-                throw new Error('프로필을 찾을 수 없습니다.');
+                throw new Error("프로필을 찾을 수 없습니다.");
             }
             const user = yield userModel_1.default.findOne({ user_id: user_id });
             if (!user) {
-                throw new Error('유저를 찾을 수 없습니다.');
+                throw new Error("유저를 찾을 수 없습니다.");
             }
             return {
                 nickname: user.nickname,
@@ -42,7 +42,7 @@ class ProfileService {
             // 회원 프로필 찾기
             const profile = yield profileModel_1.default.findOneAndUpdate({ user_id: user_id }, { image_url: img, updated_date: Date.now() }, { new: true });
             if (!profile) {
-                throw new Error('프로필을 찾을 수 없습니다.');
+                throw new Error("프로필을 찾을 수 없습니다.");
             }
             return yield profile;
         });
@@ -50,11 +50,36 @@ class ProfileService {
     // 프로필 정보 업데이트
     UpdateProfile(user_id, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const profile = yield userModel_1.default.findOneAndUpdate({ user_id: user_id }, { nickname: data.nickname, phone_number: data.phone_number, updated_date: Date.now() }, { new: true });
+            const profile = yield userModel_1.default.findOneAndUpdate({ user_id: user_id }, {
+                nickname: data.nickname,
+                phone_number: data.phone_number,
+                updated_date: Date.now(),
+            }, { new: true });
             if (!profile) {
-                throw new Error('프로필을 찾을 수 없습니다.');
+                throw new Error("프로필을 찾을 수 없습니다.");
             }
             return yield profile;
+        });
+    }
+    // 상태 메시지 업데이트
+    UpdateStatusMessage(user_id, status_message) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // 유저 프로필 찾기
+            let profile = yield profileModel_1.default.findOne({ user_id: user_id });
+            // 프로필이 없으면 새로 생성
+            if (!profile) {
+                profile = yield profileModel_1.default.create({
+                    user_id: user_id,
+                    status_message: status_message,
+                    created_date: Date.now(),
+                    updated_date: Date.now(),
+                });
+            }
+            else {
+                // 프로필이 있으면 상태 메시지 업데이트
+                profile = yield profileModel_1.default.findOneAndUpdate({ user_id: user_id }, { status_message: status_message, updated_date: Date.now() }, { new: true });
+            }
+            return profile;
         });
     }
 }
