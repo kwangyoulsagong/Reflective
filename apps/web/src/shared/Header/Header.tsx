@@ -22,9 +22,9 @@ const Header = () => {
         <Button onClick={() => navigate("/write")} variant="primary">
           게시물 작성하기
         </Button>
-        <div className="w-[50px] sm:w-[55px] md:w-[60px] h-[50px] sm:h-[55px] md:h-[60px] rounded-full overflow-hidden">
+        <circle className="w-[50px] sm:w-[55px] md:w-[60px] h-[50px] sm:h-[55px] md:h-[60px] rounded-full overflow-hidden">
           <img src={me} alt="profile" className="w-full h-full object-cover" />
-        </div>
+        </circle>
         <button
           onClick={() => navigate("/mypage")}
           className="w-[11px] sm:w-[12px] md:w-[13px] h-[8px] sm:h-[9px] md:h-[10px] bg-no-repeat bg-center bg-contain relative sm:right-2 md:right-4 sm:top-2 md:top-4"

@@ -69,7 +69,7 @@ const Login = () => {
         <span>
           계정이 없으신가요?{" "}
           <span
-            onClick={() => navigate("/account/signup")}
+            onClick={() => navigate("/signup")}
             className="text-[#21B8C2] cursor-pointer"
           >
             가입하기
