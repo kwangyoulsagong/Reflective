@@ -32,6 +32,12 @@ const useSaveFavoritesMutation = (post_id?: string) => {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.PostFavorite, post_id],
       });
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.MyFollowings],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.MyProfile],
+      });
     },
   });
 };

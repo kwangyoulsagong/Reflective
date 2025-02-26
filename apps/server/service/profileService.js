@@ -33,6 +33,7 @@ class ProfileService {
                 email: user.email,
                 phone_number: user.phone_number,
                 image_url: profile.image_url,
+                status_message: profile.status_message,
             };
         });
     }

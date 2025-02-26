@@ -26,6 +26,12 @@ const useDeleteFavoriteMutation = () => {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.PostFavorite],
       });
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.MyFollowings],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.MyProfile],
+      });
     },
   });
 };

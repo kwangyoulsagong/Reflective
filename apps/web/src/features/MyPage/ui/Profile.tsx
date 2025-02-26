@@ -1,25 +1,29 @@
 import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import useGetProfile from "../libs/hooks/useGetProfile";
+
 import logo from "../../../assets/logo.svg";
 import { useState } from "react";
 import FavoritesModal from "./Modal/FavoritesModal";
-const Profile = () => {
+interface ProfileProps {
+  profileData: {
+    myFavorites: {
+      followers: number;
+      following: number;
+    };
+    myProfile: {
+      email: string;
+      image_url: string;
+      nickname: string;
+      phone_number: string;
+    };
+  };
+}
+const Profile = ({ profileData }: ProfileProps) => {
+  console.log(profileData);
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("followers");
-  const { data, isLoading, isError } = useGetProfile();
-  if (isLoading) {
-    return <div className="w-full max-w-6xl mx-auto px-4 py-8">Loading...</div>;
-  }
 
-  if (isError) {
-    return (
-      <div className="w-full max-w-6xl mx-auto px-4 py-8">
-        Error loading data. Please try again.
-      </div>
-    );
-  }
   const handleFollowClick = (tab: string) => {
     setActiveTab(tab);
     setModalOpen(true);
@@ -30,25 +34,27 @@ const Profile = () => {
       <section className="flex items-center justify-between">
         <article className="flex items-center space-x-4">
           <img
-            src={data?.myProfile.image_url || logo}
+            src={profileData?.myProfile.image_url || logo}
             alt="Profile"
             className="w-20 h-20 rounded-full"
           />
           <div>
-            <h1 className="text-2xl font-bold">{data?.myProfile.nickname}</h1>
+            <h1 className="text-2xl font-bold">
+              {profileData?.myProfile.nickname}
+            </h1>
             <p className="text-gray-600">
               <button
                 onClick={() => handleFollowClick("followers")}
                 className="hover:underline"
               >
-                {data?.myFavorites.followers} 팔로워
+                {profileData?.myFavorites.followers} 팔로워
               </button>{" "}
               ·{" "}
               <button
                 onClick={() => handleFollowClick("following")}
                 className="hover:underline"
               >
-                {data?.myFavorites.following} 팔로잉
+                {profileData?.myFavorites.following} 팔로잉
               </button>
             </p>
           </div>
@@ -65,7 +71,7 @@ const Profile = () => {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         initialTab={activeTab}
-        data={data}
+        data={profileData}
       />
     </header>
   );

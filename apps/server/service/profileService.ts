@@ -6,6 +6,7 @@ interface responseProfile {
   email: string;
   phone_number: string;
   image_url: string;
+  status_message: string;
 }
 
 class ProfileService {
@@ -30,6 +31,7 @@ class ProfileService {
       email: user.email,
       phone_number: user.phone_number,
       image_url: profile.image_url,
+      status_message: profile.status_message,
     };
   }
 
