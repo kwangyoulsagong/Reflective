@@ -1,55 +1,67 @@
 import { CircleImage } from "../../../shared/CircleImage/CircleImage";
 import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
-import { useReducer } from "react";
-import {
-  ActionType,
-  initialState,
-  ProfileReducer,
-} from "../model/ProfileSettingReducer";
+import { useState, useEffect, ReactElement } from "react";
+import useGetProfileInfo from "../libs/hooks/useGetProfileInfo";
+
 const Setting = () => {
-  const [state, dispatch] = useReducer(ProfileReducer, initialState);
+  const { data, isLoading, isError } = useGetProfileInfo();
+  const [profileState, setProfileState] = useState({
+    image_url: "",
+    email: "",
+    nickname: "",
+    phone_number: "",
+  });
+
+  useEffect(() => {
+    if (data && !isLoading && !isError) {
+      setProfileState({
+        image_url: data.image_url || "",
+        email: data.email || "",
+        nickname: data.nickname || "",
+        phone_number: data.phone_number || "",
+      });
+    }
+  }, [data, isLoading, isError]);
+
+  const handleChange =
+    (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setProfileState({
+        ...profileState,
+        [field]: e.target.value,
+      });
+    };
+
   const handleProfileUpdate = () => {
     const body = {
-      image_url: state.image_url,
-      email: state.email,
-      nickname: state.nickname,
-      phone_number: state.phone_number,
+      image_url: profileState.image_url,
+      email: profileState.email,
+      nickname: profileState.nickname,
+      phone_number: profileState.phone_number,
     };
   };
+
+  if (isLoading) return <div>로딩 중...</div>;
+  if (isError) return <div>프로필 정보를 불러오는 중 오류가 발생했습니다.</div>;
+
   return (
     <article className="flex flex-col justify-center items-center w-[400px] h-[600px] border border-gray-300 gap-10">
-      <CircleImage />
+      <CircleImage image={profileState.image_url} />
       <Input
-        value={state.email}
+        value={profileState.email}
         placeholder="이메일"
-        onChange={(e) =>
-          dispatch({
-            type: ActionType.SET_EMAIL,
-            payload: e.target.value,
-          })
-        }
+        onChange={handleChange("email")}
         className="mt-5"
       />
       <Input
-        value={state.nickname}
+        value={profileState.nickname}
         placeholder="닉네임"
-        onChange={(e) =>
-          dispatch({
-            type: ActionType.SET_NICKNAME,
-            payload: e.target.value,
-          })
-        }
+        onChange={handleChange("nickname")}
       />
       <Input
-        value={state.phone_number}
+        value={profileState.phone_number}
         placeholder="전화번호"
-        onChange={(e) =>
-          dispatch({
-            type: ActionType.SET_PHONE_NUMBER,
-            payload: e.target.value,
-          })
-        }
+        onChange={handleChange("phone_number")}
       />
       <Button variant="auth" onClick={handleProfileUpdate}>
         프로필 수정
@@ -57,4 +69,5 @@ const Setting = () => {
     </article>
   );
 };
+
 export default Setting;
