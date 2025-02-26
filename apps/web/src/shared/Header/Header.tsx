@@ -4,6 +4,7 @@ import toggle from "../../assets/toggle.svg";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@repo/ui/button";
 import NotificationBell from "../../features/Notification/ui/NotificationBell";
+import { CircleImage } from "../CircleImage/CircleImage";
 
 const Header = () => {
   const nickname = localStorage.getItem("nickname");
@@ -22,9 +23,7 @@ const Header = () => {
         <Button onClick={() => navigate("/write")} variant="primary">
           게시물 작성하기
         </Button>
-        <circle className="w-[50px] sm:w-[55px] md:w-[60px] h-[50px] sm:h-[55px] md:h-[60px] rounded-full overflow-hidden">
-          <img src={me} alt="profile" className="w-full h-full object-cover" />
-        </circle>
+        <CircleImage />
         <button
           onClick={() => navigate("/mypage")}
           className="w-[11px] sm:w-[12px] md:w-[13px] h-[8px] sm:h-[9px] md:h-[10px] bg-no-repeat bg-center bg-contain relative sm:right-2 md:right-4 sm:top-2 md:top-4"
