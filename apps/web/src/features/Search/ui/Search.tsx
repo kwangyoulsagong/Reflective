@@ -1,4 +1,5 @@
 import { SearchBar } from "@repo/ui/searchbar";
+import { SearchList } from "@repo/ui/searchlist";
 import { SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import useSearchQueryDebounce from "../libs/hooks/useSearchQueryDebounce";
@@ -13,7 +14,7 @@ const Search = () => {
     console.log(debouncedQuery);
   }, [debouncedQuery]);
   return (
-    <section className="w-full">
+    <section className="w-full flex flex-col gap-5">
       <article className="relative  flex items-center w-full max-w-[300px] sm:max-w-[300px] md:max-w-[350px] lg:max-w-[450px] mx-auto">
         <SearchBar
           value={query}
@@ -26,6 +27,9 @@ const Search = () => {
           className={`relative right-10 transition-colors duration-300
           ${isFocused ? "text-primary" : "text-gray-400"}`}
         />
+      </article>
+      <article className="flex justify-center">
+        <SearchList />
       </article>
     </section>
   );

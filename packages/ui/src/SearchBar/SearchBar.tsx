@@ -15,7 +15,7 @@ export const SearchBar = ({
       <input
         value={value}
         onChange={onChange}
-        className={`w-full px-4 py-2 pl-10 text-sm border rounded-full transition-all duration-300 outline-none
+        className={`w-full p-10 py-2 text-sm border rounded-full transition-all duration-300 outline-none
           ${
             isFocused
               ? "border-primary ring-2 ring-primary/20"

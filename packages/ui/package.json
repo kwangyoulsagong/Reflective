@@ -9,6 +9,7 @@
     "./card": "./src/Card/Card.tsx",
     "./time": "./src/utils/times.ts",
     "./searchbar": "./src/SearchBar/SearchBar.tsx",
+    "./searchlist": "./src/SearchList/SearchList.tsx",
     "./code": "./src/code.tsx",
     "./style": "./src/styles/global.css"
   },
