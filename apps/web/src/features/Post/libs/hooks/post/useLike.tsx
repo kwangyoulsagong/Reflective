@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import UseGetLike from "../../../api/Post/likes/useGetLike";
 import UsePatchLike from "../../../api/Post/likes/usePatchLike";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "../../../../../shared/constants/queryKeys";
 
 const useLike = (
   postId: string,
@@ -9,6 +11,7 @@ const useLike = (
 ) => {
   const [isLiked, setIsLiked] = useState(initialLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
+  const queryclient = useQueryClient();
 
   useEffect(() => {
     const fetchLikeStatus = async () => {
@@ -26,6 +29,9 @@ const useLike = (
     if (response.message) {
       setIsLiked(is_liked);
       setLikeCount(likeCount + (is_liked ? 1 : -1));
+      queryclient.invalidateQueries({
+        queryKey: [queryKeys.PostDetail, postId],
+      });
     }
   };
 

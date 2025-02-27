@@ -7,8 +7,6 @@ const useUploadProfileImage = () => {
   return useMutation({
     mutationFn: postUploadProfileImage,
     onMutate: async (formData) => {
-      // 이전 쿼리를 캐시에서 가져오기 위한 키
-
       // 낙관적 업데이트 전에 현재 캐시 데이터 백업
       const previousProfileData = queryClient.getQueryData([
         queryKeys.MyProfileInfo,
