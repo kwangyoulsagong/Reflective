@@ -10,8 +10,9 @@ import useGetPostMyPage from "../features/MyPage/libs/hooks/useGetPostMyPage";
 import { usePost_idStore } from "../app/provider/post_idProvider";
 import { usePostRouterStore } from "../app/provider/postRouterProvider";
 import Profile from "../features/MyPage/ui/Profile";
-import useGetProfile from "../features/MyPage/libs/hooks/useGetProfile";
+
 import useVirtualScroll from "../shared/useVirtualScroll";
+import useGetProfile from "../shared/constants/useGetProfile";
 
 const MyPage = () => {
   const navigate = useNavigate();

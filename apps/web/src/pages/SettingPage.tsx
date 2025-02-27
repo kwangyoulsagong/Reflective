@@ -3,7 +3,7 @@ import Header from "../shared/Header/Header";
 
 const SettingPage = () => {
   return (
-    <section className="flex flex-col justify-center items-center h-screen">
+    <section className="flex flex-col  items-center h-screen gap-10">
       <Header />
       <Setting />
     </section>

@@ -43,7 +43,8 @@ const useUploadProfileImage = () => {
     },
     onSettled: () => {
       // 로컬 URL 객체 정리 및 쿼리 무효화로 최신 데이터 다시 가져오기
-      queryClient.invalidateQueries({ queryKey: ["MyProfileInfo"] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.MyProfileInfo] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.MyProfile] });
     },
   });
 };

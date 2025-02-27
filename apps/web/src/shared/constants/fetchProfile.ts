@@ -1,5 +1,5 @@
-import { END_POINTS } from "../../../shared/constants/api";
-import { axiosInstance } from "../../../shared/api/axiosinstance";
+import { END_POINTS } from "./api";
+import { axiosInstance } from "../api/axiosinstance";
 
 const fetchProfile = async () => {
   try {
