@@ -5,6 +5,7 @@ export interface IProfile extends Document {
   profile_id: mongoose.Types.ObjectId;
   user_id: mongoose.Types.ObjectId;
   image_url: string;
+  status_message: string;
   created_date: Date;
   updated_date: Date;
 }
@@ -14,6 +15,7 @@ const profileSchema: Schema<IProfile> = new Schema({
   profile_id: { type: Schema.Types.ObjectId, required: true, auto: true },
   user_id: { type: Schema.Types.ObjectId, required: true, ref: "User" },
   image_url: { type: String, default: null },
+  status_message: { type: String, default: null },
   created_date: { type: Date, required: true, default: Date.now },
   updated_date: { type: Date, required: true, default: Date.now },
 });

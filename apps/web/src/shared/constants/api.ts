@@ -14,6 +14,16 @@ export const END_POINTS = {
   FAVORITE: (post_id: string) => `/api/v1/favorite/post/${post_id}`,
   SAVEFAVORITE: `/api/v1/favorite/`,
   DELETEFAVORITE: (favorite_id: string) => `/api/v1/favorite/${favorite_id}`,
+  MYPOST: "/api/v1/post/mypost",
+  MYFAVORITEPOST: "/api/v1/post/favorite",
+  RANKING: "/api/v1/rank",
+  MYPROFILE: "/api/v1/profile/mine",
+  PROFILE: "/api/v1/profile",
+  MYFAVORITES: "/api/v1/favorite/mypage/profile",
+  MYFOLLOWERS: "/api/v1/favorite/mypage/followers",
+  MYFOLLOWINGS: "/api/v1/favorite/mypage/followings",
+  MYSTATUSMESSAGE: "/api/v1/profile/status",
+  UPLOADPROFILEIMAGE: "/api/v1/profile/image/upload",
 } as const;
 
 export const NETWORK = {

@@ -58,6 +58,7 @@ router.get("/mine", jwt_1.verifyTokenMiddleware, profileController_1.default.Get
  *       401:
  *         description: 인증 권한이 없음
  */
+router.post("/image/upload", jwt_1.verifyTokenMiddleware, profileController_1.default.UploadProfileImage);
 router.put("/image", jwt_1.verifyTokenMiddleware, profileController_1.default.UpdateProfileImage);
 /**
  * @swagger
@@ -86,4 +87,37 @@ router.put("/image", jwt_1.verifyTokenMiddleware, profileController_1.default.Up
  *         description: 인증 권한이 없음
  */
 router.put("/", jwt_1.verifyTokenMiddleware, profileController_1.default.UpdateProfile);
+/**
+ * @swagger
+ * /api/v1/profile/status:
+ *   put:
+ *     summary: 상태 메시지 업데이트
+ *     description: 유저 상태 메시지 업데이트
+ *     tags:
+ *       - Profile
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status_message:
+ *                 type: string
+ *                 description: 상태 메시지
+ *             required:
+ *               - status_message
+ *     responses:
+ *       200:
+ *         description: 상태 메시지 업데이트 성공
+ *       403:
+ *         description: 토큰이 없음
+ *       404:
+ *         description: 유저가 없음
+ *       401:
+ *         description: 인증 권한이 없음
+ */
+router.put("/status", jwt_1.verifyTokenMiddleware, profileController_1.default.UpdateStatusMessage);
 exports.default = router;

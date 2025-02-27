@@ -100,5 +100,47 @@ class PostController {
         .json({ message: "게시물 삭제 에러", error: error.message });
     }
   }
+
+  public async myPost(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "인증 권한 없음" });
+        return;
+      }
+      const userId = req.user.user_id;
+      console.log("/ghfhjalksjlksj");
+      const myPost = await postService.myPost(userId);
+      if (myPost) {
+        res.status(200).json(myPost);
+      } else {
+        res.status(404).json({ message: "게시물 없음" });
+      }
+    } catch (error: any) {
+      res
+        .status(500)
+        .json({ message: "내 게시물 조회 에러", error: error.message });
+    }
+  }
+
+  public async myFavoritePost(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "인증 권한 없음" });
+        return;
+      }
+      const userId = req.user.user_id;
+      const myPost = await postService.getFavoritePosts(userId);
+      if (myPost) {
+        res.status(200).json(myPost);
+      } else {
+        res.status(404).json({ message: "게시물 없음" });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        message: "내 즐겨찾기 한 게시물 조회 에러",
+        error: error.message,
+      });
+    }
+  }
 }
 export default new PostController();

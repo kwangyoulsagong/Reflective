@@ -42,8 +42,8 @@ const PostCard = ({ post, index, handlePost }: PostCardProps) => {
             index % 3 === 0
               ? "sm:mt-16 lg:mt-24"
               : index % 3 === 1
-              ? "sm:mt-8 lg:mt-12"
-              : ""
+                ? "sm:mt-8 lg:mt-12"
+                : ""
           }`}
     >
       <div className="relative overflow-hidden">

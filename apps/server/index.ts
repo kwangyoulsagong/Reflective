@@ -9,6 +9,7 @@ import commentRouter from "./router/commentRouter";
 import likeRouter from "./router/likeRouter";
 import favoriteRouter from "./router/favoriteRouter";
 import notificationRouter from "./router/notificationRouter";
+import rankingRouter from "./router/rankingRouter";
 const { swaggerUi, specs } = require("./module/swagger.js");
 const cors = require("cors");
 //express 이용
@@ -32,6 +33,7 @@ app.use("/api/v1/comments", commentRouter);
 app.use("/api/v1/like", likeRouter);
 app.use("/api/v1/favorite", favoriteRouter);
 app.use("/api/v1/notifications", notificationRouter);
+app.use("/api/v1/rank", rankingRouter);
 
 mongoose.connect(process.env.MONGODB_URI!);
 var db = mongoose.connection;

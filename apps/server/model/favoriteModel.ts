@@ -2,10 +2,12 @@ import mongoose, { Document, Schema, Types } from "mongoose";
 
 // favorite 인터페이스 정의
 export interface IFavorite extends Document {
-  favorite_id: mongoose.Types.ObjectId; // 즐겨찾기 고유번호
-  user_id: mongoose.Types.ObjectId; // 현재 유저의 ID
-  favorite_user_id: mongoose.Types.ObjectId; // 즐겨찾기한 유저의 ID
-  is_favorite: boolean; // 즐겨찾기 여부
+  favorite_id: Types.ObjectId;
+  user_id: Types.ObjectId;
+  favorite_user_id: Types.ObjectId;
+  is_favorite: boolean;
+  createdAt: Date; // timestamps 필드 추가
+  updatedAt: Date; // timestamps 필드 추가
 }
 
 const FavoriteSchema: Schema = new Schema(

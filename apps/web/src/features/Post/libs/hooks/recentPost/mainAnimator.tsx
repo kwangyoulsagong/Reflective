@@ -1,5 +1,6 @@
+import { PostType } from "@/types/types";
 import gsap from "gsap";
-import { PostType } from "../types/types";
+
 import CustomEase from "gsap/CustomEase";
 import { Flip } from "gsap/Flip";
 

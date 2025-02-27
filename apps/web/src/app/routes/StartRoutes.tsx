@@ -8,7 +8,7 @@ function StartRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Start />}></Route>
-      <Route path="/account/signup" element={<SignUp />}></Route>
+      <Route path="/signup" element={<SignUp />}></Route>
       <Route path="/home" element={<Home />}></Route>
     </Routes>
   );

@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose"); // Import Types from mongoose
 const favoriteModel_1 = __importDefault(require("../model/favoriteModel")); // Favorite 모델 import
 const postModel_1 = __importDefault(require("../model/postModel"));
+const profileModel_1 = __importDefault(require("../model/profileModel"));
+const userModel_1 = __importDefault(require("../model/userModel"));
 class FavoriteService {
     // 즐겨찾기 추가 메서드
     addFavorite(user_id, favorite_id) {
@@ -121,6 +123,161 @@ class FavoriteService {
             catch (error) {
                 console.error("즐겨찾기한 유저의 포스트 조회 중 오류 발생:", error);
                 return null; // 오류 발생 시 null 반환
+            }
+        });
+    }
+    // 마이페이지 프로필 정보 조회
+    getMyProfile(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userObjectId = new mongoose_1.Types.ObjectId(user_id);
+                // 팔로워/팔로잉 수 조회
+                const [followersCount, followingCount] = yield Promise.all([
+                    favoriteModel_1.default.countDocuments({
+                        favorite_user_id: userObjectId,
+                        is_favorite: true,
+                    }),
+                    favoriteModel_1.default.countDocuments({
+                        user_id: userObjectId,
+                        is_favorite: true,
+                    }),
+                ]);
+                return {
+                    followers: followersCount,
+                    following: followingCount,
+                };
+            }
+            catch (error) {
+                console.error("마이페이지 프로필 정보 조회 중 오류 발생:", error);
+                return null;
+            }
+        });
+    }
+    // 다른 사용자 프로필 정보 조회
+    getUserProfile(target_user_id, current_user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const targetObjectId = new mongoose_1.Types.ObjectId(target_user_id);
+                const currentUserObjectId = new mongoose_1.Types.ObjectId(current_user_id);
+                // 팔로워/팔로잉 수와 팔로우 여부 동시 조회
+                const [followersCount, followingCount, followStatus] = yield Promise.all([
+                    favoriteModel_1.default.countDocuments({
+                        favorite_user_id: targetObjectId,
+                        is_favorite: true,
+                    }),
+                    favoriteModel_1.default.countDocuments({
+                        user_id: targetObjectId,
+                        is_favorite: true,
+                    }),
+                    favoriteModel_1.default.findOne({
+                        user_id: currentUserObjectId,
+                        favorite_user_id: targetObjectId,
+                        is_favorite: true,
+                    }),
+                ]);
+                return {
+                    followers: followersCount,
+                    following: followingCount,
+                    isFollowing: !!followStatus,
+                };
+            }
+            catch (error) {
+                console.error("사용자 프로필 정보 조회 중 오류 발생:", error);
+                return null;
+            }
+        });
+    }
+    // 내 팔로워 목록 조회
+    getMyFollowers(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.getFollowers(user_id);
+        });
+    }
+    // 내 팔로잉 목록 조회
+    getMyFollowing(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.getFollowing(user_id);
+        });
+    }
+    // 다른 사용자의 팔로워 목록 조회
+    getUserFollowers(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.getFollowers(user_id);
+        });
+    }
+    // 다른 사용자의 팔로잉 목록 조회
+    getUserFollowing(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.getFollowing(user_id);
+        });
+    }
+    // 팔로워 목록 조회 (공통 로직)
+    getFollowers(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userObjectId = new mongoose_1.Types.ObjectId(user_id);
+                const followers = (yield favoriteModel_1.default.find({
+                    favorite_user_id: userObjectId,
+                    is_favorite: true,
+                }).lean());
+                const followerInfos = yield Promise.all(followers.map((follower) => __awaiter(this, void 0, void 0, function* () {
+                    // Profile과 User 정보를 함께 조회
+                    const [profile, user] = yield Promise.all([
+                        profileModel_1.default.findOne({
+                            user_id: follower.user_id,
+                        }).lean(),
+                        userModel_1.default.findOne({
+                            user_id: follower.user_id,
+                        }).lean(),
+                    ]);
+                    return {
+                        user_id: follower.user_id.toString(),
+                        profile_image: (profile === null || profile === void 0 ? void 0 : profile.image_url) || null,
+                        nickname: (user === null || user === void 0 ? void 0 : user.nickname) || "사용자", // User 모델에서 nickname 가져오기
+                        favorite_id: follower.favorite_id.toString(),
+                        created_at: follower.createdAt,
+                    };
+                })));
+                return followerInfos;
+            }
+            catch (error) {
+                console.error("팔로워 목록 조회 중 오류 발생:", error);
+                return null;
+            }
+        });
+    }
+    // 팔로잉 목록 조회 (공통 로직)
+    getFollowing(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userObjectId = new mongoose_1.Types.ObjectId(user_id);
+                const following = (yield favoriteModel_1.default.find({
+                    user_id: userObjectId,
+                    is_favorite: true,
+                }).lean());
+                const followingInfos = yield Promise.all(following.map((follow) => __awaiter(this, void 0, void 0, function* () {
+                    // Profile과 User 정보를 함께 조회
+                    const [profile, user] = yield Promise.all([
+                        profileModel_1.default.findOne({
+                            user_id: follow.favorite_user_id,
+                        }).lean(),
+                        userModel_1.default.findOne({
+                            user_id: follow.favorite_user_id,
+                        }).lean(),
+                    ]);
+                    return {
+                        user_id: follow.favorite_user_id.toString(),
+                        profile_image: (profile === null || profile === void 0 ? void 0 : profile.image_url) || null,
+                        nickname: (user === null || user === void 0 ? void 0 : user.nickname) || "사용자", // User 모델에서 nickname 가져오기
+                        favorite_id: follow.favorite_id.toString(),
+                        created_at: follow.createdAt,
+                    };
+                })));
+                return followingInfos;
+            }
+            catch (error) {
+                console.error("팔로잉 목록 조회 중 오류 발생:", error);
+                return null;
             }
         });
     }
