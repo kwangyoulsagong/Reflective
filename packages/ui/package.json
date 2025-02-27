@@ -8,6 +8,7 @@
     "./input": "./src/Input/Input.tsx",
     "./card": "./src/Card/Card.tsx",
     "./time": "./src/utils/times.ts",
+    "./searchbar": "./src/SearchBar/SearchBar.tsx",
     "./code": "./src/code.tsx",
     "./style": "./src/styles/global.css"
   },

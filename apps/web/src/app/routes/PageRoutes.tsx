@@ -3,6 +3,7 @@ import Write from "../../pages/WritePage";
 import PostDetail from "../../pages/PostPage";
 import MyPage from "../../pages/Mypage";
 import SettingPage from "../../pages/SettingPage";
+import SearchPage from "../../pages/SearchPage";
 
 //페이지 라우트
 function PageRoutes() {
@@ -12,6 +13,7 @@ function PageRoutes() {
       <Route path="/:nickname/:title" element={<PostDetail />} />
       <Route path={`/mypage`} element={<MyPage />} />
       <Route path={"/settings"} element={<SettingPage />} />
+      <Route path={"/search"} element={<SearchPage />} />
     </Routes>
   );
 }
