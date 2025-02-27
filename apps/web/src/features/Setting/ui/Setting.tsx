@@ -1,10 +1,13 @@
 import { CircleImage } from "../../../shared/CircleImage/CircleImage";
 import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
-import { useState, useEffect, ReactElement } from "react";
+import { useState, useEffect, useRef } from "react";
 import useGetProfileInfo from "../libs/hooks/useGetProfileInfo";
+import { imageValidation } from "../libs/\bvalidation/imageValidation";
 
 const Setting = () => {
+  const validateImage = new imageValidation();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { data, isLoading, isError } = useGetProfileInfo();
   const [profileState, setProfileState] = useState({
     image_url: "",
@@ -12,7 +15,7 @@ const Setting = () => {
     nickname: "",
     phone_number: "",
   });
-
+  const [isUploading, setIsUploading] = useState(false);
   useEffect(() => {
     if (data && !isLoading && !isError) {
       setProfileState({
@@ -41,12 +44,45 @@ const Setting = () => {
     };
   };
 
+  const changeProfileImage = () => {
+    alert("수정");
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!validateImage.validate(file)) {
+      return;
+    }
+
+    setIsUploading(true);
+
+    const formData = new FormData();
+    formData.append("profileImage", file);
+  };
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>프로필 정보를 불러오는 중 오류가 발생했습니다.</div>;
 
   return (
     <article className="flex flex-col justify-center items-center w-[400px] h-[600px] border border-gray-300 gap-10">
-      <CircleImage image={profileState.image_url} />
+      <div className="flex flex-col items-center">
+        <CircleImage image={profileState.image_url} />
+        <Button
+          variant="primary"
+          onClick={changeProfileImage}
+          disabled={isUploading}
+        >
+          {isUploading ? "업로드 중..." : "수정"}
+        </Button>
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/jpeg, image/png, image/gif"
+          className="hidden"
+        />
+      </div>
+
       <Input
         value={profileState.email}
         placeholder="이메일"

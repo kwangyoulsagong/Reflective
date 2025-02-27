@@ -54,7 +54,11 @@ router.get("/mine", verifyTokenMiddleware, profileController.GetProfile);
  *       401:
  *         description: 인증 권한이 없음
  */
-
+router.post(
+  "/image/upload",
+  verifyTokenMiddleware,
+  profileController.UploadProfileImage
+);
 router.put(
   "/image",
   verifyTokenMiddleware,

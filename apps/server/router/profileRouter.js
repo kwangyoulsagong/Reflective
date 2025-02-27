@@ -58,6 +58,7 @@ router.get("/mine", jwt_1.verifyTokenMiddleware, profileController_1.default.Get
  *       401:
  *         description: 인증 권한이 없음
  */
+router.post("/image/upload", jwt_1.verifyTokenMiddleware, profileController_1.default.UploadProfileImage);
 router.put("/image", jwt_1.verifyTokenMiddleware, profileController_1.default.UpdateProfileImage);
 /**
  * @swagger
