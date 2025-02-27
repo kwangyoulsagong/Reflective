@@ -4,4 +4,12 @@ export const queryKeys = {
   FetchComment: ["FetchComment"] as const,
   PostFavorite: ["PostFavorite"] as const,
   FavoriteStory: ["FavoriteStory"] as const,
+  MyPost: ["MyPost"] as const,
+  Ranking: ["Ranking"] as const,
+  MyProfile: ["MyProfile"] as const,
+  MyFollowers: ["MyFollowers"] as const,
+  MyFollowings: ["MyFollowings"] as const,
+  MyStatusMessage: ["MyStatusMessage"] as const,
+  MyProfileInfo: ["MyProfileInfo"] as const,
+  MyProfileImage: ["MyProfileImage"] as const,
 } as const;

@@ -97,6 +97,125 @@ class FavoriteController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  public async getMyProfileInfo(
+    req: AuthRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "인증 권한 없음" });
+        return;
+      }
+
+      const userId = req.user.user_id;
+      const profileInfo = await favoriteService.getMyProfile(userId);
+
+      if (!profileInfo) {
+        res.status(404).json({ message: "프로필 정보를 찾을 수 없습니다." });
+        return;
+      }
+
+      res.status(200).json(profileInfo);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  public async getMyFollowers(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "인증 권한 없음" });
+        return;
+      }
+
+      const userId = req.user.user_id;
+      const followers = await favoriteService.getMyFollowers(userId);
+      res.status(200).json(followers || []);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  public async getMyFollowing(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "인증 권한 없음" });
+        return;
+      }
+
+      const userId = req.user.user_id;
+      const following = await favoriteService.getMyFollowing(userId);
+      res.status(200).json(following || []);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // 다른 사용자 프로필 조회 메서드
+  public async getUserProfileInfo(
+    req: AuthRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const { user_id } = req.params;
+      if (!req.user) {
+        res.status(401).json({ message: "인증 권한 없음" });
+        return;
+      }
+
+      const currentUserId = req.user.user_id;
+      const profileInfo = await favoriteService.getUserProfile(
+        user_id,
+        currentUserId
+      );
+
+      if (!profileInfo) {
+        res.status(404).json({ message: "프로필 정보를 찾을 수 없습니다." });
+        return;
+      }
+
+      res.status(200).json(profileInfo);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  public async getUserFollowers(
+    req: AuthRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const { user_id } = req.params;
+      if (!req.user) {
+        res.status(401).json({ message: "인증 권한 없음" });
+        return;
+      }
+
+      const followers = await favoriteService.getUserFollowers(user_id);
+      res.status(200).json(followers || []);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  public async getUserFollowing(
+    req: AuthRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const { user_id } = req.params;
+      if (!req.user) {
+        res.status(401).json({ message: "인증 권한 없음" });
+        return;
+      }
+
+      const following = await favoriteService.getUserFollowing(user_id);
+      res.status(200).json(following || []);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 }
 
 export default new FavoriteController();

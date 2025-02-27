@@ -1,8 +1,7 @@
-
 import profileController from "../controller/profileController";
 import { verifyTokenMiddleware } from "../authorization/jwt";
 import { Router } from "express";
-const router:Router=Router()
+const router: Router = Router();
 /**
  * @swagger
  * /api/v1/profile/mine:
@@ -27,7 +26,7 @@ const router:Router=Router()
  *       401:
  *         description: 인증 권한이 없음
  */
-router.get("/mine",verifyTokenMiddleware,profileController.GetProfile)
+router.get("/mine", verifyTokenMiddleware, profileController.GetProfile);
 
 /**
  * @swagger
@@ -55,10 +54,16 @@ router.get("/mine",verifyTokenMiddleware,profileController.GetProfile)
  *       401:
  *         description: 인증 권한이 없음
  */
-
-
-router.put("/image",verifyTokenMiddleware,profileController.UpdateProfileImage)
-
+router.post(
+  "/image/upload",
+  verifyTokenMiddleware,
+  profileController.UploadProfileImage
+);
+router.put(
+  "/image",
+  verifyTokenMiddleware,
+  profileController.UpdateProfileImage
+);
 
 /**
  * @swagger
@@ -86,7 +91,44 @@ router.put("/image",verifyTokenMiddleware,profileController.UpdateProfileImage)
  *       401:
  *         description: 인증 권한이 없음
  */
-router.put("/",verifyTokenMiddleware,profileController.UpdateProfile)
+router.put("/", verifyTokenMiddleware, profileController.UpdateProfile);
 
+/**
+ * @swagger
+ * /api/v1/profile/status:
+ *   put:
+ *     summary: 상태 메시지 업데이트
+ *     description: 유저 상태 메시지 업데이트
+ *     tags:
+ *       - Profile
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status_message:
+ *                 type: string
+ *                 description: 상태 메시지
+ *             required:
+ *               - status_message
+ *     responses:
+ *       200:
+ *         description: 상태 메시지 업데이트 성공
+ *       403:
+ *         description: 토큰이 없음
+ *       404:
+ *         description: 유저가 없음
+ *       401:
+ *         description: 인증 권한이 없음
+ */
+router.put(
+  "/status",
+  verifyTokenMiddleware,
+  profileController.UpdateStatusMessage
+);
 
-export default router
+export default router;

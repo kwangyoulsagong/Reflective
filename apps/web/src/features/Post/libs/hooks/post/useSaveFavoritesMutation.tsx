@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import savePostFavorite from "../../../api/Post/favorites/savePostFavorite";
 import { queryKeys } from "../../../../../shared/constants/queryKeys";
 
-const useSaveFavoritesMutation = (post_id: string) => {
+const useSaveFavoritesMutation = (post_id?: string) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: savePostFavorite,
@@ -31,6 +31,12 @@ const useSaveFavoritesMutation = (post_id: string) => {
     onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.PostFavorite, post_id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.MyFollowings],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.MyProfile],
       });
     },
   });

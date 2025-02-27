@@ -14,6 +14,7 @@ export interface ButtonProps {
   onClick: () => void;
   icon?: ReactNode;
   className?: string;
+  disabled?: boolean;
 }
 
 export const Button = ({
@@ -22,6 +23,7 @@ export const Button = ({
   onClick,
   icon,
   className = "",
+  disabled = false,
 }: ButtonProps) => {
   const variantsButton = {
     primary:
@@ -42,6 +44,7 @@ export const Button = ({
       <button
         onClick={onClick}
         className={`${variantsButton[variant]} ${className}`}
+        disabled={disabled}
       >
         {children}
       </button>

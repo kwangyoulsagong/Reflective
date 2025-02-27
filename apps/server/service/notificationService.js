@@ -112,13 +112,13 @@ class NotificationService {
                     model: "Post",
                     localField: "post_id",
                     foreignField: "post_id",
-                    select: "title user_id post_id _id", // post_id와 _id도 함께 선택
+                    select: "title user_id post_id _id",
                     populate: [
                         {
                             path: "user_id",
                             model: "User",
-                            foreignField: "user_id", // User 모델의 user_id 필드와 매칭
-                            localField: "user_id", // Post 모델의 user_id 필드
+                            foreignField: "user_id",
+                            localField: "user_id",
                             select: "nickname",
                         },
                     ],

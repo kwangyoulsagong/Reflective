@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { postRouterState } from "../../../types/types";
+import { postRouterState } from "@/types/types";
 
 export const usePostRouterStore = create<postRouterState>()(
   persist(
