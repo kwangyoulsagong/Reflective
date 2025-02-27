@@ -200,6 +200,13 @@ class PostService {
     limit: number = 5
   ): Promise<{ posts: any[]; total: number; totalPages: number } | null> {
     try {
+      if (!searchTerm || searchTerm.trim() === "") {
+        return {
+          posts: [],
+          total: 0,
+          totalPages: 0,
+        };
+      }
       const skip = (page - 1) * limit;
 
       // 닉네임으로 사용자 ID 찾기

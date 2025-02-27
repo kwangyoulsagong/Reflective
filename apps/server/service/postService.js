@@ -183,6 +183,13 @@ class PostService {
     searchPostsComprehensive(searchTerm_1) {
         return __awaiter(this, arguments, void 0, function* (searchTerm, page = 1, limit = 5) {
             try {
+                if (!searchTerm || searchTerm.trim() === "") {
+                    return {
+                        posts: [],
+                        total: 0,
+                        totalPages: 0,
+                    };
+                }
                 const skip = (page - 1) * limit;
                 // 닉네임으로 사용자 ID 찾기
                 const users = yield userModel_1.default.find({

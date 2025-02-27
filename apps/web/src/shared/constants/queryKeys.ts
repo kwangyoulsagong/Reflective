@@ -12,4 +12,5 @@ export const queryKeys = {
   MyStatusMessage: ["MyStatusMessage"] as const,
   MyProfileInfo: ["MyProfileInfo"] as const,
   MyProfileImage: ["MyProfileImage"] as const,
+  SearchList: ["SearchList"] as const,
 } as const;

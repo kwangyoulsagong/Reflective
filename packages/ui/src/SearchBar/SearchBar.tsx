@@ -1,18 +1,33 @@
+import React, { useRef, useEffect } from "react";
+
 interface SearchBarProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isFocused: boolean;
-  setIsFocused: (boolean: boolean) => void;
+  setIsFocused: (focused: boolean) => void;
 }
+
 export const SearchBar = ({
   value,
   onChange,
   isFocused,
   setIsFocused,
 }: SearchBarProps) => {
+  // 인풋 요소에 대한 ref 생성
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // isFocused 상태가 변경될 때 포커스 유지
+  useEffect(() => {
+    if (isFocused && inputRef.current) {
+      // 포커스가 true면 포커스 설정
+      inputRef.current.focus();
+    }
+  }, [isFocused]);
+
   return (
     <div className="relative flex w-full items-center">
       <input
+        ref={inputRef} // ref 추가
         value={value}
         onChange={onChange}
         className={`w-full p-10 py-2 text-sm border rounded-full transition-all duration-300 outline-none
