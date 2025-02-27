@@ -2,7 +2,7 @@ import { Router } from "express";
 import postController from "../controller/postController";
 import { verifyTokenMiddleware } from "../authorization/jwt";
 const router: Router = Router();
-
+router.get("/search", postController.searchPosts);
 router.get("/mypost", verifyTokenMiddleware, postController.myPost);
 router.get("/favorite", verifyTokenMiddleware, postController.myFavoritePost);
 /**

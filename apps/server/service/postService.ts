@@ -193,6 +193,71 @@ class PostService {
       return null;
     }
   }
+
+  public async searchPostsComprehensive(
+    searchTerm: string,
+    page: number = 1,
+    limit: number = 5
+  ): Promise<{ posts: any[]; total: number; totalPages: number } | null> {
+    try {
+      const skip = (page - 1) * limit;
+
+      // 닉네임으로 사용자 ID 찾기
+      const users = await User.find({
+        nickname: { $regex: searchTerm, $options: "i" },
+      });
+
+      const userIds = users.map((user) => user.user_id);
+
+      // 검색 쿼리 구성 (제목, 내용, 작성자 닉네임)
+      const searchQuery = {
+        $or: [
+          { title: { $regex: searchTerm, $options: "i" } },
+          { contents: { $regex: searchTerm, $options: "i" } },
+          { user_id: { $in: userIds } },
+        ],
+      };
+
+      // 검색 조건에 맞는 전체 게시물 수 계산
+      const total = await Post.countDocuments(searchQuery);
+      const totalPages = Math.ceil(total / limit);
+
+      // 검색 조건에 맞는 게시물 가져오기 (페이지네이션 적용)
+      const posts = await Post.find(searchQuery)
+        .sort({ created_date: -1 })
+        .skip(skip)
+        .limit(limit)
+        .exec();
+
+      if (!posts || posts.length === 0) {
+        return {
+          posts: [],
+          total: 0,
+          totalPages: 0,
+        };
+      }
+
+      // 각 게시물에 닉네임 추가
+      const postsWithNickname = await Promise.all(
+        posts.map(async (post) => {
+          const user = await User.findOne({ user_id: post.user_id });
+          return {
+            ...post.toObject(),
+            nickname: user ? user.nickname : null,
+          };
+        })
+      );
+
+      return {
+        posts: postsWithNickname,
+        total,
+        totalPages,
+      };
+    } catch (error) {
+      console.error("통합 검색 에러", error);
+      return null;
+    }
+  }
 }
 
 export default new PostService();

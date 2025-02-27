@@ -167,5 +167,29 @@ class PostController {
             }
         });
     }
+    searchPosts(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { query = "", page = 1, limit = 5 } = req.query;
+                const searchResult = yield postService_1.default.searchPostsComprehensive(query, Number(page), Number(limit));
+                if (searchResult) {
+                    res.status(200).json(Object.assign({ success: true }, searchResult));
+                }
+                else {
+                    res.status(404).json({
+                        success: false,
+                        message: "검색 결과가 없습니다",
+                    });
+                }
+            }
+            catch (error) {
+                res.status(500).json({
+                    success: false,
+                    message: "게시물 검색 중 오류가 발생했습니다",
+                    error: error.message,
+                });
+            }
+        });
+    }
 }
 exports.default = new PostController();

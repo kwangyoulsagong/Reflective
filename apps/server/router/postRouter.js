@@ -7,6 +7,7 @@ const express_1 = require("express");
 const postController_1 = __importDefault(require("../controller/postController"));
 const jwt_1 = require("../authorization/jwt");
 const router = (0, express_1.Router)();
+router.get("/search", postController_1.default.searchPosts);
 router.get("/mypost", jwt_1.verifyTokenMiddleware, postController_1.default.myPost);
 router.get("/favorite", jwt_1.verifyTokenMiddleware, postController_1.default.myFavoritePost);
 /**
