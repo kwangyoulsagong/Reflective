@@ -16,6 +16,59 @@ const profileService_1 = __importDefault(require("../service/profileService"));
 const profileImageUploader_1 = __importDefault(require("../middleware/profileImageUploader"));
 class ProfileController {
     constructor() {
+        this.UploadProfileImage = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (!req.user) {
+                    res.status(401).json({ message: "인증 권한 없음" });
+                    return;
+                }
+                const userId = req.user.user_id;
+                // multer-s3 미들웨어 생성 및 실행
+                const upload = this.profileImageService.createProfileImageUploadMiddleware();
+                // Promise로 래핑하여 multer 미들웨어 비동기 처리
+                yield new Promise((resolve, reject) => {
+                    upload(req, res, (err) => __awaiter(this, void 0, void 0, function* () {
+                        if (err) {
+                            res.status(400).json({ message: err.message });
+                            return reject(err);
+                        }
+                        if (!req.file) {
+                            res
+                                .status(400)
+                                .json({ message: "이미지 파일이 업로드되지 않았습니다." });
+                            return reject(new Error("이미지 파일이 업로드되지 않았습니다."));
+                        }
+                        try {
+                            const file = req.file;
+                            // 기존 이미지가 있다면 S3에서 삭제
+                            yield this.profileImageService.deleteOldProfileImage(userId);
+                            // profileService를 사용하여 이미지 URL 업데이트
+                            const result = yield profileService_1.default.UpdateProfileImage(userId, file.location);
+                            if (result) {
+                                res.status(200).json({
+                                    message: "프로필 이미지가 업로드되었습니다.",
+                                    image_url: file.location,
+                                });
+                                resolve();
+                            }
+                            else {
+                                res.status(401).json({ message: "인증 권한 없음" });
+                                reject(new Error("인증 권한 없음"));
+                            }
+                        }
+                        catch (error) {
+                            console.error("이미지 처리 중 오류 발생:", error);
+                            res.status(500).json({ error: error.message });
+                            reject(error);
+                        }
+                    }));
+                });
+            }
+            catch (error) {
+                console.error("프로필 이미지 업로드 중 오류 발생:", error);
+                res.status(500).json({ error: error.message });
+            }
+        });
         this.profileImageService = new profileImageUploader_1.default();
     }
     // 프로필 조회
@@ -60,54 +113,6 @@ class ProfileController {
             }
             catch (error) {
                 res.status(401).json({ error: error.message });
-            }
-        });
-    }
-    UploadProfileImage(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                if (!req.user) {
-                    res.status(401).json({ message: "인증 권한 없음" });
-                    return;
-                }
-                const userId = req.user.user_id;
-                // multer-s3 미들웨어 생성 및 실행
-                const upload = this.profileImageService.createProfileImageUploadMiddleware();
-                // multer 미들웨어를 실행하여 파일 업로드 처리
-                upload(req, res, (err) => __awaiter(this, void 0, void 0, function* () {
-                    if (err) {
-                        return res.status(400).json({ message: err.message });
-                    }
-                    if (!req.file) {
-                        return res
-                            .status(400)
-                            .json({ message: "이미지 파일이 업로드되지 않았습니다." });
-                    }
-                    try {
-                        const file = req.file;
-                        // 기존 이미지가 있다면 S3에서 삭제
-                        yield this.profileImageService.deleteOldProfileImage(userId);
-                        // profileService를 사용하여 이미지 URL 업데이트
-                        const result = yield profileService_1.default.UpdateProfileImage(userId, file.location);
-                        if (result) {
-                            return res.status(200).json({
-                                message: "프로필 이미지가 업로드되었습니다.",
-                                image_url: file.location,
-                            });
-                        }
-                        else {
-                            return res.status(401).json({ message: "인증 권한 없음" });
-                        }
-                    }
-                    catch (error) {
-                        console.error("이미지 처리 중 오류 발생:", error);
-                        return res.status(500).json({ error: error.message });
-                    }
-                }));
-            }
-            catch (error) {
-                console.error("프로필 이미지 업로드 중 오류 발생:", error);
-                res.status(500).json({ error: error.message });
             }
         });
     }

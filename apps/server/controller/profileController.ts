@@ -58,10 +58,10 @@ class ProfileController {
     }
   }
 
-  public async UploadProfileImage(
+  public UploadProfileImage = async (
     req: AuthRequest,
     res: Response
-  ): Promise<void> {
+  ): Promise<void> => {
     try {
       if (!req.user) {
         res.status(401).json({ message: "인증 권한 없음" });
@@ -74,48 +74,55 @@ class ProfileController {
       const upload =
         this.profileImageService.createProfileImageUploadMiddleware();
 
-      // multer 미들웨어를 실행하여 파일 업로드 처리
-      upload(req, res, async (err) => {
-        if (err) {
-          return res.status(400).json({ message: err.message });
-        }
-
-        if (!req.file) {
-          return res
-            .status(400)
-            .json({ message: "이미지 파일이 업로드되지 않았습니다." });
-        }
-
-        try {
-          const file = req.file as Express.MulterS3.File;
-
-          // 기존 이미지가 있다면 S3에서 삭제
-          await this.profileImageService.deleteOldProfileImage(userId);
-
-          // profileService를 사용하여 이미지 URL 업데이트
-          const result = await profileService.UpdateProfileImage(
-            userId,
-            file.location
-          );
-
-          if (result) {
-            return res.status(200).json({
-              message: "프로필 이미지가 업로드되었습니다.",
-              image_url: file.location,
-            });
-          } else {
-            return res.status(401).json({ message: "인증 권한 없음" });
+      // Promise로 래핑하여 multer 미들웨어 비동기 처리
+      await new Promise<void>((resolve, reject) => {
+        upload(req, res, async (err) => {
+          if (err) {
+            res.status(400).json({ message: err.message });
+            return reject(err);
           }
-        } catch (error: any) {
-          console.error("이미지 처리 중 오류 발생:", error);
-          return res.status(500).json({ error: error.message });
-        }
+
+          if (!req.file) {
+            res
+              .status(400)
+              .json({ message: "이미지 파일이 업로드되지 않았습니다." });
+            return reject(new Error("이미지 파일이 업로드되지 않았습니다."));
+          }
+
+          try {
+            const file = req.file as Express.MulterS3.File;
+
+            // 기존 이미지가 있다면 S3에서 삭제
+            await this.profileImageService.deleteOldProfileImage(userId);
+
+            // profileService를 사용하여 이미지 URL 업데이트
+            const result = await profileService.UpdateProfileImage(
+              userId,
+              file.location
+            );
+
+            if (result) {
+              res.status(200).json({
+                message: "프로필 이미지가 업로드되었습니다.",
+                image_url: file.location,
+              });
+              resolve();
+            } else {
+              res.status(401).json({ message: "인증 권한 없음" });
+              reject(new Error("인증 권한 없음"));
+            }
+          } catch (error: any) {
+            console.error("이미지 처리 중 오류 발생:", error);
+            res.status(500).json({ error: error.message });
+            reject(error);
+          }
+        });
       });
     } catch (error: any) {
       console.error("프로필 이미지 업로드 중 오류 발생:", error);
       res.status(500).json({ error: error.message });
     }
-  }
+  };
   // 프로필 업데이트
   public async UpdateProfile(req: AuthRequest, res: Response): Promise<void> {
     try {

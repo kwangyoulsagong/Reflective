@@ -63,7 +63,7 @@ class ProfileImageService {
             limits: {
                 fileSize: 5 * 1024 * 1024, // 5MB 제한
             },
-        }).single("image"); // 단일 프로필 이미지 업로드
+        }).single("profileImage"); // 단일 프로필 이미지 업로드
     }
     // 파일 확장자 추출
     getFileExtension(filename) {
@@ -105,7 +105,6 @@ class ProfileImageService {
                 const userObjectId = new mongoose_1.Types.ObjectId(userId);
                 const profile = yield profileModel_1.default.findOne({ user_id: userObjectId });
                 if (profile && profile.image_url) {
-                    // S3 URL에서 키 추출 (https://bucket-name.s3.region.amazonaws.com/key)
                     const urlParts = profile.image_url.split("/");
                     const key = urlParts.slice(3).join("/");
                     if (key && key.startsWith("profiles/")) {
