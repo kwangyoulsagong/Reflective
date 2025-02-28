@@ -5,6 +5,7 @@ const router: Router = Router();
 router.get("/search", postController.searchPosts);
 router.get("/mypost", verifyTokenMiddleware, postController.myPost);
 router.get("/favorite", verifyTokenMiddleware, postController.myFavoritePost);
+router.get("/paginated", postController.getInfiniteRecentPosts);
 /**
  * @swagger
  * /api/v1/post:
