@@ -1,11 +1,18 @@
 import { Router } from "express";
 import postController from "../controller/postController";
 import { verifyTokenMiddleware } from "../authorization/jwt";
+import ThumbnailImageService from "../middleware/thumbnailImageUploader";
 const router: Router = Router();
+const thumbnailService = new ThumbnailImageService();
 router.get("/search", postController.searchPosts);
 router.get("/mypost", verifyTokenMiddleware, postController.myPost);
 router.get("/favorite", verifyTokenMiddleware, postController.myFavoritePost);
 router.get("/paginated", postController.getInfiniteRecentPosts);
+router.post(
+  "/upload/thumbnail",
+  verifyTokenMiddleware,
+  thumbnailService.uploadThumbnail
+);
 /**
  * @swagger
  * /api/v1/post:
