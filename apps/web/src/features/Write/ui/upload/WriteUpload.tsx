@@ -5,6 +5,7 @@ import { WriteUploadProps } from "../../../../entities/BlockEditor/model/type/Bl
 import { X, Upload, Image } from "lucide-react";
 import { useRef, useState } from "react";
 import uploadThumbnail from "../../api/uploadThumbnail";
+import Header from "./Header/Header";
 
 const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
   const { post_id } = usePost_idStore();
@@ -73,17 +74,7 @@ const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-blur-sm">
       <section className="w-[450px] bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all">
-        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-800">
-            {isEdit ? "게시글 수정하기" : "게시글 업로드"}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 transition-colors p-1 rounded-full hover:bg-gray-100"
-          >
-            <X size={20} />
-          </button>
-        </div>
+        <Header isEdit={isEdit} onClose={onClose} />
 
         <div className="px-6 py-5">
           <div className="mb-6">
@@ -191,10 +182,10 @@ const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
             onClick={handleSubmit}
             className="px-5 py-2 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors shadow-md flex items-center"
             disabled={
-              updateMutation.isLoading || saveMutation.isLoading || isUploading
+              updateMutation.isPending || saveMutation.isPending || isUploading
             }
           >
-            {(updateMutation.isLoading || saveMutation.isLoading) && (
+            {(updateMutation.isPending || saveMutation.isPending) && (
               <svg
                 className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
                 xmlns="http://www.w3.org/2000/svg"
