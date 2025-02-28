@@ -1,6 +1,7 @@
 import { MutableRefObject, useCallback, useEffect, useState } from "react";
 import _ from "lodash";
 import { PostType } from "@/types/types";
+import useInfinitePostsQuery from "./useInfinitePostsQuery";
 
 interface UseVirtualInfiniteScrollProps {
   containerRef: MutableRefObject<HTMLElement | null>;

@@ -40,7 +40,7 @@ const Home = () => {
         <Header />
         <Search />
         <MainRanks data={topFour} />
-        <RecentPost data={data} />
+        <RecentPost />
       </div>
     </div>
   );
