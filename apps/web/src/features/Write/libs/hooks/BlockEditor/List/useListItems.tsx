@@ -266,6 +266,9 @@ const useListItems = ({
 
   const handleListKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>, id: string) => {
+      // IME 조합 중일 때는 키 이벤트를 처리하지 않음
+      if (e.nativeEvent.isComposing) return;
+
       const currentItem = listItems.find((item) => item.id === id);
       if (!currentItem) return;
 

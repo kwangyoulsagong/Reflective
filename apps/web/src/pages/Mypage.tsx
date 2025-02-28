@@ -10,9 +10,8 @@ import useGetPostMyPage from "../features/MyPage/libs/hooks/useGetPostMyPage";
 import { usePost_idStore } from "../app/provider/post_idProvider";
 import { usePostRouterStore } from "../app/provider/postRouterProvider";
 import Profile from "../features/MyPage/ui/Profile";
-
-import useVirtualScroll from "../shared/useVirtualScroll";
 import useGetProfile from "../shared/constants/useGetProfile";
+import { PostType } from "@/types/types";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -37,18 +36,23 @@ const MyPage = () => {
 
   const activeData = activeTab === "posts" ? posts : favoritesPosts;
 
-  const { virtualItems, totalHeight, columns } = useVirtualScroll({
-    containerRef,
-    itemHeight: 400,
-    totalItems: activeData.length,
-  });
-
   const handlePost = (post_id: string, nickname: string, title: string) => {
     const hyphenatedTitle = title.replace(/\s+/g, "-");
     setPost_id(post_id);
     setNickname(nickname);
     setTitle(hyphenatedTitle);
     navigate(`/${nickname}/${hyphenatedTitle}`);
+  };
+
+  const handleTabChange = (tab: string) => {
+    if (tab === activeTab) return;
+
+    // 스크롤 초기화
+    if (containerRef.current) {
+      containerRef.current.scrollTop = 0;
+    }
+
+    setActiveTab(tab);
   };
 
   const isLoading = myPageLoading || profileLoading;
@@ -91,45 +95,28 @@ const MyPage = () => {
           icon={<FileText size={20} />}
           label="내 게시물"
           isActive={activeTab === "posts"}
-          onClick={() => setActiveTab("posts")}
+          onClick={() => handleTabChange("posts")}
         />
         <TabButton
           icon={<Bookmark size={20} />}
           label="즐겨찾기"
           isActive={activeTab === "favorites"}
-          onClick={() => setActiveTab("favorites")}
+          onClick={() => handleTabChange("favorites")}
         />
       </nav>
 
       {activeData.length > 0 ? (
-        <div ref={containerRef} className="h-[800px] overflow-auto w-full">
-          <div style={{ height: totalHeight, position: "relative" }}>
-            <div className="w-full px-4">
-              {virtualItems.map(
-                ({ index, offsetTop, columnIndex, columnWidth }) =>
-                  activeData[index] ? (
-                    <div
-                      key={activeData[index].post_id}
-                      style={{
-                        position: "absolute",
-                        top: offsetTop,
-                        left:
-                          columns === 1
-                            ? "50%"
-                            : `${columnIndex * columnWidth}%`,
-                        width: `calc(${columnWidth}% - 2rem)`,
-                        transform: columns === 1 ? "translateX(-50%)" : "none",
-                      }}
-                    >
-                      <PostCard
-                        post={activeData[index]}
-                        index={index}
-                        handlePost={handlePost}
-                      />
-                    </div>
-                  ) : null
-              )}
-            </div>
+        <div
+          ref={containerRef}
+          className="h-[800px] overflow-auto w-full"
+          key={`scroll-container-${activeTab}`}
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {activeData.map((post: PostType, index: any) => (
+              <div key={`${activeTab}-${post.post_id}`} className="mb-6">
+                <PostCard post={post} index={index} handlePost={handlePost} />
+              </div>
+            ))}
           </div>
         </div>
       ) : (

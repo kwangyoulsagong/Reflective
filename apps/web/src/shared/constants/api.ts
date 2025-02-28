@@ -27,6 +27,7 @@ export const END_POINTS = {
   UPLOADPROFILEIMAGE: "/api/v1/profile/image/upload",
   SEARCHPOSTQUERY: (searchTerm: string, page: number = 1) =>
     `/api/v1/post/search?query=${encodeURIComponent(searchTerm)}&page=${page}&limit=5`,
+  UPLOADTHUMBNAIL: "/api/v1/post//upload/thumbnail",
 } as const;
 
 export const NETWORK = {
