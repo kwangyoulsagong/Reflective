@@ -27,7 +27,7 @@ export const SearchBar = ({
   return (
     <div className="relative flex w-full items-center">
       <input
-        ref={inputRef} // ref 추가
+        ref={inputRef}
         value={value}
         onChange={onChange}
         className={`w-full py-2 text-sm border rounded-full transition-all duration-300 outline-none

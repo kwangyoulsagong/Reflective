@@ -1,13 +1,22 @@
 import { formatRelativeTime } from "../../utils/times";
 import { Post } from "../types/type";
 
-const List = ({ searchResult }: { searchResult: Post[] }) => {
+const List = ({
+  searchResult,
+  goToPostDetail,
+}: {
+  searchResult: Post[];
+  goToPostDetail: (title: string, post_id: string, nickname: string) => void;
+}) => {
   return (
     <ul className="divide-y divide-gray-200">
       {searchResult.map((item) => (
         <li
           key={item.post_id}
           className="p-4 hover:bg-gray-50 transition-colors duration-150"
+          onClick={() =>
+            goToPostDetail(item.title, item.post_id, item.nickname)
+          }
         >
           <section className="flex items-start justify-between">
             <article className="space-y-1">
@@ -43,21 +52,6 @@ const List = ({ searchResult }: { searchResult: Post[] }) => {
                 )}
               </div>
             </article>
-            <button className="p-1 rounded-full hover:bg-gray-200">
-              <svg
-                className="h-5 w-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-                ></path>
-              </svg>
-            </button>
           </section>
         </li>
       ))}

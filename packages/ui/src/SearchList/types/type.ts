@@ -7,7 +7,7 @@ export interface Post {
   category: string;
   like_count?: number;
   created_date: string;
-  nickname?: string;
+  nickname: string;
 }
 
 export interface SearchListProps {
@@ -18,4 +18,5 @@ export interface SearchListProps {
   isLoading?: boolean;
   isError?: boolean;
   query?: string;
+  goToPostDetail: (title: string, post_id: string, nickname: string) => void;
 }

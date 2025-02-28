@@ -12,6 +12,7 @@ export const SearchList = ({
   isLoading = false,
   isError = false,
   query = "",
+  goToPostDetail,
 }: SearchListProps) => {
   return (
     <section className="w-full max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
@@ -42,7 +43,7 @@ export const SearchList = ({
 
       {/* 검색 결과 리스트 */}
       {!isLoading && !isError && results.length > 0 && (
-        <List searchResult={results} />
+        <List searchResult={results} goToPostDetail={goToPostDetail} />
       )}
 
       {/* 페이지네이션 */}

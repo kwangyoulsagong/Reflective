@@ -4,11 +4,17 @@ import { SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import useSearchQueryDebounce from "../libs/hooks/useSearchQueryDebounce";
 import useSearchPostQuery from "../libs/hooks/useSearchPostQuery";
+import { useNavigate } from "react-router-dom";
+import { usePost_idStore } from "../../../app/provider/post_idProvider";
+import { usePostRouterStore } from "../../../app/provider/postRouterProvider";
 const Search = () => {
+  const navigate = useNavigate();
   const [isFocused, setIsFocused] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState("");
   const debouncedQuery = useSearchQueryDebounce(query);
+  const { setPost_id } = usePost_idStore();
+  const { setNickname, setTitle } = usePostRouterStore();
   const handleChangeSearchQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
     setCurrentPage(1);
@@ -26,6 +32,14 @@ const Search = () => {
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
+  };
+
+  const goToPostDetail = (title: string, post_id: string, nickname: string) => {
+    const hyphenatedTitle = title.replace(/\s+/g, "-");
+    navigate(`/${nickname}/${hyphenatedTitle}`);
+    setPost_id(post_id);
+    setNickname(nickname);
+    setTitle(hyphenatedTitle);
   };
 
   return (
@@ -52,6 +66,7 @@ const Search = () => {
           isLoading={isLoading}
           isError={isError}
           query={debouncedQuery}
+          goToPostDetail={goToPostDetail}
         />
       </article>
     </section>
