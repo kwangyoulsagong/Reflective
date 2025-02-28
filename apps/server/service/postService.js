@@ -82,6 +82,45 @@ class PostService {
             }
         });
     }
+    getInfiniteRecentPosts() {
+        return __awaiter(this, arguments, void 0, function* (page = 1, limit = 30) {
+            try {
+                const skip = (page - 1) * limit;
+                // 첫 페이지에는 좋아요 많은 상위 게시물 포함
+                let topPosts = [];
+                if (page === 1) {
+                    topPosts = yield postModel_1.default.find()
+                        .sort({ like_count: -1, created_date: -1 })
+                        .limit(3)
+                        .exec();
+                }
+                // 나머지 게시물 조회 (첫 페이지에서는 상위 게시물 제외)
+                const regularPosts = yield postModel_1.default.find(page === 1 ? { _id: { $nin: topPosts.map((post) => post._id) } } : {})
+                    .sort({ created_date: -1 })
+                    .skip(skip)
+                    .limit(page === 1 ? limit - topPosts.length : limit)
+                    .exec();
+                // 전체 게시물 수 조회 (더 많은 데이터가 있는지 확인용)
+                const totalCount = yield postModel_1.default.countDocuments();
+                const currentCount = skip + (page === 1 ? topPosts.length : 0) + regularPosts.length;
+                const hasMore = currentCount < totalCount;
+                // 결합 및 닉네임 추가
+                const allPosts = [...(page === 1 ? topPosts : []), ...regularPosts];
+                const postsWithNickname = yield Promise.all(allPosts.map((post) => __awaiter(this, void 0, void 0, function* () {
+                    const user = yield userModel_1.default.findOne({ user_id: post.user_id });
+                    if (user) {
+                        return Object.assign(Object.assign({}, post.toObject()), { nickname: user.nickname });
+                    }
+                    return post.toObject();
+                })));
+                return { posts: postsWithNickname, hasMore };
+            }
+            catch (error) {
+                console.error("페이지네이션 게시물 조회 에러", error);
+                return null;
+            }
+        });
+    }
     // 상세 게시물 조회
     getPostDetail(post_id) {
         return __awaiter(this, void 0, void 0, function* () {

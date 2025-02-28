@@ -40,6 +40,29 @@ class PostController {
     }
   }
 
+  public async getInfiniteRecentPosts(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 30;
+
+      const result = await postService.getInfiniteRecentPosts(page, limit);
+
+      if (result) {
+        res.status(200).json(result);
+      } else {
+        res.status(404).json({ message: "게시물을 찾을 수 없습니다" });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        message: "게시물 조회 중 오류가 발생했습니다",
+        error: error.message,
+      });
+    }
+  }
+
   // 상세 게시물 조회
   public async getPostDetail(req: Request, res: Response): Promise<void> {
     const { post_id } = req.params;

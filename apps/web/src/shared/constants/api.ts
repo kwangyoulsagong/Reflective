@@ -8,6 +8,7 @@ export const END_POINTS = {
   LOGIN: "/api/v1/auth/login",
   PATCHLIKE: (post_id: string) => `/api/v1/like/${post_id}`,
   SAVEPOST: "/api/v1/post",
+  RECENTPOST: "/api/v1/post/paginated",
   POST: (post_id: string) => `/api/v1/post/${post_id}`,
   COMMENT: (post_id: string) => `/api/v1/comments/${post_id}`,
   SAVECOMMENT: `/api/v1/comments/`,

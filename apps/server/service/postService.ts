@@ -71,6 +71,59 @@ class PostService {
       return null;
     }
   }
+
+  public async getInfiniteRecentPosts(
+    page: number = 1,
+    limit: number = 30
+  ): Promise<{
+    posts: IPost[];
+    hasMore: boolean;
+  } | null> {
+    try {
+      const skip = (page - 1) * limit;
+
+      // 첫 페이지에는 좋아요 많은 상위 게시물 포함
+      let topPosts: IPost[] = [];
+      if (page === 1) {
+        topPosts = await Post.find()
+          .sort({ like_count: -1, created_date: -1 })
+          .limit(3)
+          .exec();
+      }
+
+      // 나머지 게시물 조회 (첫 페이지에서는 상위 게시물 제외)
+      const regularPosts = await Post.find(
+        page === 1 ? { _id: { $nin: topPosts.map((post) => post._id) } } : {}
+      )
+        .sort({ created_date: -1 })
+        .skip(skip)
+        .limit(page === 1 ? limit - topPosts.length : limit)
+        .exec();
+
+      // 전체 게시물 수 조회 (더 많은 데이터가 있는지 확인용)
+      const totalCount = await Post.countDocuments();
+      const currentCount =
+        skip + (page === 1 ? topPosts.length : 0) + regularPosts.length;
+      const hasMore = currentCount < totalCount;
+
+      // 결합 및 닉네임 추가
+      const allPosts = [...(page === 1 ? topPosts : []), ...regularPosts];
+      const postsWithNickname = await Promise.all(
+        allPosts.map(async (post) => {
+          const user = await User.findOne({ user_id: post.user_id });
+          if (user) {
+            return { ...post.toObject(), nickname: user.nickname };
+          }
+          return post.toObject();
+        })
+      );
+
+      return { posts: postsWithNickname, hasMore };
+    } catch (error) {
+      console.error("페이지네이션 게시물 조회 에러", error);
+      return null;
+    }
+  }
   // 상세 게시물 조회
   public async getPostDetail(post_id: string): Promise<object | null> {
     try {

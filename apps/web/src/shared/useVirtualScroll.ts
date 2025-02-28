@@ -1,14 +1,15 @@
 import { MutableRefObject, useCallback, useEffect, useState } from "react";
 import _ from "lodash";
+import { PostType } from "@/types/types";
+import useInfinitePostsQuery from "./useInfinitePostsQuery";
 
-interface VirtualScrollProps {
+interface UseVirtualInfiniteScrollProps {
   containerRef: MutableRefObject<HTMLElement | null>;
   itemHeight: number;
-  totalItems: number;
   overscan?: number;
 }
 
-interface VirtualScrollReturn {
+interface UseVirtualInfiniteScrollReturn {
   virtualItems: {
     index: number;
     offsetTop: number;
@@ -17,14 +18,26 @@ interface VirtualScrollReturn {
   }[];
   totalHeight: number;
   columns: number;
+  allPosts: PostType[];
+  isLoading: boolean;
+  isFetchingNextPage: boolean;
+  error: unknown;
 }
 
 const useVirtualScroll = ({
   containerRef,
   itemHeight,
-  totalItems,
   overscan = 3,
-}: VirtualScrollProps): VirtualScrollReturn => {
+}: UseVirtualInfiniteScrollProps): UseVirtualInfiniteScrollReturn => {
+  const {
+    posts: allPosts,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error,
+  } = useInfinitePostsQuery();
+
   const [scrollTop, setScrollTop] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
   const [columns, setColumns] = useState(getColumnCount());
@@ -39,8 +52,17 @@ const useVirtualScroll = ({
     _.throttle((e: Event) => {
       const scroll = e.target as HTMLElement;
       setScrollTop(Math.max(0, scroll.scrollTop));
+
+      // 스크롤이 하단에 가까워지면 다음 페이지 로드
+      if (hasNextPage && !isFetchingNextPage) {
+        const ScrollBottom =
+          scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight;
+        if (ScrollBottom < 200) {
+          fetchNextPage();
+        }
+      }
     }, 16),
-    []
+    [hasNextPage, isFetchingNextPage, fetchNextPage]
   );
 
   const calculateRange = useCallback(() => {
@@ -51,10 +73,17 @@ const useVirtualScroll = ({
     const endRow = Math.ceil((scrollTop + containerHeight) / rowHeight);
 
     const start = Math.max(0, (startRow - overscan) * columns);
-    const end = Math.min(totalItems, (endRow + overscan) * columns);
+    const end = Math.min(allPosts.length, (endRow + overscan) * columns);
 
     return { start, end };
-  }, [scrollTop, containerHeight, itemHeight, totalItems, overscan, columns]);
+  }, [
+    scrollTop,
+    containerHeight,
+    itemHeight,
+    allPosts.length,
+    overscan,
+    columns,
+  ]);
 
   useEffect(() => {
     const handleResize = _.debounce(() => {
@@ -103,15 +132,19 @@ const useVirtualScroll = ({
       columnIndex,
       columnWidth,
     };
-  });
+  }).filter((item) => item.index < allPosts.length);
 
-  const totalRows = Math.ceil(totalItems / columns);
+  const totalRows = Math.ceil(allPosts.length / columns);
   const totalHeight = totalRows * itemHeight;
 
   return {
     virtualItems,
     totalHeight,
     columns,
+    allPosts,
+    isLoading,
+    isFetchingNextPage,
+    error,
   };
 };
 

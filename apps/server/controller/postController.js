@@ -49,6 +49,27 @@ class PostController {
             }
         });
     }
+    getInfiniteRecentPosts(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const page = parseInt(req.query.page) || 1;
+                const limit = parseInt(req.query.limit) || 30;
+                const result = yield postService_1.default.getInfiniteRecentPosts(page, limit);
+                if (result) {
+                    res.status(200).json(result);
+                }
+                else {
+                    res.status(404).json({ message: "게시물을 찾을 수 없습니다" });
+                }
+            }
+            catch (error) {
+                res.status(500).json({
+                    message: "게시물 조회 중 오류가 발생했습니다",
+                    error: error.message,
+                });
+            }
+        });
+    }
     // 상세 게시물 조회
     getPostDetail(req, res) {
         return __awaiter(this, void 0, void 0, function* () {

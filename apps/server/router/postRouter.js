@@ -10,6 +10,7 @@ const router = (0, express_1.Router)();
 router.get("/search", postController_1.default.searchPosts);
 router.get("/mypost", jwt_1.verifyTokenMiddleware, postController_1.default.myPost);
 router.get("/favorite", jwt_1.verifyTokenMiddleware, postController_1.default.myFavoritePost);
+router.get("/paginated", postController_1.default.getInfiniteRecentPosts);
 /**
  * @swagger
  * /api/v1/post:
