@@ -13,9 +13,6 @@ interface UserRankType {
 const RankCard = () => {
   const { data, isLoading, isError } = useGetRanks();
 
-  // 콘솔 로그 추가
-  console.log("Rank data:", data);
-
   if (isLoading) {
     return <div className="w-full max-w-6xl mx-auto px-4 py-8">Loading...</div>;
   }
