@@ -29,7 +29,7 @@ export const Button = ({
     primary:
       "px-3 py-1 text-sm text-primary border border-primary rounded-full hover:bg-primary hover:text-white transition-colors",
     secondary:
-      "bg-primary rounded-[20px] w-[150px] h-[40px] text-white font-bold",
+      "bg-primary rounded-full w-[150px] h-[40px] text-white font-bold",
     auth: "bg-primary rounded-[20px] w-[300px] h-[40px] text-white font-bold",
     favorite:
       "px-3 py-1 text-sm text-primary border border-primary rounded-full hover:bg-primary hover:text-white transition-colors",

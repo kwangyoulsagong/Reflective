@@ -6,11 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const postController_1 = __importDefault(require("../controller/postController"));
 const jwt_1 = require("../authorization/jwt");
+const thumbnailImageUploader_1 = __importDefault(require("../middleware/thumbnailImageUploader"));
 const router = (0, express_1.Router)();
+const thumbnailService = new thumbnailImageUploader_1.default();
 router.get("/search", postController_1.default.searchPosts);
 router.get("/mypost", jwt_1.verifyTokenMiddleware, postController_1.default.myPost);
 router.get("/favorite", jwt_1.verifyTokenMiddleware, postController_1.default.myFavoritePost);
 router.get("/paginated", postController_1.default.getInfiniteRecentPosts);
+router.post("/upload/thumbnail", jwt_1.verifyTokenMiddleware, thumbnailService.uploadThumbnail);
 /**
  * @swagger
  * /api/v1/post:
