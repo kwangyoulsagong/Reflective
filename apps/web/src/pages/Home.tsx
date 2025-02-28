@@ -2,11 +2,11 @@ import React from "react";
 
 import MainRanks from "../features/Post/ui/RecentPost/MainRanks";
 import RecentPost from "../features/Post/ui/RecentPost/RecentPost";
-import Search from "../components/Search";
 import useRecentPostQuery from "../features/Post/libs/hooks/recentPost/useRecentPostQuery";
 
 import Header from "../shared/Header/Header";
 import FavoriteStories from "../features/favorite/ui/Favorite";
+import Search from "../shared/Search";
 
 const Home = () => {
   const { data, isLoading, error } = useRecentPostQuery();

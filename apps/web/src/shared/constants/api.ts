@@ -24,6 +24,8 @@ export const END_POINTS = {
   MYFOLLOWINGS: "/api/v1/favorite/mypage/followings",
   MYSTATUSMESSAGE: "/api/v1/profile/status",
   UPLOADPROFILEIMAGE: "/api/v1/profile/image/upload",
+  SEARCHPOSTQUERY: (searchTerm: string, page: number = 1) =>
+    `/api/v1/post/search?query=${encodeURIComponent(searchTerm)}&page=${page}&limit=5`,
 } as const;
 
 export const NETWORK = {
