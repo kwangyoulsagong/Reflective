@@ -36,7 +36,7 @@ class ThumbnailImageService {
     this.s3 = new S3Client({
       region,
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY || "",
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
         secretAccessKey: process.env.AWS_SECRETE_ACCESS_KEY || "",
       },
     });
