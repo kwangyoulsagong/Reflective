@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=reflective
+      - MONGO_INITDB_ROOT_PASSWORD=reflective
+
+  app:
+    image: ${ECR_REGISTRY}/reflective-mono:latest
+    restart: always
+    ports:
+      - "80:8000" # 외부 80 포트를 내부 8000 포트로 매핑
+    depends_on:
+      - mongodb
+    environment:
+      - MONGODB_URI=mongodb://reflective:reflective@mongodb:27017/reflective?authSource=reflective
+      - PORT=8000
+      - NODE_ENV=production
+      - JWT_SECRET=eXlFcXlORWVmQ0dOdGJWam1lZkxvRFl0U0dWd2FzSmpxRmkyOU4zVzM3TGVhMW1wYjQ7w3jsF1U16qA2jX6ytRYWZ5AF8DqPdt
+      - JWT_REFRESH_SECRET=cloy5Fejs8nuhflT2rGOTt2U1r00sdyP0w8a6oBHEB9DhlDlZoFv1jsffhdfVvDqWRw5YUnHRdXzRbF9RTGBzLK7nwdkcglq
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+volumes:
+  mongodb_data:
