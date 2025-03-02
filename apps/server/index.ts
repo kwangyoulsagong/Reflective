@@ -11,7 +11,7 @@ import favoriteRouter from "./router/favoriteRouter";
 import notificationRouter from "./router/notificationRouter";
 import rankingRouter from "./router/rankingRouter";
 import path from "path"; // path 모듈 추가
-const { swaggerUi, specs } = require("./module/swagger.js");
+
 const cors = require("cors");
 //express 이용
 const app: Express = express();
@@ -26,7 +26,7 @@ app.use(
   })
 );
 const port = process.env.PORT;
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+
 app.use("/api/v1/auth", userRouter);
 app.use("/api/v1/profile", profileRouter);
 app.use("/api/v1/post", postRouter);
