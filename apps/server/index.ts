@@ -28,8 +28,11 @@ app.use(express.json()); // JSON 바디 파서 추가
 // dotenv.config() 제거 (위에서 이미 로드했으므로)
 app.use(
   cors({
-    origin:
-      "http://localhost:5173, https://reflective.site, http://reflective.site", // 클라이언트 주소
+    origin: [
+      "http://localhost:5173",
+      "https://reflective.site",
+      "http://reflective.site",
+    ], // 클라이언트 주소
     credentials: true, // credentials 허용
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // 허용할 HTTP 메서드
     allowedHeaders: ["*"], // 모든 헤더 허용
