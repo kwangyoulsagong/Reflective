@@ -1,0 +1,105 @@
+name: Build and Deploy to EC2 with ECR
+
+on:
+  push:
+    branches:
+      - main # 또는 master
+
+env:
+  AWS_REGION: ap-northeast-2 # 서울 리전
+  ECR_REPOSITORY: reflective-mono # ECR 저장소 이름
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          # 애플리케이션 이미지 빌드
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+          # ECR로 푸시
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+          # 이미지 URI를 출력하여 다음 단계에서 사용
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add EC2 to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to EC2
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          # docker-compose.yml 파일 생성
+          cat > docker-compose.yml <<EOL
+          version: '3'
+
+          services:
+            mongodb:
+              image: mongo
+              restart: always
+              ports:
+                - "27017:27017"
+              volumes:
+                - mongodb_data:/data/db
+              environment:
+                - MONGO_INITDB_ROOT_USERNAME=admin
+                - MONGO_INITDB_ROOT_PASSWORD=password
+
+            app:
+              image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+              restart: always
+              ports:
+                - "80:8000"  # 외부 80 포트를 내부 8000 포트로 매핑
+              depends_on:
+                - mongodb
+              environment:
+                - MONGODB_URI=mongodb://admin:password@mongodb:27017/reflective?authSource=admin
+                - PORT=8000
+                - NODE_ENV=production
+                - JWT_SECRET=${{ secrets.JWT_SECRET }}
+                - JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}
+                - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+                - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+          volumes:
+            mongodb_data:
+          EOL
+
+          # EC2에 docker-compose 파일 전송
+          scp docker-compose.yml ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/app/
+
+          # EC2에서 로그인하고 배포 실행
+          ssh ec2-user@${{ secrets.EC2_HOST }} "aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }} && cd /home/ec2-user/app && docker-compose down && docker-compose up -d"

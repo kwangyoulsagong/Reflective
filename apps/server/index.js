@@ -15,6 +15,7 @@ const likeRouter_1 = __importDefault(require("./router/likeRouter"));
 const favoriteRouter_1 = __importDefault(require("./router/favoriteRouter"));
 const notificationRouter_1 = __importDefault(require("./router/notificationRouter"));
 const rankingRouter_1 = __importDefault(require("./router/rankingRouter"));
+const path_1 = __importDefault(require("path")); // path 모듈 추가
 const { swaggerUi, specs } = require("./module/swagger.js");
 const cors = require("cors");
 //express 이용
@@ -37,6 +38,17 @@ app.use("/api/v1/like", likeRouter_1.default);
 app.use("/api/v1/favorite", favoriteRouter_1.default);
 app.use("/api/v1/notifications", notificationRouter_1.default);
 app.use("/api/v1/rank", rankingRouter_1.default);
+// 프로덕션 환경에서는 정적 파일 제공 (빌드된 프론트엔드)
+if (process.env.NODE_ENV === "production") {
+    // 빌드된 프론트엔드 파일 제공
+    app.use(express_1.default.static(path_1.default.join(__dirname, "../../web/dist")));
+    // SPA 라우팅을 위한 설정
+    app.get("*", (req, res) => {
+        if (!req.path.startsWith("/api")) {
+            res.sendFile(path_1.default.join(__dirname, "../../web/dist/index.html"));
+        }
+    });
+}
 mongoose_1.default.connect(process.env.MONGODB_URI);
 var db = mongoose_1.default.connection;
 // 4. 연결 실패
