@@ -1,12 +1,15 @@
 # 1. 빌드용 베이스 이미지 설정
 FROM node:18-alpine AS builder
 
+# 네이티브 모듈 컴파일을 위한 빌드 도구 추가
+RUN apk add --no-cache python3 make g++
+
 WORKDIR /app
 
-# 2. pnpm 설치
+# pnpm 설치
 RUN npm install -g pnpm
 
-# 3. 의존성 파일 복사
+# 의존성 파일 복사
 COPY package.json pnpm-lock.yaml turbo.json ./
 COPY apps/server/package.json ./apps/server/
 COPY apps/web/package.json ./apps/web/
@@ -14,15 +17,18 @@ COPY packages/ui/package.json ./packages/ui/
 COPY packages/eslint-config/package.json ./packages/eslint-config/
 COPY packages/typescript-config/package.json ./packages/typescript-config/
 
-# 4. 전체 소스 코드 복사
+# 전체 소스 코드 복사
 COPY . .
 
-# 5. 의존성 설치 및 빌드
+# 의존성 설치 및 빌드
 RUN pnpm install -r
 RUN pnpm build
 
 # 최종 프로덕션 이미지
 FROM node:18-alpine
+
+# 네이티브 모듈 컴파일을 위한 빌드 도구 추가
+RUN apk add --no-cache python3 make g++
 
 WORKDIR /app
 
