@@ -2,42 +2,46 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# 의존성 파일 복사 (공유 패키지 포함)
-COPY package.json package-lock.json ./
+# 의존성 파일 복사
+COPY package.json pnpm-lock.yaml ./
 COPY apps/server/package.json ./apps/server/
 COPY apps/web/package.json ./apps/web/
-COPY packages/ui/package.json ./packages/ui/  # UI 공통 패키지 추가
+COPY packages/ui/package.json ./packages/ui/
 
-# 모노레포 의존성 설치
-RUN npm ci
+# pnpm 설치 및 의존성 설치
+RUN npm install -g pnpm
+RUN pnpm install --frozen-lockfile
 
 # 소스 코드 복사
 COPY . .
 
 # 공유 패키지 먼저 빌드
 WORKDIR /app/packages/ui
-RUN npm run build
+RUN pnpm run build
 
 # 웹 앱 빌드
 WORKDIR /app/apps/web
-RUN npm run build
+RUN pnpm run build
 
 # 서버 빌드
 WORKDIR /app/apps/server
-RUN npm run build
+RUN pnpm run build
 
 # 최종 이미지 생성
 FROM node:18-alpine
 
 WORKDIR /app
 
+# pnpm 설치
+RUN npm install -g pnpm
+
 # 서버 의존성만 복사
-COPY --from=builder /app/package.json /app/package-lock.json ./
+COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
 COPY --from=builder /app/apps/server/package.json ./apps/server/
-COPY --from=builder /app/packages/ui/package.json ./packages/ui/  # UI 패키지 package.json도 복사
+COPY --from=builder /app/packages/ui/package.json ./packages/ui/
 
 # 프로덕션 의존성만 설치
-RUN npm ci --only=production
+RUN pnpm install --prod --frozen-lockfile
 
 # 빌드된 공유 패키지 복사
 COPY --from=builder /app/packages/ui/dist ./packages/ui/dist
