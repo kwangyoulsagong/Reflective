@@ -54,7 +54,7 @@ importers:
         specifier: ^16.4.5
         version: 16.4.7
       express:
-        specifier: ^4.19.2
+        specifier: ^4.21.2
         version: 4.21.2
       jsonwebtoken:
         specifier: ^9.0.2
