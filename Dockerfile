@@ -20,6 +20,12 @@ COPY packages/typescript-config/package.json ./packages/typescript-config/
 # 전체 소스 코드 복사
 COPY . .
 
+# 네이티브 모듈 컴파일을 위한 환경 설정
+ENV npm_config_target=18.20.7
+ENV npm_config_arch=x64
+ENV npm_config_target_arch=x64
+ENV npm_config_build_from_source=true
+
 # 의존성 설치 및 빌드
 RUN pnpm install -r
 RUN pnpm build
@@ -40,9 +46,15 @@ COPY --from=builder /app/apps/server/dist ./dist
 COPY --from=builder /app/apps/server/package.json ./package.json
 COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
 
-# 프로덕션 의존성 설치
-WORKDIR /app
+# 네이티브 모듈 컴파일을 위한 환경 설정
+ENV npm_config_target=18.20.7
+ENV npm_config_arch=x64
+ENV npm_config_target_arch=x64
+ENV npm_config_build_from_source=true
+
+# 프로덕션 의존성 설치 및 bcrypt 리빌드
 RUN pnpm install --prod
+RUN npm rebuild bcrypt
 
 # 서버 포트 노출
 EXPOSE 8000
