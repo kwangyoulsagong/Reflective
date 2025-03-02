@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useNotificationStore from "../../../entities/Notification/model/store/notificationStore";
 import { useOnClickOutside } from "../../../entities/Notification/libs/hooks/useOnClickOutside";
 import notification from "../../../assets/notification.svg";

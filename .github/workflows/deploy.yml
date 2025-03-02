@@ -3,7 +3,7 @@ name: Build and Deploy to EC2 with ECR
 on:
   push:
     branches:
-      - dev # 또는 master
+      - feat9/infra # 또는 master
 
 env:
   AWS_REGION: ap-northeast-2 # 서울 리전
