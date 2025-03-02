@@ -17,7 +17,6 @@ services:
     restart: always
     ports:
       - "80:8000" # 백엔드 서버
-      - "5173:5173" # 프론트엔드 포트 추가
     depends_on:
       - mongodb
     environment:
