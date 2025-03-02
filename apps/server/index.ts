@@ -12,11 +12,20 @@ import notificationRouter from "./router/notificationRouter";
 import rankingRouter from "./router/rankingRouter";
 import path from "path"; // path 모듈 추가
 
+// 환경 설정 파일 먼저 로드
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
+
+dotenv.config({ path: envFile });
+
 const cors = require("cors");
 //express 이용
 const app: Express = express();
 app.use(express.json()); // JSON 바디 파서 추가
-dotenv.config();
+
+// dotenv.config() 제거 (위에서 이미 로드했으므로)
 app.use(
   cors({
     origin: "http://localhost:5173", // 클라이언트 주소
@@ -49,7 +58,18 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-mongoose.connect(process.env.MONGODB_URI!);
+mongoose
+  .connect(process.env.MONGODB_URI!, {
+    authSource: process.env.NODE_ENV === "production" ? "admin" : undefined,
+  })
+  .then(() => {
+    console.log("MongoDB connection successful");
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+    process.exit(1);
+  });
+
 var db = mongoose.connection;
 // 4. 연결 실패
 db.on("error", function () {
@@ -59,6 +79,7 @@ db.on("error", function () {
 db.once("open", function () {
   console.log("Connected!");
 });
+
 app.listen(port, () => {
   console.log(`[server]: Server is running at <https://localhost>:${port}`);
 });
