@@ -8,6 +8,6 @@
       "lucide-react": ["./node_modules/lucide-react"]
     }
   },
-  "include": ["src", "../../apps/web/src/shared/CircleImage"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }
