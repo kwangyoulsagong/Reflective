@@ -9,7 +9,7 @@ COPY turbo.json ./
 COPY apps/server/package.json ./apps/server/
 COPY apps/web/package.json ./apps/web/
 COPY packages/ui/package.json ./packages/ui/
-COPY packages/eslint-config/package.json ./packages/eslint-config/ 
+COPY packages/eslint-config/package.json ./packages/eslint-config/
 COPY packages/typescript-config/package.json ./packages/typescript-config/
 
 # 3. pnpm 설치
@@ -60,7 +60,7 @@ COPY --from=builder /app/apps/web/package.json ./apps/web/
 COPY --from=builder /app/packages/ui/package.json ./packages/ui/
 
 # 13. 프로덕션 의존성만 설치
-RUN pnpm install --prod
+RUN pnpm install --prod --ignore-scripts  # --ignore-scripts를 추가하여 prepare 스크립트 실행 방지
 
 # 14. 빌드된 패키지 복사
 COPY --from=builder /app/packages/ui/dist ./packages/ui/dist
