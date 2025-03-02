@@ -60,8 +60,7 @@ COPY --from=builder /app/apps/web/package.json ./apps/web/
 COPY --from=builder /app/packages/ui/package.json ./packages/ui/
 
 # 13. 프로덕션 의존성만 설치
-# --no-prepare 옵션을 추가하여 Husky 관련 스크립트 실행 방지
-RUN pnpm install --prod --no-prepare
+RUN pnpm install --prod
 
 # 14. 빌드된 패키지 복사
 COPY --from=builder /app/packages/ui/dist ./packages/ui/dist
