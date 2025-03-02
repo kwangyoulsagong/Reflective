@@ -15,17 +15,8 @@ RUN pnpm install --frozen-lockfile
 # 소스 코드 복사
 COPY . .
 
-# 공유 패키지 먼저 빌드
-WORKDIR /app/packages/ui
-RUN pnpm run build
-
-# 웹 앱 빌드
-WORKDIR /app/apps/web
-RUN pnpm run build
-
-# 서버 빌드
-WORKDIR /app/apps/server
-RUN pnpm run build
+# 워크스페이스 전체 빌드 (Turborepo는 빌드 순서를 자동으로 처리)
+RUN pnpm -w run build
 
 # 최종 이미지 생성
 FROM node:18-alpine
