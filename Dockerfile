@@ -11,33 +11,44 @@ COPY packages/ui/package.json ./packages/ui/
 COPY packages/eslint-config/package.json ./packages/eslint-config/ 
 COPY packages/typescript-config/package.json ./packages/typescript-config/
 
-# pnpm 설치 및 의존성 설치 (개발 의존성 포함)
+# pnpm 설치
 RUN npm install -g pnpm
+
+# 전체 소스 코드 복사 (워크스페이스 구조를 완전히 복사)
+COPY . .
+
+# 기본 의존성 설치
 RUN pnpm install --no-frozen-lockfile
 
-# 필요한 타입 정의 파일과 의존성 설치 (workspaces 전체에 추가)
-RUN pnpm add -D -w @types/node @types/express @types/mongoose @types/bcrypt @types/multer @types/multer-s3 @types/jsonwebtoken @types/jest @testing-library/jest-dom express mongoose bcrypt multer multer-s3 jsonwebtoken dotenv @aws-sdk/client-s3 vite @vitejs/plugin-react
+# 서버 앱에 필요한 타입 정의 파일 설치
+WORKDIR /app/apps/server
+RUN pnpm add -D @types/node @types/express @types/mongoose @types/bcrypt @types/multer @types/multer-s3 @types/jsonwebtoken express mongoose bcrypt multer multer-s3 jsonwebtoken dotenv @aws-sdk/client-s3
 
-# 소스 코드 복사
-COPY . .
+# 웹 앱에 필요한 타입 정의 파일 설치
+WORKDIR /app/apps/web
+RUN pnpm add -D @types/jest @testing-library/jest-dom vite @vitejs/plugin-react
 
 # 임시로 TypeScript 설정 수정하여 오류를 경고로 변경
 WORKDIR /app
 RUN find . -name "tsconfig.json" -exec sh -c 'sed -i "s/\"strict\": true/\"strict\": false/g; s/\"noImplicitAny\": true/\"noImplicitAny\": false/g; s/\"strictNullChecks\": true/\"strictNullChecks\": false/g" {}' \;
 
-# 누락된 타입 문제 해결을 위한 임시 파일 생성
-WORKDIR /app/apps/web/src/features/Comments/types
+# Comments/types 디렉토리 생성 (누락된 경우)
 RUN mkdir -p /app/apps/web/src/features/Comments/types
-RUN echo "export type Comment = { id: string; text: string; };" > /app/apps/web/src/features/Comments/types/types.ts
+# 누락된 타입 파일 생성
+RUN echo 'export type Comment = { id: string; text: string; };' > /app/apps/web/src/features/Comments/types/types.ts
 
 # 각 패키지 빌드
-WORKDIR /app
-# 먼저 UI 패키지 빌드
-RUN cd packages/ui && pnpm build
+# UI 패키지 빌드
+WORKDIR /app/packages/ui
+RUN pnpm build
+
 # 서버 빌드
-RUN cd apps/server && pnpm build
+WORKDIR /app/apps/server
+RUN pnpm build
+
 # 웹 빌드
-RUN cd apps/web && pnpm build
+WORKDIR /app/apps/web
+RUN pnpm build
 
 # 최종 이미지 생성
 FROM node:18-alpine
