@@ -75,9 +75,9 @@ jobs:
               volumes:
                 - mongodb_data:/data/db
               environment:
-                - MONGO_INITDB_ROOT_USERNAME=reflective
-                - MONGO_INITDB_ROOT_PASSWORD=reflective
-                - MONGO_INITDB_DATABASE=reflective
+                - MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_USERNAME }}
+                - MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_PASSWORD }}
+                - MONGO_INITDB_DATABASE=${{ secrets.MONGO_DATABASE }}
 
             app:
               image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
@@ -87,7 +87,7 @@ jobs:
               depends_on:
                 - mongodb
               environment:
-                - MONGODB_URI=mongodb://reflective:reflective@mongodb:27017/reflective?authSource=admin
+                - MONGODB_URI=mongodb://${{ secrets.MONGO_USERNAME }}:${{ secrets.MONGO_PASSWORD }}@mongodb:27017/${{ secrets.MONGO_DATABASE }}?authSource=admin
                 - PORT=8000
                 - NODE_ENV=production
                 - JWT_SECRET=${{ secrets.JWT_SECRET }}
