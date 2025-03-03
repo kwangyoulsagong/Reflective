@@ -70,7 +70,7 @@ class ProfileImageService {
         }
       },
       limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB 제한
+        fileSize: 10 * 1024 * 1024, // 10MB 제한
       },
     }).single("profileImage"); // 단일 프로필 이미지 업로드
   }

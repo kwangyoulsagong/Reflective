@@ -1,7 +1,7 @@
 export class imageValidation {
   constructor(
     private readonly validTypes = ["image/jpeg", "image/png", "image/gif"],
-    private readonly maxSize = 5 * 1024 * 1024
+    private readonly maxSize = 10 * 1024 * 1024
   ) {}
 
   validate(file: any) {

@@ -104,7 +104,7 @@ class ThumbnailImageService {
         }
       },
       limits: {
-        fileSize: 40 * 1024 * 1024, // 5MB 제한
+        fileSize: 10 * 1024 * 1024, // 10MB 제한
       },
     }).single("thumbnailImage"); // 단일 썸네일 이미지 업로드
   }
