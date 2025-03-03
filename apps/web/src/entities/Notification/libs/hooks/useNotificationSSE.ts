@@ -85,9 +85,6 @@ export const useNotificationSSE = () => {
 
   // 컴포넌트 마운트/언마운트와 무관하게 SSE 연결 유지
   useEffect(() => {
-    // 즉시 SSE 연결 시작
-    const eventSource = connectSSE();
-
     // 브라우저 탭 포커스 시 재연결 로직
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {

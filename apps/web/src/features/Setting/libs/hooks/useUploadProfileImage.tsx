@@ -30,7 +30,7 @@ const useUploadProfileImage = () => {
       // 롤백을 위해 이전 데이터 반환
       return { previousProfileData };
     },
-    onError: (err, _, context) => {
+    onError: (_, context) => {
       // 에러 발생 시 이전 데이터로 롤백
       if (context?.previousProfileData) {
         queryClient.setQueryData(

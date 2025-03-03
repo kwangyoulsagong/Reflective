@@ -3,7 +3,7 @@ name: Build and Deploy to EC2 with ECR
 on:
   push:
     branches:
-      - dev # 또는 master
+      - main # 또는 master
 
 env:
   AWS_REGION: ap-northeast-2 # 서울 리전
@@ -75,18 +75,19 @@ jobs:
               volumes:
                 - mongodb_data:/data/db
               environment:
-                - MONGO_INITDB_ROOT_USERNAME=admin
-                - MONGO_INITDB_ROOT_PASSWORD=password
+                - MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_USERNAME }}
+                - MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_PASSWORD }}
+                - MONGO_INITDB_DATABASE=${{ secrets.MONGO_DATABASE }}
 
             app:
               image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
               restart: always
               ports:
-                - "80:8000"  # 외부 80 포트를 내부 8000 포트로 매핑
+                - "0.0.0.0:8000:8000"  # 외부 80 포트를 내부 8000 포트로 매핑
               depends_on:
                 - mongodb
               environment:
-                - MONGODB_URI=mongodb://admin:password@mongodb:27017/reflective?authSource=admin
+                - MONGODB_URI=mongodb://${{ secrets.MONGO_USERNAME }}:${{ secrets.MONGO_PASSWORD }}@mongodb:27017/${{ secrets.MONGO_DATABASE }}?authSource=admin
                 - PORT=8000
                 - NODE_ENV=production
                 - JWT_SECRET=${{ secrets.JWT_SECRET }}

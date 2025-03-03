@@ -1,4 +1,4 @@
-import { commentState } from "../../types/types";
+import { commentState } from "@/types/types";
 
 export class CommentBuilder {
   builderCommentTree(commentData: commentState[]): commentState[] {

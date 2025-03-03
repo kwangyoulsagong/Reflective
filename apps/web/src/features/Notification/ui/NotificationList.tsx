@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import useNotificationStore from "../../../entities/Notification/model/store/notificationStore";
-
 import { useNotificationSSE } from "../../../entities/Notification/libs/hooks/useNotificationSSE";
 import { formatRelativeTime } from "@repo/ui/time";
 import { usePost_idStore } from "../../../app/provider/post_idProvider";
@@ -40,7 +39,7 @@ export const NotificationList = () => {
     post_id: {
       _id?: string;
       post_id?: string;
-      title?: string;
+      title?: string | undefined;
       user_id?: {
         _id: string;
         user_id: string;
@@ -55,7 +54,9 @@ export const NotificationList = () => {
       const hyphenatedTitle = post_id.title?.replace(/\s+/g, "-");
       if (post_id.post_id) {
         setPost_id(post_id.post_id);
-        setTitle(hyphenatedTitle);
+        if (hyphenatedTitle) {
+          setTitle(hyphenatedTitle);
+        }
         navigate(`/${post_id.user_id?.nickname}/${hyphenatedTitle}`);
       }
     }

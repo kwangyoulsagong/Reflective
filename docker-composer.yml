@@ -9,22 +9,23 @@ services:
     volumes:
       - mongodb_data:/data/db
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=reflective
-      - MONGO_INITDB_ROOT_PASSWORD=reflective
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_DATABASE}
 
   app:
     image: ${ECR_REGISTRY}/reflective-mono:latest
     restart: always
     ports:
-      - "80:8000" # 외부 80 포트를 내부 8000 포트로 매핑
+      - "0.0.0.0:8000:8000" # 백엔드 서버를 로컬에서만 접근 가능하게 설정
     depends_on:
       - mongodb
     environment:
-      - MONGODB_URI=mongodb://reflective:reflective@mongodb:27017/reflective?authSource=reflective
+      - MONGODB_URI=mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb:27017/${MONGO_DATABASE}?authSource=admin
       - PORT=8000
       - NODE_ENV=production
-      - JWT_SECRET=eXlFcXlORWVmQ0dOdGJWam1lZkxvRFl0U0dWd2FzSmpxRmkyOU4zVzM3TGVhMW1wYjQ7w3jsF1U16qA2jX6ytRYWZ5AF8DqPdt
-      - JWT_REFRESH_SECRET=cloy5Fejs8nuhflT2rGOTt2U1r00sdyP0w8a6oBHEB9DhlDlZoFv1jsffhdfVvDqWRw5YUnHRdXzRbF9RTGBzLK7nwdkcglq
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 

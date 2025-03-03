@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { CommentButton, buttonProps } from "./CommentButton";
+import { CommentButton } from "./CommentButton";
 
 const meta = {
   title: "UI/CommentButton",

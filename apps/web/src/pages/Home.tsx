@@ -1,5 +1,3 @@
-import React from "react";
-
 import MainRanks from "../features/Post/ui/RecentPost/MainRanks";
 import RecentPost from "../features/Post/ui/RecentPost/RecentPost";
 import useRecentPostQuery from "../features/Post/libs/hooks/recentPost/useRecentPostQuery";
