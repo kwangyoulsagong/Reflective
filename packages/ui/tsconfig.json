@@ -2,11 +2,12 @@
   "extends": "@repo/typescript-config/react-library.json",
   "compilerOptions": {
     "outDir": "dist",
+    "rootDir": "src",
     "baseUrl": ".",
     "paths": {
       "lucide-react": ["./node_modules/lucide-react"]
     }
   },
-  "include": ["src", "../../apps/web/src/shared/CircleImage"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

@@ -1,6 +1,7 @@
-export const BASE_URL = "http://localhost:5173";
-
-export const AXIOS_BASE_URL = "http://localhost:8000";
+export const AXIOS_BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://reflective.site"
+    : "http://localhost:8000";
 
 export const END_POINTS = {
   COMMENTS: (postId: string) => `/api/v1/comments/${postId}`,

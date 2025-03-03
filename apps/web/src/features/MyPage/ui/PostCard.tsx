@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Heart, Clock, Eye } from "lucide-react";
 import { useSpring, animated } from "react-spring";
 interface PostType {

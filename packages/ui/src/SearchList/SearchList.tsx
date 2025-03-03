@@ -1,4 +1,3 @@
-import React from "react";
 import { SearchListProps } from "./types/type";
 import List from "./ui/List";
 import Header from "./ui/Header";

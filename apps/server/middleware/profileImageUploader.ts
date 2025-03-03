@@ -36,8 +36,8 @@ class ProfileImageService {
     this.s3 = new S3Client({
       region,
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY || "",
-        secretAccessKey: process.env.AWS_SECRETE_ACCESS_KEY || "",
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
       },
     });
   }
@@ -70,7 +70,7 @@ class ProfileImageService {
         }
       },
       limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB 제한
+        fileSize: 10 * 1024 * 1024, // 10MB 제한
       },
     }).single("profileImage"); // 단일 프로필 이미지 업로드
   }

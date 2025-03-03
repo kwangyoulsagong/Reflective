@@ -12,7 +12,6 @@ export const Input = ({
   onChange,
   placeholder,
   type = "text",
-  className = "",
 }: InputProps) => {
   return (
     <input

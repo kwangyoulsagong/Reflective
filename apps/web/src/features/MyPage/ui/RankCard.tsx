@@ -1,4 +1,3 @@
-import React from "react";
 import useGetRanks from "../libs/hooks/useGetRanks";
 
 interface UserRankType {

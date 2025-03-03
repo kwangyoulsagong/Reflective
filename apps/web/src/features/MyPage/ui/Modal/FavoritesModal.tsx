@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { UserMinus } from "lucide-react";
 import useGetFollowers from "../../libs/hooks/useGetFollowers";
 import useGetFollowings from "../../libs/hooks/useGetFollowings";
