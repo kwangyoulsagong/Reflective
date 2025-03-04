@@ -7,10 +7,10 @@ import { usePost_idStore } from "../../../../app/provider/post_idProvider";
 import { usePostRouterStore } from "../../../../app/provider/postRouterProvider";
 import { axiosInstance } from "../../../../shared/api/axiosinstance";
 import { END_POINTS } from "../../../../shared/constants/api";
-import { useToast } from "../../../../shared/Toast/Hooks/useToast";
+import { useApiError } from "../../../../shared/useApiError";
 
 const RecentPost = () => {
-  const { showToast } = useToast();
+  const { handleError } = useApiError();
   const containerRef = useRef<HTMLDivElement>(null);
   const {
     virtualItems,
@@ -38,22 +38,6 @@ const RecentPost = () => {
     setTitle(hyphenatedTitle);
   };
 
-  const testError = async () => {
-    try {
-      const response = await axiosInstance.get(
-        END_POINTS.POST("non-existent-id")
-      );
-      return response;
-    } catch (error: any) {
-      if (error instanceof Error) {
-        showToast(error.message, "error");
-        throw new Error(error.message);
-      }
-    }
-  };
-  useEffect(() => {
-    testError();
-  }, []);
   if (isLoading && !isFetchingNextPage) {
     return (
       <div className="flex justify-center items-center h-[400px]">
