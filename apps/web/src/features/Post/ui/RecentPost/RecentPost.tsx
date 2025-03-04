@@ -1,12 +1,15 @@
 import { useNavigate } from "react-router-dom";
 
 import { PostCard } from "@repo/ui/card";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import useVirtualScroll from "../../../../shared/useVirtualScroll";
 import { usePost_idStore } from "../../../../app/provider/post_idProvider";
 import { usePostRouterStore } from "../../../../app/provider/postRouterProvider";
-
+import { axiosInstance } from "../../../../shared/api/axiosinstance";
+import { END_POINTS } from "../../../../shared/constants/api";
+import { useToast } from "@repo/ui/usetoast";
 const RecentPost = () => {
+  const { showToast } = useToast();
   const containerRef = useRef<HTMLDivElement>(null);
   const {
     virtualItems,
@@ -33,6 +36,20 @@ const RecentPost = () => {
     setNickname(nickname);
     setTitle(hyphenatedTitle);
   };
+
+  const testError = async () => {
+    const response = await axiosInstance.get(
+      END_POINTS.POST("non-existent-id")
+    );
+    if (response) {
+      return response.data;
+    } else {
+      throw new Error(response.error);
+    }
+  };
+  useEffect(() => {
+    testError();
+  }, []);
   if (isLoading && !isFetchingNextPage) {
     return (
       <div className="flex justify-center items-center h-[400px]">
