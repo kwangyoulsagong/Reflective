@@ -1,12 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { queryKeys } from "../../../../shared/constants/queryKeys";
 import fetchFavoriteStory from "../../api/fetchFavoriteStory";
 
 const useGetFavoriteStory = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: queryKeys.FavoriteStory,
     queryFn: fetchFavoriteStory,
-    throwOnError: true,
+    // throwOnError: true,
   });
 };
 export default useGetFavoriteStory;

@@ -12,7 +12,7 @@ const Comments = () => {
   const [showReplies, setShowReplies] = useState<{ [key: string]: boolean }>(
     {}
   );
-  const { comments, isLoading, error } = useFetchingComments(post_id);
+  const { comments } = useFetchingComments(post_id);
   const {
     handleSaveComment,
     handleDeleteComment,
@@ -27,9 +27,6 @@ const Comments = () => {
     editContent,
     setEditContent,
   } = useCommentsBuilder({ post_id });
-
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="flex flex-col mt-8 sm:mt-12 lg:mt-20 items-center gap-3 sm:gap-4 w-[80%] px-4 sm:px-6 max-w-3xl mx-auto">

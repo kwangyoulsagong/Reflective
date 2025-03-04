@@ -7,19 +7,9 @@ import { CircleImage } from "../CircleImage/CircleImage";
 import useGetProfile from "../constants/useGetProfile";
 
 const Header = () => {
-  const { data, isLoading, isError } = useGetProfile();
+  const { data } = useGetProfile();
   const navigate = useNavigate();
-  if (isLoading) {
-    return <div className="w-full max-w-6xl mx-auto px-4 py-8">Loading...</div>;
-  }
 
-  if (isError) {
-    return (
-      <div className="w-full max-w-6xl mx-auto px-4 py-8">
-        Error loading data. Please try again.
-      </div>
-    );
-  }
   return (
     <header className="mt-6 sm:mt-8 md:mt-10 flex flex-col sm:flex-row justify-between items-center w-full px-4 sm:px-8 md:px-16 gap-4 sm:gap-0">
       <img

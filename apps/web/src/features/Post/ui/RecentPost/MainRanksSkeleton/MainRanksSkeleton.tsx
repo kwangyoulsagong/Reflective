@@ -1,7 +1,8 @@
 const MainRanksSkeleton = () => {
   return (
-    <section className="relative w-full h-[400px] overflow-hidden my-6">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <section className="w-full flex justify-center items-center h-[400px] my-6 relative">
+      {/* 원형으로 배열된 스켈레톤 아이템들 */}
+      <div className="relative w-[300px] h-[300px]">
         {Array.from({ length: 8 }).map((_, i) => {
           // 원형 배치를 위한 각도 계산
           const angle = (i / 8) * 2 * Math.PI;
@@ -16,7 +17,9 @@ const MainRanksSkeleton = () => {
               style={{
                 width: "80px",
                 height: "80px",
-                transform: `translate(${x}px, ${y}px) rotate(${angle * (180 / Math.PI)}deg)`,
+                left: "50%",
+                top: "50%",
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${angle * (180 / Math.PI)}deg)`,
                 backgroundColor: "#e5e7eb",
               }}
             />

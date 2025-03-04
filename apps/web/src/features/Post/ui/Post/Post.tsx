@@ -1,12 +1,16 @@
 import { useEffect, useState, useRef } from "react";
 import PostHeader from "./Header/Header";
 import Bars from "./Bars/Bars";
-import { getPostType } from "../../model/post/type";
 import { Block } from "../../../../shared/BlockView/model/BlockView/types";
 import BlockView from "../../../../shared/BlockView/ui/BlockView";
 import { PostValidation } from "../../libs/validation/Post";
+import { usePost_idStore } from "../../../../app/provider/post_idProvider";
+import usePostDetailQuery from "../../libs/hooks/post/usePostDetailQuery";
 
-const PostView = (data: Partial<getPostType>) => {
+const PostView = () => {
+  const { post_id } = usePost_idStore();
+
+  const { data } = usePostDetailQuery(post_id);
   const contentRef = useRef<HTMLDivElement>(null);
   const [blocks, setBlocks] = useState<Block[]>([]);
   const postValidation = new PostValidation();
