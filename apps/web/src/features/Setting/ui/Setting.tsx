@@ -6,13 +6,14 @@ import useGetProfileInfo from "../libs/hooks/useGetProfileInfo";
 import { imageValidation } from "../libs/validation/imageValidation";
 import useUploadProfileImage from "../libs/hooks/useUploadProfileImage";
 import useUpdateProfileInfo from "../libs/hooks/useUpdateProfileInfo";
-
+import { useToast } from "../../../shared/Toast/Hooks/useToast";
 const Setting = () => {
   const validateImage = new imageValidation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { data, isLoading, isError } = useGetProfileInfo();
   const uploadProfileImage = useUploadProfileImage();
   const updateProfile = useUpdateProfileInfo();
+  const { showToast } = useToast();
   const [profileState, setProfileState] = useState({
     image_url: "",
     email: "",
@@ -58,7 +59,7 @@ const Setting = () => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (!validateImage.validate(file)) {
+    if (!validateImage.validate(file, showToast)) {
       return;
     }
 

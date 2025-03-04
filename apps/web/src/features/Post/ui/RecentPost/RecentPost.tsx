@@ -1,12 +1,16 @@
 import { useNavigate } from "react-router-dom";
 
 import { PostCard } from "@repo/ui/card";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import useVirtualScroll from "../../../../shared/useVirtualScroll";
 import { usePost_idStore } from "../../../../app/provider/post_idProvider";
 import { usePostRouterStore } from "../../../../app/provider/postRouterProvider";
+import { axiosInstance } from "../../../../shared/api/axiosinstance";
+import { END_POINTS } from "../../../../shared/constants/api";
+import { useApiError } from "../../../../shared/useApiError";
 
 const RecentPost = () => {
+  const { handleError } = useApiError();
   const containerRef = useRef<HTMLDivElement>(null);
   const {
     virtualItems,
@@ -33,6 +37,7 @@ const RecentPost = () => {
     setNickname(nickname);
     setTitle(hyphenatedTitle);
   };
+
   if (isLoading && !isFetchingNextPage) {
     return (
       <div className="flex justify-center items-center h-[400px]">

@@ -10,6 +10,9 @@
   background: var(--custom-gray);
   text-indent: 10px;
 }
+.toast-success {
+  color: #2e7d32;
+}
 @media (max-width: 1000px) {
   .hide-on-small {
     display: none;

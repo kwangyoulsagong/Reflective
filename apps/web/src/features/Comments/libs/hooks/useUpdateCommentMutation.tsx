@@ -2,12 +2,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import updateComment from "../../api/updateComment";
 import { queryKeys } from "../../../../shared/constants/queryKeys";
 import { commentState } from "../../../../types/types";
+import { useApiError } from "../../../../shared/useApiError";
 interface UpdateCommentParams {
   comment_id: string;
   content: string;
 }
 const useUpdateCommentMutation = (post_id: string) => {
   const queryClient = useQueryClient();
+  const { handleError } = useApiError();
   return useMutation({
     mutationFn: updateComment,
     onMutate: ({ comment_id, content }: UpdateCommentParams) => {
@@ -34,7 +36,7 @@ const useUpdateCommentMutation = (post_id: string) => {
         [queryKeys.FetchComment, post_id],
         context?.previousComments
       );
-      alert(err);
+      handleError(err);
     },
   });
 };

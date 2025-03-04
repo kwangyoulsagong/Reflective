@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import deleteComment from "../../api/deleteComment";
-
 import { commentState } from "../../../../types/types";
 import { queryKeys } from "../../../../shared/constants/queryKeys";
+import { useApiError } from "../../../../shared/useApiError";
 
 const useDeleteCommentMutation = (post_id: string) => {
   const queryClient = useQueryClient();
+  const { handleError } = useApiError();
   return useMutation({
     mutationFn: deleteComment,
     onMutate: (comment_id) => {
@@ -31,7 +32,7 @@ const useDeleteCommentMutation = (post_id: string) => {
         [queryKeys.FetchComment, post_id],
         context?.previousComments
       );
-      alert(err);
+      handleError(err);
     },
   });
 };

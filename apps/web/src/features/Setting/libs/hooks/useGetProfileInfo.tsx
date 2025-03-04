@@ -6,6 +6,7 @@ const useGetProfileInfo = () => {
   return useQuery({
     queryKey: [queryKeys.MyProfileInfo],
     queryFn: fetchProfileInfo,
+    throwOnError: true,
   });
 };
 export default useGetProfileInfo;

@@ -2,10 +2,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import saveComment from "../../api/saveComment";
 import { queryKeys } from "../../../../shared/constants/queryKeys";
 import { commentState } from "../../../../types/types";
-
+import { useApiError } from "../../../../shared/useApiError";
 const useSaveCommentMutation = (post_id: string) => {
   const queryClient = useQueryClient();
   const nickname = localStorage.getItem("nickname");
+  const { handleError } = useApiError();
   return useMutation({
     mutationFn: saveComment,
     onMutate: async (newComment: {
@@ -43,7 +44,7 @@ const useSaveCommentMutation = (post_id: string) => {
         [queryKeys.FetchComment, post_id],
         context?.previousComments
       );
-      alert(err);
+      handleError(err);
     },
   });
 };
