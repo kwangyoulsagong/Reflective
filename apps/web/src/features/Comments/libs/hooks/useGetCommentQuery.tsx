@@ -6,7 +6,6 @@ const useGetCommentQuery = (post_id: string) => {
   return useSuspenseQuery({
     queryKey: [queryKeys.FetchComment, post_id],
     queryFn: () => fetchComment(post_id),
-    // throwOnError: true,
   });
 };
 export default useGetCommentQuery;

@@ -6,7 +6,6 @@ const useGetFavoriteStory = () => {
   return useSuspenseQuery({
     queryKey: queryKeys.FavoriteStory,
     queryFn: fetchFavoriteStory,
-    // throwOnError: true,
   });
 };
 export default useGetFavoriteStory;
