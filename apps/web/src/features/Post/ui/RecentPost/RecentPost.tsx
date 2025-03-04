@@ -1,16 +1,12 @@
 import { useNavigate } from "react-router-dom";
 
 import { PostCard } from "@repo/ui/card";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import useVirtualScroll from "../../../../shared/useVirtualScroll";
 import { usePost_idStore } from "../../../../app/provider/post_idProvider";
 import { usePostRouterStore } from "../../../../app/provider/postRouterProvider";
-import { axiosInstance } from "../../../../shared/api/axiosinstance";
-import { END_POINTS } from "../../../../shared/constants/api";
-import { useApiError } from "../../../../shared/useApiError";
 
 const RecentPost = () => {
-  const { handleError } = useApiError();
   const containerRef = useRef<HTMLDivElement>(null);
   const {
     virtualItems,
