@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-
 import { PostCard } from "@repo/ui/card";
 import { useRef } from "react";
 import useVirtualScroll from "../../../../shared/useVirtualScroll";
