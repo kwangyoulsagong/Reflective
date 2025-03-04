@@ -1,9 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import postUploadProfileImage from "../../api/postUploadProfileImage";
 import { queryKeys } from "../../../../shared/constants/queryKeys";
+import { useApiError } from "../../../../shared/useApiError";
 
 const useUploadProfileImage = () => {
   const queryClient = useQueryClient();
+  const { handleError } = useApiError();
   return useMutation({
     mutationFn: postUploadProfileImage,
     onMutate: async (formData) => {
@@ -30,7 +32,8 @@ const useUploadProfileImage = () => {
       // 롤백을 위해 이전 데이터 반환
       return { previousProfileData };
     },
-    onError: (_, context) => {
+    onError: (err, _, context) => {
+      handleError(err);
       // 에러 발생 시 이전 데이터로 롤백
       if (context?.previousProfileData) {
         queryClient.setQueryData(

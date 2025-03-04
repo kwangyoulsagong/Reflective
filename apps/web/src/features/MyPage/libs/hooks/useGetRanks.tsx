@@ -6,6 +6,7 @@ const useGetRanks = () => {
   return useQuery({
     queryKey: [queryKeys.Ranking],
     queryFn: fetchRanks,
+    throwOnError: true,
   });
 };
 export default useGetRanks;

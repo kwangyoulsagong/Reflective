@@ -1,13 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import putProfileInfo from "../../api/putProfileInfo";
 import { queryKeys } from "../../../../shared/constants/queryKeys";
+import { useToast } from "../../../../shared/Toast/Hooks/useToast";
+import { useApiError } from "../../../../shared/useApiError";
 
 const useUpdateProfileInfo = () => {
   const queryClient = useQueryClient();
+  const { showToast } = useToast();
+  const { handleError } = useApiError();
   return useMutation({
     mutationFn: putProfileInfo,
     onSuccess: (data: { message: string }) => {
-      alert(data.message);
+      showToast(data.message);
       queryClient.invalidateQueries({
         queryKey: [queryKeys.MyProfile],
       });
@@ -16,7 +20,7 @@ const useUpdateProfileInfo = () => {
       });
     },
     onError: (err) => {
-      alert(err);
+      handleError(err);
     },
   });
 };

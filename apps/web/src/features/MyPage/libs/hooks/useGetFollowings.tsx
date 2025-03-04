@@ -5,6 +5,7 @@ const useGetFollowings = () => {
   return useQuery({
     queryKey: [queryKeys.MyFollowings],
     queryFn: fetchMyFollowings,
+    throwOnError: true,
   });
 };
 export default useGetFollowings;

@@ -5,6 +5,7 @@ const useGetFollowers = () => {
   return useQuery({
     queryKey: [queryKeys.MyFollowers],
     queryFn: fetchMyFollowers,
+    throwOnError: true,
   });
 };
 export default useGetFollowers;
