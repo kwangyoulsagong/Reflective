@@ -3,6 +3,7 @@ import UseGetLike from "../../../api/Post/likes/useGetLike";
 import UsePatchLike from "../../../api/Post/likes/usePatchLike";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../../../../shared/constants/queryKeys";
+import { useApiError } from "../../../../../shared/useApiError";
 
 const useLike = (
   postId: string,
@@ -11,30 +12,51 @@ const useLike = (
 ) => {
   const [isLiked, setIsLiked] = useState(initialLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
-  const queryclient = useQueryClient();
+  const queryClient = useQueryClient();
+  const { handleError } = useApiError();
 
   useEffect(() => {
     const fetchLikeStatus = async () => {
-      const response = await UseGetLike(postId);
-      if (response.result?.is_liked !== undefined) {
-        setIsLiked(response.result.is_liked);
+      try {
+        const response = await UseGetLike(postId);
+
+        // response와 response.result가 존재하는지 확인
+        if (
+          response &&
+          response.result &&
+          response.result.is_liked !== undefined
+        ) {
+          setIsLiked(response.result.is_liked);
+        }
+      } catch (error) {
+        // 좋아요 상태 조회 실패 시 에러 처리
+        handleError(error);
       }
     };
     fetchLikeStatus();
-  }, [postId]);
+  }, [postId, handleError]);
 
   const handleLike = async () => {
-    const is_liked = !isLiked;
-    const response = await UsePatchLike(postId, { is_liked });
-    if (response.message) {
-      setIsLiked(is_liked);
-      setLikeCount(likeCount + (is_liked ? 1 : -1));
-      queryclient.invalidateQueries({
-        queryKey: [queryKeys.PostDetail, postId],
-      });
+    try {
+      const is_liked = !isLiked;
+      const response = await UsePatchLike(postId, { is_liked });
+
+      // response와 response.message가 존재하는지 확인
+      if (response && response.message) {
+        setIsLiked(is_liked);
+        setLikeCount(likeCount + (is_liked ? 1 : -1));
+
+        queryClient.invalidateQueries({
+          queryKey: [queryKeys.PostDetail, postId],
+        });
+      }
+    } catch (error) {
+      // 좋아요 토글 실패 시 에러 처리
+      handleError(error);
     }
   };
 
   return { isLiked, likeCount, handleLike };
 };
+
 export default useLike;

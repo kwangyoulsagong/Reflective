@@ -6,6 +6,7 @@ const useGetPostMyPage = () => {
   return useQuery({
     queryKey: [queryKeys.MyPost],
     queryFn: fetchMyPage,
+    throwOnError: true,
   });
 };
 export default useGetPostMyPage;

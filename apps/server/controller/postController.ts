@@ -91,7 +91,9 @@ class PostController {
       const userId = req.user.user_id;
       const updatedPost = await postService.updatePost(post_id, userId, data);
       if (updatedPost) {
-        res.status(200).json({ message: "게시물이 수정 되었습니다." });
+        res
+          .status(200)
+          .json({ message: "게시물이 수정 되었습니다.", updatedPost });
       } else {
         res.status(404).json({ message: "게시물 없음" });
       }

@@ -11,7 +11,10 @@
     "./searchbar": "./src/SearchBar/SearchBar.tsx",
     "./searchlist": "./src/SearchList/SearchList.tsx",
     "./code": "./src/code.tsx",
-    "./style": "./src/styles/global.css"
+    "./style": "./src/styles/global.css",
+    "./toastprovider": "./src/Toast/Provider/ToastContext.tsx",
+    "./toast": "./src/Toast/Toast.tsx",
+    "./usetoast": "./src/Toast/Hooks/useToast.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

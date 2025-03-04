@@ -21,7 +21,7 @@ const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
       title: data.title,
       contents: data.contents,
       category: data.category || "",
-      thumbnail: thumbnail,
+      thumbnail: thumbnail || "",
       like_count: isEdit ? undefined : 0,
     };
 
@@ -30,7 +30,7 @@ const WriteUpload = ({ data, onClose, isEdit }: WriteUploadProps) => {
         title: data.title,
         contents: data.contents,
         category: data.category || "",
-        thumbnail: thumbnail,
+        thumbnail: thumbnail || "",
       };
       updateMutation.mutate({ post_id, body: updateBody });
     } else {
