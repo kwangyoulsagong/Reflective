@@ -1,16 +1,27 @@
 const MainRanksSkeleton = () => {
   return (
-    <section className="container">
-      <div className="gallery flex justify-center space-x-4">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <div
-            key={i}
-            className="w-32 h-48 bg-gray-200 rounded-lg animate-pulse"
-          ></div>
-        ))}
-      </div>
-      <div className="message flex justify-center mt-4">
-        <div className="h-6 bg-gray-200 rounded w-48 animate-pulse"></div>
+    <section className="relative w-full h-[400px] overflow-hidden my-6">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        {Array.from({ length: 8 }).map((_, i) => {
+          // 원형 배치를 위한 각도 계산
+          const angle = (i / 8) * 2 * Math.PI;
+          const radius = 120; // 원의 반지름
+          const x = Math.cos(angle) * radius;
+          const y = Math.sin(angle) * radius;
+
+          return (
+            <div
+              key={i}
+              className="absolute rounded-full overflow-hidden shadow-lg animate-pulse"
+              style={{
+                width: "80px",
+                height: "80px",
+                transform: `translate(${x}px, ${y}px) rotate(${angle * (180 / Math.PI)}deg)`,
+                backgroundColor: "#e5e7eb",
+              }}
+            />
+          );
+        })}
       </div>
     </section>
   );
