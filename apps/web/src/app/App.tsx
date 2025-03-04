@@ -6,12 +6,12 @@ import QueryClientProvider from "./provider/QueryClientProvider/QueryClientProvi
 import StartRoutes from "./routes/StartRoutes";
 import PageRoutes from "./routes/PageRoutes";
 import Error from "./error/Error";
-import { ToastProvider } from "@repo/ui/toastprovider";
+import { ToastProvider } from "../shared/Toast/Provider/ToastContext";
 
 function App() {
   return (
-    <RecoilRoot>
-      <ToastProvider>
+    <ToastProvider>
+      <RecoilRoot>
         <ErrorBoundary Fallback={Error}>
           <Router>
             <QueryClientProvider>
@@ -21,8 +21,8 @@ function App() {
             </QueryClientProvider>
           </Router>
         </ErrorBoundary>
-      </ToastProvider>
-    </RecoilRoot>
+      </RecoilRoot>
+    </ToastProvider>
   );
 }
 

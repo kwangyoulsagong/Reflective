@@ -1,6 +1,6 @@
-import { useToast } from "@repo/ui/usetoast";
 import { HTTP_STATUS_CODE } from "./constants/api";
 import { HTTPError } from "./api/HTTPError";
+import { useToast } from "./Toast/Hooks/useToast";
 export const useApiError = () => {
   const { showToast } = useToast();
   const handleError = (error: unknown) => {

@@ -7,7 +7,8 @@ import { usePost_idStore } from "../../../../app/provider/post_idProvider";
 import { usePostRouterStore } from "../../../../app/provider/postRouterProvider";
 import { axiosInstance } from "../../../../shared/api/axiosinstance";
 import { END_POINTS } from "../../../../shared/constants/api";
-import { useToast } from "@repo/ui/usetoast";
+import { useToast } from "../../../../shared/Toast/Hooks/useToast";
+
 const RecentPost = () => {
   const { showToast } = useToast();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -38,13 +39,16 @@ const RecentPost = () => {
   };
 
   const testError = async () => {
-    const response = await axiosInstance.get(
-      END_POINTS.POST("non-existent-id")
-    );
-    if (response) {
-      return response.data;
-    } else {
-      throw new Error(response.error);
+    try {
+      const response = await axiosInstance.get(
+        END_POINTS.POST("non-existent-id")
+      );
+      return response;
+    } catch (error: any) {
+      if (error instanceof Error) {
+        showToast(error.message, "error");
+        throw new Error(error.message);
+      }
     }
   };
   useEffect(() => {

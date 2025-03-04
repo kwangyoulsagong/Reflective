@@ -23,7 +23,7 @@ export const Toast = ({
   const getBackgroundColor = () => {
     switch (type) {
       case "success":
-        return "bg-green-50 border-l-4 border-green-500";
+        return "toast-success border-l-4 border-green-500";
       case "error":
         return "bg-red-50 border-l-4 border-red-500";
       case "warning":
@@ -64,7 +64,7 @@ export const Toast = ({
 
   return (
     <div
-      className={`fixed right-4 ${
+      className={`fixed left-0 top-0 ${
         isVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
       } shadow-lg rounded-md overflow-hidden max-w-md transition-all duration-300 ease-in-out ${getBackgroundColor()}`}
       style={{ zIndex: 9999 }}

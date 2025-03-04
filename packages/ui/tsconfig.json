@@ -8,6 +8,10 @@
       "lucide-react": ["./node_modules/lucide-react"]
     }
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "../../apps/web/src/shared/Toast/Hooks",
+    "../../apps/web/src/shared/Toast/Provider"
+  ],
   "exclude": ["node_modules", "dist"]
 }

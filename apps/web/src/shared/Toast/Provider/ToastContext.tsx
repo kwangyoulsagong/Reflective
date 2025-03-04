@@ -1,7 +1,7 @@
 import React, { createContext, useState, ReactNode } from "react";
-import { ToastType } from "../Types/type";
-import { Toast } from "../Toast";
-import { ToastContextProps, ToastItem } from "./Types/type";
+
+import { Toast } from "@repo/ui/toast";
+import { ToastContextProps, ToastItem, ToastType } from "./Types/type";
 
 export const ToastContext = createContext<ToastContextProps | undefined>(
   undefined
@@ -14,7 +14,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({
 
   const showToast = (
     message: string,
-    type: ToastType = "info",
+    type: ToastType = "success",
     duration = 3000
   ) => {
     const id = Math.random().toString(36).substr(2, 9);
