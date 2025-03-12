@@ -4,7 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import PostView from "../ui/Post/Post";
 import { PostValidation } from "../libs/validation/Post";
-import { getPostType } from "../model/post/type";
 import { Block } from "@/entities/BlockEditor/model/type/BlockEditor";
 
 jest.mock("../api/Post/likes/useGetLike", () => ({
@@ -49,14 +48,6 @@ const customRender = (ui: React.ReactElement) => {
 };
 
 describe("PostView", () => {
-  const mockPost: Partial<getPostType> = {
-    title: "테스트 제목",
-    contents: JSON.stringify([
-      { id: "1", type: "paragraph", content: "첫 번째 블록" },
-      { id: "2", type: "code", content: "두 번째 블록" },
-    ]),
-  };
-
   const mockValidBlocks: Block[] = [
     { id: "1", type: "paragraph", content: "첫 번째 블록" },
     { id: "2", type: "code", content: "두 번째 블록" },
@@ -69,7 +60,7 @@ describe("PostView", () => {
 
   describe("렌더링 테스트", () => {
     it("제목이 올바르게 렌더링되어야 한다", () => {
-      customRender(<PostView {...mockPost} />);
+      customRender(<PostView />);
 
       const title = screen.getByText("테스트 제목");
       expect(title).toBeInTheDocument();
@@ -82,7 +73,7 @@ describe("PostView", () => {
     });
 
     it("article이 올바른 width 클래스를 가져야 한다", () => {
-      customRender(<PostView {...mockPost} />);
+      customRender(<PostView />);
       const articleContent = screen.getByRole("article").querySelector("div");
       expect(articleContent).toHaveClass("w-[375px]", "md:w-[750px]");
     });
@@ -95,7 +86,7 @@ describe("PostView", () => {
         contents: mockValidBlocks,
       });
 
-      customRender(<PostView {...mockPost} />);
+      customRender(<PostView />);
 
       await waitFor(() => {
         const blocks = screen.getAllByTestId("block-view");
@@ -113,7 +104,7 @@ describe("PostView", () => {
         isError: "검증 실패",
       });
 
-      customRender(<PostView {...mockPost} />);
+      customRender(<PostView />);
 
       await waitFor(() => {
         expect(consoleSpy).toHaveBeenCalledWith("검증 실패");
@@ -133,14 +124,7 @@ describe("PostView", () => {
           contents: mockValidBlocks,
         });
 
-      const { rerender } = customRender(<PostView {...mockPost} />);
-
-      const updatedPost = {
-        ...mockPost,
-        contents: JSON.stringify([
-          { id: "1", type: "paragraph", content: "업데이트된 블록" },
-        ]),
-      };
+      const { rerender } = customRender(<PostView />);
 
       validationSpy.mockReturnValue({
         isValid: true,
@@ -149,7 +133,7 @@ describe("PostView", () => {
         ],
       });
 
-      rerender(<PostView {...updatedPost} />);
+      rerender(<PostView />);
 
       await waitFor(() => {
         const blocks = screen.getAllByTestId("block-view");
@@ -161,7 +145,7 @@ describe("PostView", () => {
 
   describe("반응형 스타일 테스트", () => {
     it("컨테이너가 올바른 반응형 클래스를 가져야 한다", () => {
-      customRender(<PostView {...mockPost} />);
+      customRender(<PostView />);
 
       const container = screen.getByRole("article").parentElement;
       expect(container).toHaveClass(

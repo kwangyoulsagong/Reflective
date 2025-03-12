@@ -29,6 +29,14 @@ const useCommentsBuilder = ({ post_id }: updateCommentState) => {
 
     const body = { post_id, parent_comment_id, content };
     saveMutate(body);
+    if (parent_comment_id) {
+      setReplyContent((prev) => ({
+        ...prev,
+        [parent_comment_id]: "",
+      }));
+    } else {
+      setNewComment("");
+    }
   };
 
   const handleDeleteComment = async (comment_id: string) => {
