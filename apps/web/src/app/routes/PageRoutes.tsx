@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Write from "../../pages/WritePage";
 import PostDetail from "../../pages/Post/PostPage";
-import MyPage from "../../pages/Mypage";
+import MyPage from "../../pages/Mypage/Mypage";
 import SettingPage from "../../pages/SettingPage";
 import SearchPage from "../../pages/SearchPage";
 
