@@ -12,7 +12,6 @@ const useLoginMutation = () => {
   return useMutation({
     mutationFn: postLogin,
     onSuccess: (data: LoginType) => {
-      console.log(data);
       localStorage.setItem(USER_ID_KEY, data.user_id);
       localStorage.setItem("nickname", data.nickname);
       localStorage.setItem("email", data.email);

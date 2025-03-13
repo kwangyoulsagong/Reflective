@@ -18,7 +18,6 @@ export const NotificationList = () => {
     isLoading,
     error,
   } = useNotificationStore();
-  console.log(notifications);
   useNotificationSSE();
   useEffect(() => {
     fetchNotifications();

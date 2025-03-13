@@ -33,14 +33,12 @@ export const useNotificationSSE = () => {
     });
 
     eventSource.onopen = () => {
-      console.log("SSE connection established");
       setIsConnected(true);
     };
 
     eventSource.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        console.log("Received SSE message:", data);
 
         // 에러 타입 처리
         if (data.type === "ERROR") {
@@ -50,14 +48,12 @@ export const useNotificationSSE = () => {
         }
 
         if (data.type === "CONNECT") {
-          console.log("SSE 연결 성공:", data.message);
           setIsConnected(true);
         } else if (data.type === "NOTIFICATION") {
           // 중요: 항상 알림 추가 및 최신 알림 패치
           addNotification(data);
           fetchNotifications();
         } else if (data.type === "DISCONNECT") {
-          console.log("서버에서 연결 종료 신호");
           eventSource.close();
           reconnect();
         }

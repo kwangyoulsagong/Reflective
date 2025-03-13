@@ -19,7 +19,6 @@ interface ProfileProps {
   };
 }
 const Profile = ({ profileData }: ProfileProps) => {
-  console.log(profileData);
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("followers");
