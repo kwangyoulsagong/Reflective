@@ -9,8 +9,8 @@ const PostPage = () => {
   return (
     <div className="flex justify-center items-center">
       <div className="flex flex-col items-center justify-center w-[full] ">
-        <Header />
         <Suspense fallback={<PostPageSkeleton />}>
+          <Header />
           <PostView />
           <Comments />
         </Suspense>
