@@ -3,7 +3,7 @@ name: Build and Deploy to EC2 with ECR
 on:
   push:
     branches:
-      - main # 또는 master
+      - feat11/skeleton-suspense-suspensequery # 또는 master
 
 env:
   AWS_REGION: ap-northeast-2 # 서울 리전
