@@ -10,7 +10,7 @@ import { useToast } from "../../../shared/Toast/Hooks/useToast";
 const Setting = () => {
   const validateImage = new imageValidation();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { data, isLoading, isError } = useGetProfileInfo();
+  const { data } = useGetProfileInfo();
   const uploadProfileImage = useUploadProfileImage();
   const updateProfile = useUpdateProfileInfo();
   const { showToast } = useToast();
@@ -22,15 +22,15 @@ const Setting = () => {
   });
   const [isUploading, setIsUploading] = useState(false);
   useEffect(() => {
-    if (data && !isLoading && !isError) {
+    if (data) {
       setProfileState({
-        image_url: data.image_url || "",
+        image_url: data.image_url || null,
         email: data.email || "",
         nickname: data.nickname || "",
         phone_number: data.phone_number || "",
       });
     }
-  }, [data, isLoading, isError]);
+  }, [data]);
 
   const handleChange =
     (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,8 +73,6 @@ const Setting = () => {
       },
     });
   };
-  if (isLoading) return <div>로딩 중...</div>;
-  if (isError) return <div>프로필 정보를 불러오는 중 오류가 발생했습니다.</div>;
 
   return (
     <article className="flex flex-col justify-center items-center w-[350px] h-[600px] border border-gray-300 gap-10">
