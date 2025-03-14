@@ -21,6 +21,7 @@
     "check-types": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "deploy-storybook": "storybook-to-ghpages",
     "build": "tsc --outDir dist"
   },
   "peerDependencies": {
@@ -30,6 +31,7 @@
     "@chromatic-com/storybook": "^3.2.4",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@storybook/addon-actions": "^8.6.4",
     "@storybook/addon-designs": "^8.1.0",
     "@storybook/addon-essentials": "^8.5.3",
     "@storybook/addon-interactions": "^8.5.3",
@@ -40,6 +42,7 @@
     "@storybook/blocks": "^8.5.3",
     "@storybook/react": "^8.5.3",
     "@storybook/react-vite": "^8.5.3",
+    "@storybook/storybook-deployer": "^2.8.16",
     "@storybook/test": "^8.5.3",
     "@storybook/testing-library": "^0.2.2",
     "@turbo/gen": "^2.3.4",
