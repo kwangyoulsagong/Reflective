@@ -1,0 +1,1 @@
+const i=e=>{const t={year:"numeric",month:"long",day:"numeric"};return new Date(e).toLocaleDateString("ko-KR",t)},c=e=>{const t=new Date,a=new Date(e),o=t.getTime()-a.getTime(),n=Math.floor(o/6e4),r=Math.floor(o/36e5),s=Math.floor(o/864e5);return n<1?"방금 전":n<60?`${n}분 전`:r<24?`${r}시간 전`:s<7?`${s}일 전`:i(e)};export{c as f};
