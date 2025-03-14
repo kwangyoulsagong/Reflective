@@ -1,35 +1,27 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FileText, Bookmark } from "lucide-react";
-import TabButton from "../features/MyPage/ui/TabButton";
-import RankCard from "../features/MyPage/ui/RankCard";
-import IntroductionCard from "../features/MyPage/ui/IntroductionCard";
+import TabButton from "../../../features/MyPage/ui/TabButton";
+import RankCard from "../../../features/MyPage/ui/RankCard";
+import IntroductionCard from "../../../features/MyPage/ui/IntroductionCard";
 import { PostCard } from "@repo/ui/card";
-import Header from "../shared/Header/Header";
-import useGetPostMyPage from "../features/MyPage/libs/hooks/useGetPostMyPage";
-import { usePost_idStore } from "../app/provider/post_idProvider";
-import { usePostRouterStore } from "../app/provider/postRouterProvider";
-import Profile from "../features/MyPage/ui/Profile";
-import useGetProfile from "../shared/constants/useGetProfile";
+import Header from "../../../shared/Header/Header";
+import useGetPostMyPage from "../../../features/MyPage/libs/hooks/useGetPostMyPage";
+import { usePost_idStore } from "../../../app/provider/post_idProvider";
+import { usePostRouterStore } from "../../../app/provider/postRouterProvider";
+import Profile from "../../../features/MyPage/ui/Profile";
+import useGetProfile from "../../../shared/constants/useGetProfile";
 import { PostType } from "@/types/types";
 
-const MyPage = () => {
+const MyPageContent = () => {
   const navigate = useNavigate();
   const { setPost_id } = usePost_idStore();
   const { setNickname, setTitle } = usePostRouterStore();
   const [activeTab, setActiveTab] = useState<string>("posts");
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const {
-    data: myPageData,
-    isLoading: myPageLoading,
-    isError: myPageError,
-  } = useGetPostMyPage();
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    isError: profileError,
-  } = useGetProfile();
+  const { data: myPageData } = useGetPostMyPage();
+  const { data: profileData } = useGetProfile();
 
   const posts = myPageData?.myPosts ?? [];
   const favoritesPosts = myPageData?.favoritePosts ?? [];
@@ -54,21 +46,6 @@ const MyPage = () => {
 
     setActiveTab(tab);
   };
-
-  const isLoading = myPageLoading || profileLoading;
-  const isError = myPageError || profileError;
-
-  if (isLoading) {
-    return <div className="w-full max-w-6xl mx-auto px-4 py-8">Loading...</div>;
-  }
-
-  if (isError) {
-    return (
-      <div className="w-full max-w-6xl mx-auto px-4 py-8">
-        Error loading data. Please try again.
-      </div>
-    );
-  }
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8">
@@ -132,4 +109,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default MyPageContent;

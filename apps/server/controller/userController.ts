@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import userService from "../service/userService";
+import { generateToken, verifyRefreshToken } from "../authorization/jwt";
 class UserController {
   // 회원가입 컨틀롤러
   public async Register(req: Request, res: Response): Promise<void> {
@@ -32,6 +33,34 @@ class UserController {
     } catch (error: any) {
       console.log(error);
       res.status(401).json({ error: error.message });
+    }
+  }
+
+  public async refreshToken(req: Request, res: Response): Promise<any> {
+    const { refreshToken } = req.body;
+    console.log("refreshTOken", refreshToken);
+
+    if (!refreshToken) {
+      return res.status(403).json({
+        message: "리프레쉬 토큰이 없습니다.",
+        code: "REFRESH_TOKEN_MISSING",
+      });
+    }
+
+    try {
+      // refreshToken에서 user_id 추출
+      const decoded = verifyRefreshToken(refreshToken);
+      const userId = decoded?.user_id; // refreshToken에서 user_id 가져오기
+
+      // 새로운 액세스 토큰 발급
+      const accessToken = generateToken({ user_id: userId });
+      return res.json({ accessToken });
+    } catch (error) {
+      console.error("Token verification failed:", error);
+      return res.status(403).json({
+        message: "리프레쉬 토큰 검증 실패",
+        code: "TOKEN_VERIFICATION_FAILED",
+      });
     }
   }
 }

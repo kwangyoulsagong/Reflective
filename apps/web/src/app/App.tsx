@@ -7,19 +7,22 @@ import StartRoutes from "./routes/StartRoutes";
 import PageRoutes from "./routes/PageRoutes";
 import Error from "./error/Error";
 import { ToastProvider } from "../shared/Toast/Provider/ToastContext";
+import { SSEProvider } from "./provider/SSEProvider";
 
 function App() {
   return (
     <ToastProvider>
       <RecoilRoot>
         <ErrorBoundary Fallback={Error}>
-          <Router>
-            <QueryClientProvider>
-              {/* routes 폴더에 nested route로 관리 */}
-              <StartRoutes />
-              <PageRoutes />
-            </QueryClientProvider>
-          </Router>
+          <SSEProvider>
+            <Router>
+              <QueryClientProvider>
+                {/* routes 폴더에 nested route로 관리 */}
+                <StartRoutes />
+                <PageRoutes />
+              </QueryClientProvider>
+            </Router>
+          </SSEProvider>
         </ErrorBoundary>
       </RecoilRoot>
     </ToastProvider>

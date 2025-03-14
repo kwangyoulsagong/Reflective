@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { queryKeys } from "./constants/queryKeys";
 import fetchPosts from "./api/Post/fetchPosts";
 import { useApiError } from "./useApiError";
@@ -7,7 +7,7 @@ import { useEffect } from "react";
 const useInfinitePostsQuery = () => {
   const { handleError } = useApiError();
 
-  const result = useInfiniteQuery({
+  const result = useSuspenseInfiniteQuery({
     queryKey: [queryKeys.RecentPost],
     queryFn: fetchPosts,
     getNextPageParam: (lastPage, allPages) =>
@@ -30,10 +30,6 @@ const useInfinitePostsQuery = () => {
     fetchNextPage: result.fetchNextPage,
     hasNextPage: result.hasNextPage,
     isFetchingNextPage: result.isFetchingNextPage,
-    status: result.status,
-    error: result.error,
-    isLoading: result.status === "pending",
-    isError: result.status === "error",
   };
 };
 

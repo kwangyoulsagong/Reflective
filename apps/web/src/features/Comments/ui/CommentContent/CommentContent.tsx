@@ -1,9 +1,8 @@
 import { CommentButton } from "@repo/ui/commentbutton";
-
 import TextArea from "../Common/TextArea/TextArea";
 import { commentContentProps } from "../../../../entities/Comments/model/CommentContent/type";
 import { formatRelativeTime } from "@repo/ui/time";
-
+import profileImg from "../../../../assets/profile.png";
 const CommentContent = ({
   comment,
   isReply = false,
@@ -19,7 +18,7 @@ const CommentContent = ({
         className={`${
           isReply ? "w-6 h-6 sm:w-8 sm:h-8" : "w-8 h-8 sm:w-10 sm:h-10"
         } rounded-full object-cover`}
-        src={comment.image_url}
+        src={comment.image_url ?? profileImg}
         alt={`${comment.nickname}'s avatar`}
       />
       <div className="flex-1">

@@ -1,7 +1,7 @@
 import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import logo from "../../../assets/logo.svg";
+import logo from "../../../assets/profile.png";
 import { useState } from "react";
 import FavoritesModal from "./Modal/FavoritesModal";
 interface ProfileProps {
@@ -19,7 +19,6 @@ interface ProfileProps {
   };
 }
 const Profile = ({ profileData }: ProfileProps) => {
-  console.log(profileData);
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("followers");

@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-
 import Prism from "prismjs";
 import "prismjs/themes/prism.css";
 import "prismjs/components/prism-javascript.min.js";
@@ -23,7 +22,7 @@ const FavoriteStories = () => {
   const [activeStory, setActiveStory] = useState<Story | null>(null);
   const [readStories, setReadStories] = useState<Set<string>>(new Set());
   const contentRef = useRef<HTMLDivElement>(null);
-  const { data, isLoading, error } = useGetFavoriteStory();
+  const { data } = useGetFavoriteStory();
 
   const toggleOpen = (): void => {
     setIsOpen(!isOpen);
@@ -34,14 +33,6 @@ const FavoriteStories = () => {
       Prism.highlightAll();
     }
   }, [activeStory]);
-
-  if (isLoading) return <div className="text-center py-4">Loading...</div>;
-  if (error)
-    return (
-      <div className="text-center py-4 text-red-500">
-        Error: {error.message}
-      </div>
-    );
 
   const handleStoryClick = (story: Story) => {
     setActiveStory(activeStory && activeStory._id === story._id ? null : story);

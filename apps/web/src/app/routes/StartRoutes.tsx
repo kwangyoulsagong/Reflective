@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Start from "../../pages/StartPage";
 import SignUp from "../../pages/SignUpPage";
-import Home from "../../pages/Home";
+import Home from "../../pages/Home/Home";
 
 // 시작 페이지 라우트
 function StartRoutes() {

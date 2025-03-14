@@ -6,6 +6,7 @@ import {
 import * as Sentry from "@sentry/react";
 import { ACCESS_TOKEN_KEY, HTTP_STATUS_CODE } from "../constants/api";
 import { HTTPError } from "./HTTPError";
+import postNewToken from "./postNewToken";
 
 export interface ErrorResponse {
   statusCode?: number;
@@ -55,17 +56,8 @@ export const handleTokenError = async (error: AxiosError<ErrorResponse>) => {
 
   if (status === HTTP_STATUS_CODE.UNAUTHORIZED) {
     try {
-      const response = await fetch("/api/auth/refresh", {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Token refresh failed");
-      }
-
-      const { accessToken } = await response.json();
-      localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+      // 기존 fetch 사용 코드를 postNewToken() 함수 호출로 변경
+      const { accessToken } = await postNewToken();
 
       if (error.config.headers) {
         error.config.headers.Authorization = `Bearer ${accessToken}`;

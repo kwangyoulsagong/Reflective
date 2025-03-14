@@ -4,20 +4,54 @@ import {
   ACCESS_TOKEN_KEY,
   AXIOS_BASE_URL,
 } from "../../../../shared/constants/api";
+import postNewToken from "../../../../shared/api/postNewToken";
 
 export const useNotificationSSE = () => {
   const { addNotification, fetchNotifications } = useNotificationStore();
   const [isConnected, setIsConnected] = useState(false);
   const eventSourceRef = useRef<EventSource | null>(null);
 
-  const connectSSE = useCallback(() => {
+  // 토큰 리프레시 처리 함수
+  const handleTokenRefresh = async () => {
+    try {
+      await postNewToken();
+
+      // 기존 연결 닫기
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+        eventSourceRef.current = null;
+      }
+
+      // 재연결
+      setTimeout(connectSSE, 1000);
+      return true;
+    } catch (error) {
+      console.error("토큰 갱신 실패:", error);
+      return false;
+    }
+  };
+
+  const connectSSE = useCallback(async () => {
     // 기존 연결 있으면 먼저 닫기
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
     }
 
     // 초기 알림 불러오기
-    fetchNotifications();
+    try {
+      await fetchNotifications();
+    } catch (error) {
+      // 401 에러일 경우 토큰 리프레시 시도
+      if (error instanceof Error && error.message.includes("401")) {
+        try {
+          await postNewToken();
+          await fetchNotifications();
+        } catch (refreshError) {
+          console.error("토큰 갱신 실패:", refreshError);
+          return null;
+        }
+      }
+    }
 
     const token = localStorage.getItem(ACCESS_TOKEN_KEY);
     if (!token) {
@@ -33,31 +67,34 @@ export const useNotificationSSE = () => {
     });
 
     eventSource.onopen = () => {
-      console.log("SSE connection established");
       setIsConnected(true);
     };
 
     eventSource.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        console.log("Received SSE message:", data);
 
         // 에러 타입 처리
         if (data.type === "ERROR") {
           console.error("SSE 연결 에러:", data.message);
+
+          // 401 에러일 경우 토큰 리프레시 시도
+          if (
+            data.message.includes("401") ||
+            data.message.includes("unauthorized")
+          ) {
+            handleTokenRefresh();
+          }
+
           setIsConnected(false);
           return;
         }
 
         if (data.type === "CONNECT") {
-          console.log("SSE 연결 성공:", data.message);
           setIsConnected(true);
         } else if (data.type === "NOTIFICATION") {
-          // 중요: 항상 알림 추가 및 최신 알림 패치
           addNotification(data);
-          fetchNotifications();
         } else if (data.type === "DISCONNECT") {
-          console.log("서버에서 연결 종료 신호");
           eventSource.close();
           reconnect();
         }
@@ -79,18 +116,18 @@ export const useNotificationSSE = () => {
 
   // 재연결 메서드
   const reconnect = useCallback(() => {
-    // 5초 후 재연결 시도
     setTimeout(connectSSE, 5000);
   }, [connectSSE]);
 
   // 컴포넌트 마운트/언마운트와 무관하게 SSE 연결 유지
   useEffect(() => {
+    // 초기 연결
+    connectSSE();
+
     // 브라우저 탭 포커스 시 재연결 로직
     const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        if (!isConnected) {
-          reconnect();
-        }
+      if (document.visibilityState === "visible" && !isConnected) {
+        reconnect();
       }
     };
 

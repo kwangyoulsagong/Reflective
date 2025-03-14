@@ -24,12 +24,14 @@ class CommentController {
       const userId = req.user.user_id;
       const result = await commentService.saveComment(userId, data);
       if (result?.post_id && result.author_id) {
-        await notificationService.sendNotification({
-          type: "COMMENT",
-          sender_id: userId,
-          receiver_id: result.author_id,
-          post_id: result.post_id,
-        });
+        if (userId !== result.author_id) {
+          await notificationService.sendNotification({
+            type: "COMMENT",
+            sender_id: userId,
+            receiver_id: result.author_id,
+            post_id: result.post_id,
+          });
+        }
         res.status(200).json({ message: "댓글 저장 성공" });
         return;
       }

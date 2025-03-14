@@ -15,7 +15,6 @@ const useUpdatePostMutaion = () => {
       message: string;
       updatedPost: { post_id: string };
     }) => {
-      console.log(data);
       showToast(data.message, "success");
       queryClient.invalidateQueries({
         queryKey: [queryKeys.PostDetail, data.updatedPost.post_id],

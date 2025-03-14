@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { queryKeys } from "../../../../../shared/constants/queryKeys";
 import fetchRecentPost from "../../../api/recentPost/fetchRecentPost";
 
 const useRecentPostQuery = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: queryKeys.RecentPost,
     queryFn: fetchRecentPost,
     staleTime: 1000 * 60 * 5, // 5분
