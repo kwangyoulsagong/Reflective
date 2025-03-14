@@ -47,7 +47,6 @@ export const NotificationList = () => {
     },
     type: string
   ) => {
-    console.log(post_id);
     if (type == "FOLLOW") {
     } else {
       const hyphenatedTitle = post_id.title?.replace(/\s+/g, "-");
@@ -72,19 +71,21 @@ export const NotificationList = () => {
       ) : (
         notifications.map((notification) => (
           <div
-            onClick={() => {
-              if (notification.post_id) {
-                // post_id가 존재하는지 확인
-                handleNavigate(notification.post_id, notification.type);
-              }
-            }}
             key={notification.notification_id}
             className={`p-4 hover:bg-gray-50 ${
               notification.is_read ? "bg-white" : "bg-blue-50"
             }`}
           >
             <div className="flex items-start justify-between">
-              <div className="flex items-center">
+              <div
+                className="flex items-center"
+                onClick={() => {
+                  if (notification.post_id) {
+                    // post_id가 존재하는지 확인
+                    handleNavigate(notification.post_id, notification.type);
+                  }
+                }}
+              >
                 <div>
                   <p className="text-sm">
                     <span className="font-bold"></span>

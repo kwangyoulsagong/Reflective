@@ -3,6 +3,7 @@ import RecentPost from "../../../features/Post/ui/RecentPost/RecentPost";
 import Header from "../../../shared/Header/Header";
 import FavoriteStories from "../../../features/favorite/ui/Favorite";
 import Search from "../../../shared/Search";
+import { Footer } from "@repo/ui/footer";
 const HomeContent = () => {
   return (
     <div className="flex justify-center">
@@ -12,6 +13,9 @@ const HomeContent = () => {
         <Search />
         <MainRanks />
         <RecentPost />
+        <section className="pt-[100px] w-full">
+          <Footer />
+        </section>
       </div>
     </div>
   );
