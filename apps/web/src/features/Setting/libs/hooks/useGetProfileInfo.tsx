@@ -1,12 +1,11 @@
 import { queryKeys } from "../../../../shared/constants/queryKeys";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import fetchProfileInfo from "../../api/fetchProfileInfo";
 
 const useGetProfileInfo = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: [queryKeys.MyProfileInfo],
     queryFn: fetchProfileInfo,
-    throwOnError: true,
   });
 };
 export default useGetProfileInfo;

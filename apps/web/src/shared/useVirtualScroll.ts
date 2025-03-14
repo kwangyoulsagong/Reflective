@@ -19,9 +19,8 @@ interface UseVirtualInfiniteScrollReturn {
   totalHeight: number;
   columns: number;
   allPosts: PostType[];
-  isLoading: boolean;
+
   isFetchingNextPage: boolean;
-  error: unknown;
 }
 
 const useVirtualScroll = ({
@@ -34,8 +33,6 @@ const useVirtualScroll = ({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    isLoading,
-    error,
   } = useInfinitePostsQuery();
 
   const [scrollTop, setScrollTop] = useState(0);
@@ -142,9 +139,7 @@ const useVirtualScroll = ({
     totalHeight,
     columns,
     allPosts,
-    isLoading,
     isFetchingNextPage,
-    error,
   };
 };
 

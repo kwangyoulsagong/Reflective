@@ -1,8 +1,9 @@
 import { create } from "zustand";
 import { NotificationStore } from "../type/type";
 import { axiosInstance } from "../../../../shared/api/axiosinstance";
+import postNewToken from "../../../../shared/api/postNewToken";
 
-const useNotificationStore = create<NotificationStore>((set) => ({
+const useNotificationStore = create<NotificationStore>((set, get) => ({
   notifications: [],
   unreadCount: 0,
   isLoading: false,
@@ -36,6 +37,23 @@ const useNotificationStore = create<NotificationStore>((set) => ({
 
       return data;
     } catch (error) {
+      // 401 에러 처리
+      if (error instanceof Error && error.message.includes("401")) {
+        try {
+          await postNewToken();
+          // 토큰 갱신 후 재시도 - get()을 사용하여 현재 메서드에 접근
+          return await get().markAsRead(notification_id);
+        } catch (refreshError) {
+          set({
+            error:
+              refreshError instanceof Error
+                ? refreshError.message
+                : "인증 오류가 발생했습니다.",
+          });
+          throw refreshError;
+        }
+      }
+
       set({
         error: error instanceof Error ? error.message : "An error occurred",
       });
@@ -59,6 +77,23 @@ const useNotificationStore = create<NotificationStore>((set) => ({
 
       return data;
     } catch (error) {
+      // 401 에러 처리
+      if (error instanceof Error && error.message.includes("401")) {
+        try {
+          await postNewToken();
+          // 토큰 갱신 후 재시도 - get()을 사용하여 현재 메서드에 접근
+          return await get().markAllAsRead();
+        } catch (refreshError) {
+          set({
+            error:
+              refreshError instanceof Error
+                ? refreshError.message
+                : "인증 오류가 발생했습니다.",
+          });
+          throw refreshError;
+        }
+      }
+
       set({
         error: error instanceof Error ? error.message : "An error occurred",
       });
@@ -85,6 +120,23 @@ const useNotificationStore = create<NotificationStore>((set) => ({
         };
       });
     } catch (error) {
+      // 401 에러 처리
+      if (error instanceof Error && error.message.includes("401")) {
+        try {
+          await postNewToken();
+          // 토큰 갱신 후 재시도 - get()을 사용하여 현재 메서드에 접근
+          return await get().deleteNotification(notification_id);
+        } catch (refreshError) {
+          set({
+            error:
+              refreshError instanceof Error
+                ? refreshError.message
+                : "인증 오류가 발생했습니다.",
+          });
+          throw refreshError;
+        }
+      }
+
       set({
         error: error instanceof Error ? error.message : "An error occurred",
       });
@@ -103,7 +155,37 @@ const useNotificationStore = create<NotificationStore>((set) => ({
         isLoading: false,
         error: null,
       });
+
+      return data;
     } catch (error) {
+      // 401 에러 처리
+      if (error instanceof Error && error.message.includes("401")) {
+        try {
+          await postNewToken();
+          // 토큰 갱신 후 재시도 - 로직을 직접 실행
+          set({ isLoading: true });
+          const { data } = await axiosInstance.get("api/v1/notifications");
+
+          set({
+            notifications: data.notifications,
+            unreadCount: data.unreadCount,
+            isLoading: false,
+            error: null,
+          });
+
+          return data;
+        } catch (refreshError) {
+          set({
+            error:
+              refreshError instanceof Error
+                ? refreshError.message
+                : "인증 오류가 발생했습니다.",
+            isLoading: false,
+          });
+          throw refreshError;
+        }
+      }
+
       set({
         error: error instanceof Error ? error.message : "An error occurred",
         isLoading: false,

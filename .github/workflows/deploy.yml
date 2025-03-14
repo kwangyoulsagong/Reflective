@@ -3,7 +3,7 @@ name: Build and Deploy to EC2 with ECR
 on:
   push:
     branches:
-      - feat10/toast # 또는 master
+      - main
 
 env:
   AWS_REGION: ap-northeast-2 # 서울 리전

@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import Write from "../../pages/WritePage";
-import PostDetail from "../../pages/PostPage";
-import MyPage from "../../pages/Mypage";
-import SettingPage from "../../pages/SettingPage";
+import PostDetail from "../../pages/Post/PostPage";
+import MyPage from "../../pages/Mypage/Mypage";
+import SettingPage from "../../pages/Setting/SettingPage";
 import SearchPage from "../../pages/SearchPage";
 
 //페이지 라우트

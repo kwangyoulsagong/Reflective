@@ -24,11 +24,13 @@ class FavoriteController {
       const userId = req.user.user_id;
       const result = await favoriteService.addFavorite(userId, favorite_id);
       if (result) {
-        await notificationService.sendNotification({
-          type: "FOLLOW",
-          sender_id: userId,
-          receiver_id: favorite_id,
-        });
+        if (userId !== favorite_id) {
+          await notificationService.sendNotification({
+            type: "FOLLOW",
+            sender_id: userId,
+            receiver_id: favorite_id,
+          });
+        }
         res.status(200).json({ message: "즐겨찾기 추가 성공" });
         return;
       }

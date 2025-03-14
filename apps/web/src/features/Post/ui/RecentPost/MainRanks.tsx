@@ -1,25 +1,13 @@
-import { PostType } from "../../../../types/types";
-import { mainAnimator } from "../../libs/hooks/recentPost/mainAnimator";
-import "./styles/MainRanks.css";
-import { useEffect } from "react";
-
-const MainRanks = ({ data }: { data: PostType[] }) => {
-  useEffect(() => {
-    if (data) {
-      // mainAnimator 함수 호출 및 반환된 정리 함수 저장
-      const cleanup = mainAnimator(data);
-      // 컴포넌트 언마운트 시 정리 함수 실행 (이벤트 리스너 제거)
-      return cleanup;
-    }
-  }, [data]);
-
+import React, { Suspense } from "react";
+import MainRanksContent from "./MainRanksContent/MainRanksContent";
+const MainRanksSkeleton = React.lazy(
+  () => import("./MainRanksSkeleton/MainRanksSkeleton")
+);
+const MainRanks = () => {
   return (
-    <section className="container">
-      <div className="gallery"></div>
-      <div className="message" id="message">
-        오늘의 트렌드는?
-      </div>
-    </section>
+    <Suspense fallback={<MainRanksSkeleton />}>
+      <MainRanksContent />
+    </Suspense>
   );
 };
 

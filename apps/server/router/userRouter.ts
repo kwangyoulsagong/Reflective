@@ -1,6 +1,6 @@
 import { Router } from "express";
 import userController from "../controller/userController";
-const router:Router=Router()
+const router: Router = Router();
 /**
  * @swagger
  * /api/v1/auth/register:
@@ -21,7 +21,7 @@ const router:Router=Router()
  *       400:
  *         description: 잘못된 요청
  */
-router.post('/register', userController.Register);
+router.post("/register", userController.Register);
 
 /**
  * @swagger
@@ -43,6 +43,6 @@ router.post('/register', userController.Register);
  *       401:
  *         description: 인증 권한 없음
  */
-router.post('/login',userController.Login)
-
-export default router
+router.post("/login", userController.Login);
+router.post("/refresh", userController.refreshToken);
+export default router;
