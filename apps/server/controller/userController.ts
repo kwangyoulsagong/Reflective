@@ -50,13 +50,29 @@ class UserController {
     try {
       // refreshToken에서 user_id 추출
       const decoded = verifyRefreshToken(refreshToken);
+      console.log(decoded);
       const userId = decoded?.user_id; // refreshToken에서 user_id 가져오기
-
+      if (!decoded || !decoded.user_id) {
+        return res.status(403).json({
+          message: "유효하지 않은 리프레쉬 토큰입니다.",
+          code: "INVALID_REFRESH_TOKEN",
+        });
+      }
       // 새로운 액세스 토큰 발급
       const accessToken = generateToken({ user_id: userId });
       return res.json({ accessToken });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Token verification failed:", error);
+
+      // 토큰 만료 오류 확인 및 처리
+      if (error.name === "TokenExpiredError") {
+        return res.status(401).json({
+          message: "리프레쉬 토큰이 만료되었습니다. 다시 로그인해 주세요.",
+          code: "REFRESH_TOKEN_EXPIRED",
+          requireReLogin: true,
+        });
+      }
+
       return res.status(403).json({
         message: "리프레쉬 토큰 검증 실패",
         code: "TOKEN_VERIFICATION_FAILED",
