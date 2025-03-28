@@ -23,7 +23,7 @@ const refreshSecretKey = process.env.JWT_REFRESH_SECRET as string;
 
 // 토큰 생성 함수
 function generateToken(payload: object): string {
-  return jwt.sign(payload, secretKey, { expiresIn: "1hr" }); // 실제 운영에서는 더 긴 시간으로 설정
+  return jwt.sign(payload, secretKey, { expiresIn: "1h" }); // 실제 운영에서는 더 긴 시간으로 설정
 }
 
 // 리프레쉬 토큰 생성 함수
