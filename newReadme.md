@@ -121,12 +121,11 @@
 - 최근 게시물들을 좋아요 순으로 탑 3을 먼저 표시하고,
 - 그 이후로는 최신 날짜 기준으로 정렬하는 방식으로 반영했습니다.
 
-### [ 은하 공유 ]
+### [ 실시간 알림 시스템 ]
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/89ceeab5-9a08-4799-9e02-b10e8b77ff22" alt="은하 공유 이미지"/>
+<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/readmeAssets/%EC%95%8C%EB%A6%BC.gif" alt="은하 공유 이미지"/>
 
-- 체크박스를 통해 검색 허용 여부를 설정할 수 있습니다.
-- 로그인하지 않은 사용자도 공유 링크를 통해 은하에 접근할 수 있습니다.
+- 실시간 알림을 통한 댓글, 좋아요, 즐겨찾기 이벤트 발생시 즉시 전송했습니다.
 
 ### [ 은하 검색 ]
 
