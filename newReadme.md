@@ -20,7 +20,7 @@
 
 </br>
 
-[✨ <Reflective> 사용해보기](https://reflective.site/)
+[✨ < Reflective > 사용해보기](https://reflective.site/)
 
 </div>
 
@@ -30,7 +30,7 @@
 
 ### [1. 프로젝트 소개](#%EF%B8%8F-프로젝트-소개)
 
-- [<Reflective>를 만들게 된 계기](#Reflective를-만들게-된-계기)
+- [< Reflective >를 만들게 된 계기](#Reflective를-만들게-된-계기)
 - [주요 기능 설명](#주요-기능-설명)
 - [프로젝트 실행 방법](#프로젝트-실행-방법)
 
@@ -54,7 +54,7 @@
 
 # ⭐️ 프로젝트 소개
 
-## <Reflective>를 만들게 된 계기
+## < Reflective >를 만들게 된 계기
 
 우리는 모두 형형색색의 기억들을 가지고 있습니다.
 
