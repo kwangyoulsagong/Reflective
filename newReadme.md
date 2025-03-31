@@ -129,25 +129,19 @@
 
 ### [ 글 검색 ]
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/40f8d4c6-d220-44f8-9abe-34f1f309286b" alt="은하 검색 이미지">
+<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/readmeAssets/%EA%B2%80%EC%83%89.gif" alt="은하 검색 이미지">
 
-- 검색 허용된 사용자들의 우주를 닉네임 검색을 통해 구경할 수 있습니다.
-- 검색해서 들어간 우주에서 왼쪽 위 뒤로가기 버튼을 누르면 다시 내 우주로 돌아옵니다.
+- 검색은 제목 또는 작성자로 검색할 수 있습니다.
+- 검색해서 해당 블로그로 이동할 수 있습니다..
 
 <br />
 
 ## 프로젝트 실행 방법
 
-### Front-end
-
 ```bash
-yarn workspace client dev
-```
+pnpm install
 
-### Back-end
-
-```bash
-yarn workspace server start:dev
+pnpm dev
 ```
 
 <br />
