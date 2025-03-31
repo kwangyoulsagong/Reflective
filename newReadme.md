@@ -41,7 +41,6 @@
 - [FE](#FE)
   - [성능 최적화](#성능-최적화)
   - [FSD 아키텍처](#fsd-아키텍처)
-  - [배포 및 자동화](#배포-및-자동화)
 
 <br />
 
@@ -277,7 +276,3 @@ FSD 아키텍처는 app, pages, widgets, features, entities, shared라는 6개�
 ```
 
 <br />
-
-### 배포 및 자동화
-
-클라우드 배포 경험이 많지 않아 이번 프로젝트를 통해 많은 성장을 할 수 있었습니다. AWS 및 NCP에서 제공하는 서버, VPC, NAT Gateway 등 주요 서비스에 대해 학습하여 배포 환경을 구성하고, Nginx, Docker 및 Docker Compose, GitHub Actions 등을 학습하여 main 브랜치에 push되면 자동으로 배포되도록 설정했습니다.
