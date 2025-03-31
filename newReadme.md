@@ -142,7 +142,7 @@ pnpm dev
 
 # ⚒️ 기술 스택
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/3a0507ca-1f7f-4fa1-add7-43d3e73515d4" height="500" alt="기술스택 이미지"/>
+<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/readmeAssets/skills.png" height="500" alt="기술스택 이미지"/>
 
 ![Reflective 시스템 아키텍처](https://assetkungya.s3.ap-northeast-2.amazonaws.com/reflective.png)
 
