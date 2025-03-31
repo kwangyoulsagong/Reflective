@@ -103,7 +103,7 @@
 
 ### [ 글 조회 ]
 
-<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/apps/web/src/assets/%EA%B8%80%EC%A1%B0%ED%9A%8C.gif" alt="글 작성 이미지">
+<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/readmeAssets/%EA%B8%80%EC%A1%B0%ED%9A%8C.gif" alt="글 작성 이미지">
 
 - 글은 블록 타입 형식으로 적용된 글을 볼 수 있습니다.
 - 헤딩(Heading) 내비게이션을 통해 해당 헤딩으로 라우팅 지원합니다.
