@@ -213,7 +213,7 @@ React의 렌더링 사이클은 크게 **렌더 페이즈**와 **커밋 페이�
     <td><img src="https://velog.velcdn.com/images/tkrhdrhkdduf/post/6060341a-1af9-4768-8bd5-c07eaec8cd22/image.png" alt="블록 에디터 1" /></td>
     <td><img src="https://velog.velcdn.com/images/tkrhdrhkdduf/post/9efc3d54-a6be-4354-9e4d-415a8880db15/image.png" alt="블록 에디터 2" /></td>
   </tr>
-</table
+</table>
 
 ### FSD 아키텍처
 
