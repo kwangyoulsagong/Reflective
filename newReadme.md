@@ -152,7 +152,7 @@ pnpm dev
 
 <img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/3a0507ca-1f7f-4fa1-add7-43d3e73515d4" height="500" alt="기술스택 이미지"/>
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/f2590ade-7a4d-4151-8024-c58b75c2c9ff" height="500" alt="아키텍처 이미지"/>
+![Reflective 시스템 아키텍처](https://assetkungya.s3.ap-northeast-2.amazonaws.com/reflective.png)
 
 ## 기술 스택 선정 이유에 관한 팀원들의 글
 
