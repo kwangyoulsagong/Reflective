@@ -77,7 +77,7 @@
     <td><img src="https://assetkungya.s3.ap-northeast-2.amazonaws.com/%E1%84%82%E1%85%A1%E1%84%8B%E1%85%B4-%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A1%E1%86%BC-4.gif" alt="블록 에디터 2" /></td>
   </tr>
 
-  <img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/readmeAssets/%EB%B8%94%EB%A1%9D%EC%97%90%EB%94%94%ED%84%B0.gif" alt="블록에디터">
+  <img src="https://github.com/kwangyoulsagong/Reflective/blob/main/readmeAssets/%EB%B8%94%EB%A1%9D%EC%97%90%EB%94%94%ED%84%B0.gif" alt="블록에디터">
 </table
 
 #### 1. **블록 기반 편집**
@@ -97,19 +97,19 @@
 
 ### [ 글 조회 ]
 
-<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/readmeAssets/%EA%B8%80%EC%A1%B0%ED%9A%8C.gif" alt="글 작성 이미지">
+<img src="https://github.com/kwangyoulsagong/Reflective/blob/main/readmeAssets/%EA%B8%80%EC%A1%B0%ED%9A%8C.gif" alt="글 작성 이미지">
 
 - 글은 블록 타입 형식으로 적용된 글을 볼 수 있습니다.
 - 헤딩(Heading) 내비게이션을 통해 해당 헤딩으로 라우팅 지원합니다.
 
-<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/readmeAssets/%EB%8C%93%EA%B8%80%20%EB%8C%80%EB%8C%93%EA%B8%80.gif" alt="글 커스텀 이미지">
+<img src="https://github.com/kwangyoulsagong/Reflective/blob/main/readmeAssets/%EB%8C%93%EA%B8%80%20%EB%8C%80%EB%8C%93%EA%B8%80.gif" alt="글 커스텀 이미지">
 
 - 해당 게시물에 댓글을 달 수 있습니다.
 - 답글도 지원해서 커뮤니티 활성화를 할 수 있습니다.
 
 ### [ 메인 페이지 ]
 
-<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/readmeAssets/%EB%A9%94%EC%9D%B8%ED%8E%98%EC%9D%B4%EC%A7%80.gif" alt="은하 수정 이미지">
+<img src="https://github.com/kwangyoulsagong/Reflective/blob/main/readmeAssets/%EB%A9%94%EC%9D%B8%ED%8E%98%EC%9D%B4%EC%A7%80.gif" alt="메인 페이지">
 
 - Top 8 인기 게시물 최신 트렌드로 애니메이션 반영했습니다.
 - 최근 게시물들을 좋아요 순으로 탑 3을 먼저 표시하고,
@@ -117,13 +117,13 @@
 
 ### [ 실시간 알림 시스템 ]
 
-<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/readmeAssets/%EC%95%8C%EB%A6%BC.gif" alt="은하 공유 이미지"/>
+<img src="https://github.com/kwangyoulsagong/Reflective/blob/main/readmeAssets/%EC%95%8C%EB%A6%BC.gif" alt="실시간 알림 시스템"/>
 
 - 실시간 알림을 통한 댓글, 좋아요, 즐겨찾기 이벤트 발생시 즉시 전송했습니다.
 
 ### [ 글 검색 ]
 
-<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/readmeAssets/%EA%B2%80%EC%83%89.gif" alt="은하 검색 이미지">
+<img src="https://github.com/kwangyoulsagong/Reflective/blob/main/readmeAssets/%EA%B2%80%EC%83%89.gif" alt="글 검색">
 
 - 검색은 제목 또는 작성자로 검색할 수 있습니다.
 - 검색해서 해당 블로그로 이동할 수 있습니다..
@@ -142,7 +142,7 @@ pnpm dev
 
 # ⚒️ 기술 스택
 
-<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/readmeAssets/skills.png" height="500" alt="기술스택 이미지"/>
+<img src="https://github.com/kwangyoulsagong/Reflective/blob/main/readmeAssets/skills.png" height="500" alt="기술스택 이미지"/>
 
 ![Reflective 시스템 아키텍처](https://assetkungya.s3.ap-northeast-2.amazonaws.com/reflective.png)
 
@@ -214,6 +214,7 @@ React의 렌더링 사이클은 크게 **렌더 페이즈**와 **커밋 페이�
     <td><img src="https://velog.velcdn.com/images/tkrhdrhkdduf/post/9efc3d54-a6be-4354-9e4d-415a8880db15/image.png" alt="블록 에디터 2" /></td>
   </tr>
 </table
+
 ### FSD 아키텍처
 
 그동안 개발을 하면서 점점 서비스가 확장되면서 폴더들이 복잡해지고 찾기가 어려워져서 나누는게 낫다고 판단하여 마이그레이션 했습니다.
@@ -221,7 +222,7 @@ React의 렌더링 사이클은 크게 **렌더 페이즈**와 **커밋 페이�
 
 프로젝트의 규모가 커지면서 코드의 복잡성을 관리하기 위해 FSD 방식은 폴더를 세세하게 나누는 구조로 대규모 프로젝트에 적합하다고 판단했습니다. 또한 프로젝트를 분할하여 정복하는 이 방식의 장점이 매력적으로 느껴졌고, 학습 목적이 강한 이 프로젝트에서 새로운 폴더구조를 적용해보고 싶었습니다.
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/f12852bd-5f09-4526-a404-ebf442c57f8d">_출처: https://feature-sliced.design/_
+<img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fl3RRQ%2FbtsJsii7gUo%2FqEDelkesLO4SGTkta6pzt1%2Fimg.png">\_출처: https://world-developer.tistory.com/87
 
 FSD 아키텍처는 app, pages, widgets, features, entities, shared라는 6개의 `Layer`로 이루어져있습니다. 그리고 각각의 `Layer`는 `Slice`들로 이루어져있고, 그 `Slice`는 `Segment`로 이루어져있습니다. 하위요소들을 조합하여 상위 요소를 구성하는 방식으로, 이 매커니즘이 저희에게 굉장히 매력적으로 다가왔습니다.
 이렇게 각자의 역할이 분명한 폴더구조를 적용해봄으로써 모듈을 만들 때 각 모듈의 역할을 명확히 정의하게 되었습니다. 또한 하위 요소들이 모두 개별적으로 기능할 수 있기 때문에 훨씬 유지보수성이 높은 코드를 작성할 수 있게 되었습니다.
