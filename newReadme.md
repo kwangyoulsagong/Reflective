@@ -85,8 +85,6 @@
     <td><img src="https://assetkungya.s3.ap-northeast-2.amazonaws.com/%E1%84%82%E1%85%A1%E1%84%8B%E1%85%B4-%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A1%E1%86%BC-4.gif" alt="블록 에디터 2" /></td>
   </tr>
 </table>
-<img src="https://assetkungya.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A9%E1%86%A8%E1%84%8B%E1%85%A6%E1%84%83%E1%85%B5%E1%84%90%E1%85%A5.gif">
-
 #### 1. **블록 기반 편집**
 
 - 각 콘텐츠(문단, 이미지, 목록 등)를 블록 단위로 분리하여, 사용자가 자유롭게 콘텐츠를 삽입, 이동, 삭제할 수 있습니다.
