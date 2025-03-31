@@ -157,16 +157,11 @@ pnpm dev
 
 ## FE
 
-프론트엔드의 주요 기술적 도전은 **Three.js + React-Three-Fiber(R3F)를 사용한 우주 공간 구현**이었습니다.
-팀원 모두에게 생소한 기술이었기에 사용한 것 자체도 도전적인 경험이었지만, 그 중에서 특히 **사용자 경험 개선** 위주의 경험을 작성해보았습니다.
+프론트엔드의 주요 기술적 도전은 블록 에디터를 어떻게 구현하느지가 젤 어려움 이었습니다.
 
-먼저 아래는 Three.js와 R3F에 관련하여 팀원들이 작성한 기술블로그입니다.
+먼저 아래는 블록 에디터 구현 과정입니다.
 
-- [Three.js와의 설레는 첫만남](https://velog.io/@greencloud/Three.js%EC%99%80%EC%9D%98-%EC%84%A4%EB%A0%88%EB%8A%94-%EC%B2%AB%EB%A7%8C%EB%82%A8-)
-- [JS로 자전과 공전을 구현할 수 있다고?](https://velog.io/@greencloud/JS%EB%A1%9C-%EC%9E%90%EC%A0%84%EA%B3%BC-%EA%B3%B5%EC%A0%84%EC%9D%84-%EA%B5%AC%ED%98%84%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8B%A4%EA%B3%A0)
-- [R3F Material 간단 정리](https://electric-period-6ff.notion.site/Material-2f0279fc0d104b4e852250d190908b8b)
-- [너와의 추억을 우주의 별로 띄울게](https://velog.io/@greencloud/%EB%84%88%EC%99%80%EC%9D%98-%EC%B6%94%EC%96%B5%EC%9D%84-%EC%9A%B0%EC%A3%BC%EC%9D%98-%EB%B3%84%EB%A1%9C-%EB%9D%84%EC%9A%B8%EA%B2%8C)
-- [React로 멋진 3D 은하 만들기(Feat.R3F)](https://velog.io/@minboykim/React%EB%A1%9C-%EB%A9%8B%EC%A7%84-3D-%EC%9D%80%ED%95%98-%EB%A7%8C%EB%93%A4%EA%B8%B0feat.-R3F)
+- [마크다운에서 블록 에디터로: 내 블로그 에디터 개발기](https://velog.io/@tkrhdrhkdduf/%EB%A7%88%ED%81%AC%EB%8B%A4%EC%9A%B4%EC%97%90%EC%84%9C-%EB%B8%94%EB%A1%9D-%EC%97%90%EB%94%94%ED%84%B0%EB%A1%9C-%EB%82%B4-%EB%B8%94%EB%A1%9C%EA%B7%B8-%EC%97%90%EB%94%94%ED%84%B0-%EA%B0%9C%EB%B0%9C%EA%B8%B0)
 
 <br />
 
@@ -269,7 +264,7 @@ FSD 아키텍처는 app, pages, widgets, features, entities, shared라는 6개�
  ┃ ┣ 📂styles
  ┃ ┣ 📂Toast
  ┃ ┣ 📜Search.tsx
- ┃ ┣ 📜ts.useApiError.ts
+ ┃ ┣ 📜useApiError.ts
  ┃ ┣ 📜useInfinitePostsQuery.ts
  ┃ ┗ 📜useVirtualScroll.ts
 ```
