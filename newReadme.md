@@ -103,7 +103,7 @@
 
 ### [ 글 조회 ]
 
-<img src="https://assetkungya.s3.ap-northeast-2.amazonaws.com/%E1%84%80%E1%85%B3%E1%86%AF%E1%84%8C%E1%85%A9%E1%84%92%E1%85%AC.gif" alt="글 작성 이미지">
+<img src="https://assetkungya.s3.ap-northeast-2.amazonaws.com/%E1%84%91%E1%85%A9%E1%84%89%E1%85%B3%E1%84%90%E1%85%B3-%E1%84%87%E1%85%B2.gif" alt="글 작성 이미지">
 
 - 글은 마크다운 형식으로 작성할 수 있으며, Preview 버튼을 누르면 마크다운이 적용된 글을 미리 볼 수 있습니다.
 - 사진은 5장까지 첨부할 수 있습니다.
