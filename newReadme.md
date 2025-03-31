@@ -41,13 +41,7 @@
 - [FE](#FE)
   - [성능 최적화](#성능-최적화)
   - [FSD 아키텍처](#fsd-아키텍처)
-- [BE](#BE)
-  - [TDD, e2e 및 유닛 테스트](#tdd-e2e-및-유닛-테스트)
-  - [인증/인가](#인증인가)
-  - [트랜잭션 제어, 쿼리 최적화](#트랜잭션-제어-쿼리-최적화)
-  - [NestJS Enhancers](#NestJS-Enhancers)
   - [배포 및 자동화](#배포-및-자동화)
-  - [admin 페이지 구현](#admin-페이지-구현)
 
 <br />
 
@@ -157,7 +151,7 @@ pnpm dev
 
 ## FE
 
-프론트엔드의 주요 기술적 도전은 블록 에디터를 어떻게 구현하느지가 젤 어려움 이었습니다.
+프론트엔드의 주요 기술적 도전은 블록 에디터를 구현하는 것이었습니다. 기존의 마크다운 에디터와는 달리, 블록 에디터는 각 콘텐츠 요소(텍스트, 이미지, 코드 등)를 독립적인 '블록'으로 다루어 더 직관적이고 유연한 편집 경험을 제공합니다.
 
 먼저 아래는 블록 에디터 구현 과정입니다.
 
@@ -167,47 +161,56 @@ pnpm dev
 
 ### 성능 최적화
 
-저희는 은하를 만들기 위해 수많은 별 오브젝트들을 화면에 띄워야 했습니다.
-하지만 별 개수를 늘릴수록 화면이 더 버벅이기 시작했습니다.
-별 개수를 줄이면 시각적으로 좋지 않았기에, 저희는 별 개수를 유지하면서도 화면이 버벅이지 않도록 최적화를 시도하게 되었습니다.
+처음 블록 에디터를 개발했을 때, 몇 가지 심각한 성능 문제가 있었습니다:
 
-1. Instancing
+- 텍스트 입력할 때마다 화면이 버벅였습니다.
+- 블록이 많아질수록 에디터가 느려졌습니다.
+- 메모리 사용량이 계속 증가했습니다.
+- 초기 로딩이 느렸습니다.
 
-   저희가 선택한 첫 번째 최적화 방식은 `Instancing`이었습니다.
+---
 
-   CPU가 GPU에게 무엇을 어떻게 그릴지 지시하는 `Draw Call`은 단순해 보이지만 상당히 무거운 작업입니다. 일반적인 컴퓨터 환경에서 Draw Call이 대략 1000회 넘어가면 프레임 드랍이 생긴다고 합니다. 은하를 구성하는 별 오브젝트만 4000개인 저희 프로젝트에서 이러한 `Draw Call`을 줄이는 것이 중요햐다고 생각했습니다.
+#### 1. React의 렌더링 개선 기법 적용
 
-   이를 위해 사용한 방식이 `Instancing`으로, 동일한 오브젝트를 여러 번 그리는 경우 이를 한번에 처리하도록 하는 방식입니다. 저희는 이를 `InstancedMesh`를 사용해 구현했습니다. 이 방식을 통해 은하를 구성하는 별을 종류별로 묶어줌으로써 4000개의 오브젝트를 13개의 인스턴스로 줄일 수 있었습니다. 이렇게 `Draw Call`에 의한 CPU 병목 현상을 해결했습니다.
+제가 선택한 첫 번째 최적화 방식은 **React의 렌더링 개선 기법**을 적용하는 것이었습니다.  
+React의 렌더링 사이클은 크게 **렌더 페이즈**와 **커밋 페이즈**로 구성됩니다.  
+불필요한 렌더 페이즈를 줄이기 위해 `React.memo`, `useMemo`, `useCallback`과 같은 기법을 적용했습니다.  
+특히 `BlockEditor` 컴포넌트에 `React.memo`를 적용하여 **특정 블록만 변경되었을 때 해당 블록만 리렌더링**되도록 개선했습니다.
 
-<br />
+하지만 이런 기본적인 최적화만으로는 충분하지 않았고,  
+특히 문서 크기가 커질수록 여전히 성능 저하가 발생했습니다.
 
-하지만 금요일 프로젝트 현황 공유 시간 때 '처음으로 맥북 팬 소리를 들었어요', '컴터가 안좋아서 그런지 느려요ㅠㅜㅠ' 같은 피드백을 들으면서 추가적인 최적화 작업의 필요성을 느꼈습니다.
+---
 
-<br />
+#### 2. Map 자료구조를 활용한 상태 관리 개선
 
-2.  Performance Monitoring
+추가적인 최적화를 위해 **블록 데이터 관리 방식을 변경**했습니다.  
+기존에는 **배열 기반**으로 블록 상태를 관리했는데, 이 방식은  
+하나의 블록이 변경될 때마다 전체 배열이 갱신되어 **모든 블록이 리렌더링**되는 문제가 있었습니다.  
+이를 해결하기 위해 **Map 자료구조**를 도입했습니다.
 
-    피드백을 받은 이후 선택한 것은 `Performance Monitoring`입니다. 다양한 최적화 방식이 있었으나 프로젝트에서 사용하는 대부분의 오브젝트가 매우 단순한 형태라 그리 효과적이지 않았습니다. 이에 선택한 방법이 `Performance Monitoring`으로, 실시간으로 웹의 퍼포먼스를 모니터링해 이를 반영하는 방식입니다.
+#### 3. 디바운싱을 통한 입력 최적화
 
-    react-three/drei 라이브러리의 `Performance Monitor`를 통해 웹의 퍼포먼스를 모니터링합니다. 그리고 퍼포먼스가 좋지 않은 경우 Canvas의 `Device Pixel Ratio`을 최대 0.5까지 낮춥니다. 은하의 해상도를 낮추어 프레임 드랍을 해결하는 방식입니다. 이렇게 CPU만 고려하던 1번 방식에서 나아가 GPU의 부담까지 덜어주는 방식을 추가함으로써 더 최적화된 서비스를 만들 수 있었습니다.
+마지막으로 적용한 최적화는 사용자 입력에 대한 디바운싱 처리였습니다.
+초기에는 모든 키 입력마다 상태를 업데이트했고,
+이로 인해 과도한 렌더링과 성능 저하가 발생했습니다.
 
-    아래 사진 중 왼쪽은 최고 해상도인 경우이고, 오른쪽은 최저 해상도인 경우입니다.
+이를 해결하기 위해 lodash의 debounce 함수를 사용하여
+300ms 지연 시간을 설정, 연속된 입력을 하나의 업데이트로 처리했습니다.
 
-       <img  height="220" src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/3f8b0974-4492-4567-a395-76a3ccb7007a" alt="은하 최고 해상도">
-       <img  height="220" src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/5f0c25f8-d977-437c-ba1d-3bc3b6f05c2a" alt="은하 최저 회상도">
+<table>
+  <tr>
+    <td><img src="https://velog.velcdn.com/images/tkrhdrhkdduf/post/50919b5d-41e1-4055-b723-cfd532f28d5d/image.png" alt="블록 에디터 1" /></td>
+    <td><img src="https://velog.velcdn.com/images/tkrhdrhkdduf/post/e9375921-e6ed-49f0-8e6f-732e16291fda/image.png" alt="블록 에디터 2" /></td>
+  </tr>
+</table
 
-    아래 사진은 메모리 사용량을 비교한 것으로, Performance Monitoring 최적화 전 13.46GB였던 메모리 사용량이 최적화 후 12.50GB까지 감소했습니다.
-
-       <img height="90" src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/8aaa4b26-9556-414d-bf28-98b95f2a0816">
-       <img height="100" src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/f461b4c4-f411-4f56-8ec5-d37805ee4d41">
-
-    아래 사진은 퍼포먼스를 비교한 것으로, GPU 전력 사용량이 0.91 에서 0.62로 감소했고 GPU 사용률이 66에서 51로 감소했습니다.
-
-       <img height="300" src="https://github.com/boostcampwm2023/web16-B1G1/assets/78800560/b394cab5-d9ea-40f4-92b5-efee7a6b1c4e">
-       <img height="300" src="https://github.com/boostcampwm2023/web16-B1G1/assets/78800560/2a40aeda-add1-41c2-98d6-bce5b2fef954">
-
-<br />
-
+<table>
+  <tr>
+    <td><img src="https://velog.velcdn.com/images/tkrhdrhkdduf/post/6060341a-1af9-4768-8bd5-c07eaec8cd22/image.png" alt="블록 에디터 1" /></td>
+    <td><img src="https://velog.velcdn.com/images/tkrhdrhkdduf/post/9efc3d54-a6be-4354-9e4d-415a8880db15/image.png" alt="블록 에디터 2" /></td>
+  </tr>
+</table
 ### FSD 아키텍처
 
 그동안 개발을 하면서 점점 서비스가 확장되면서 폴더들이 복잡해지고 찾기가 어려워져서 나누는게 낫다고 판단하여 마이그레이션 했습니다.
@@ -268,14 +271,6 @@ FSD 아키텍처는 app, pages, widgets, features, entities, shared라는 6개�
  ┃ ┣ 📜useInfinitePostsQuery.ts
  ┃ ┗ 📜useVirtualScroll.ts
 ```
-
-<br />
-
-## BE
-
-**테스트와 쿼리 로그 분석을 통한 이유 있는 코드 작성**
-
-### TDD, e2e 및 유닛 테스트
 
 <br />
 
