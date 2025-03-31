@@ -103,7 +103,7 @@
 
 ### [ 글 조회 ]
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/61fbd19b-17b3-4901-bce0-73d56c87b6fb" alt="글 작성 이미지">
+<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/apps/web/src/assets/%EA%B8%80%EC%A1%B0%ED%9A%8C.gif" alt="글 작성 이미지">
 
 - 글은 마크다운 형식으로 작성할 수 있으며, Preview 버튼을 누르면 마크다운이 적용된 글을 미리 볼 수 있습니다.
 - 사진은 5장까지 첨부할 수 있습니다.
