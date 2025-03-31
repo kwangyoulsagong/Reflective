@@ -113,9 +113,9 @@
 - 해당 게시물에 댓글을 달 수 있습니다.
 - 답글도 지원해서 커뮤니티 활성화를 할 수 있습니다.
 
-### [ 은하 수정 ]
+### [ 메인 페이지 ]
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/31b6ebb4-ad0e-424d-90bd-4d10a5735f78" alt="은하 수정 이미지">
+<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/readmeAssets/%EB%A9%94%EC%9D%B8%ED%8E%98%EC%9D%B4%EC%A7%80.gif" alt="은하 수정 이미지">
 
 - 내 은하 나선팔 꼬인 정도, 나선팔 두께, 막대 길이, 은하 높이를 조절할 수 있습니다.
 - 오른쪽 위의 되돌리기 버튼을 누르면 수정 이전의 내 은하 스타일로 돌아갑니다.
