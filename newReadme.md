@@ -161,7 +161,9 @@ pnpm dev
 
 <br />
 
-### 성능 최적화 [블록 에디터 성능 개선](https://velog.io/@tkrhdrhkdduf/%EB%B8%94%EB%A1%9D-%EC%97%90%EB%94%94%ED%84%B0-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0)
+### 성능 최적화
+
+- [블록 에디터 성능 개선](https://velog.io/@tkrhdrhkdduf/%EB%B8%94%EB%A1%9D-%EC%97%90%EB%94%94%ED%84%B0-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0)
 
 처음 블록 에디터를 개발했을 때, 몇 가지 심각한 성능 문제가 있었습니다:
 
