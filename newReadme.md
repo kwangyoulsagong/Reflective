@@ -39,7 +39,6 @@
 ### [3. 기술적 경험](#-기술적-경험)
 
 - [FE](#FE)
-  - [R3F Camera](#r3f-camera)
   - [성능 최적화](#성능-최적화)
   - [FSD 아키텍처](#fsd-아키텍처)
 - [BE](#BE)
@@ -150,22 +149,9 @@ pnpm dev
 
 # ⚒️ 기술 스택
 
-[🔗 wiki 기술 스택 소개 바로가기](https://github.com/boostcampwm2023/web16-B1G1/wiki/%EA%B8%B0%EC%88%A0%EC%8A%A4%ED%83%9D-%EC%86%8C%EA%B0%9C)
-
 <img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/3a0507ca-1f7f-4fa1-add7-43d3e73515d4" height="500" alt="기술스택 이미지"/>
 
 ![Reflective 시스템 아키텍처](https://assetkungya.s3.ap-northeast-2.amazonaws.com/reflective.png)
-
-## 기술 스택 선정 이유에 관한 팀원들의 글
-
-- [우리 팀이 Zustand를 쓰는 이유](https://velog.io/@greencloud/%EC%9A%B0%EB%A6%AC-%ED%8C%80%EC%9D%B4-Zustand%EB%A5%BC-%EC%93%B0%EB%8A%94-%EC%9D%B4%EC%9C%A0)
-- [Emotion 선택 시 고려사항](https://velog.io/@200tiger/Emotion-%EC%84%A0%ED%83%9D%EC%8B%9C-%EA%B3%A0%EB%A0%A4%EC%82%AC%ED%95%AD)
-- [Yarn berry로 모노레포 구성하기](https://velog.io/@minboykim/Yarn-berry%EB%A1%9C-%EB%AA%A8%EB%85%B8%EB%A0%88%ED%8F%AC-%EA%B5%AC%EC%84%B1%ED%95%98%EA%B8%B0)
-- [Vite, 왜 쓰는거지?](https://velog.io/@minboykim/Vite-%EC%99%9C-%EC%93%B0%EB%8A%94%EA%B1%B0%EC%A7%80)
-- [기술스택 선정이유 (NestJS, TypeORM, Docker, GitHub Actions)](https://velog.io/@qkrwogk/%EA%B8%B0%EC%88%A0%EC%8A%A4%ED%83%9D-%EC%84%A0%EC%A0%95%EC%9D%B4%EC%9C%A0-NestJS-TypeORM-Docker-GitHub-Actions)
-- [MySQL 선택 이유](https://velog.io/@songjseop/why-mysql)
-
-<br />
 
 # 💪🏻 기술적 경험
 
@@ -181,41 +167,6 @@ pnpm dev
 - [R3F Material 간단 정리](https://electric-period-6ff.notion.site/Material-2f0279fc0d104b4e852250d190908b8b)
 - [너와의 추억을 우주의 별로 띄울게](https://velog.io/@greencloud/%EB%84%88%EC%99%80%EC%9D%98-%EC%B6%94%EC%96%B5%EC%9D%84-%EC%9A%B0%EC%A3%BC%EC%9D%98-%EB%B3%84%EB%A1%9C-%EB%9D%84%EC%9A%B8%EA%B2%8C)
 - [React로 멋진 3D 은하 만들기(Feat.R3F)](https://velog.io/@minboykim/React%EB%A1%9C-%EB%A9%8B%EC%A7%84-3D-%EC%9D%80%ED%95%98-%EB%A7%8C%EB%93%A4%EA%B8%B0feat.-R3F)
-
-<br />
-
-### R3F Camera
-
-3D 공간 상에서 카메라는 사용자의 시점입니다.
-그렇기 때문에 카메라 움직임은 사용자 경험에 직결됩니다.
-저희는 `자연스러운 카메라 움직임`을 만들어내 사용자 경험을 향상시키기 위해 여러 과정을 거쳤습니다.
-
-저희 서비스에서 별을 클릭하면 해당 별을 바라보도록 해야 합니다.
-처음에는 카메라의 위치는 그대로 둔 채 시야만 회전하도록 하는 `회전 운동`의 방식을 사용했습니다.
-처음 `회전 운동` 방식을 적용해본 결과, 별을 바꿀때마다 별과 카메라 사이의 거리를 직접 조정해 줘야 한다는 문제가 있었습니다.
-
-그래서 별과 카메라 사이 거리를 유지한 채 별을 향해 `직선 운동` 하도록 변경했습니다.
-이 방식은 `회전 운동`에 비해 사용하기 편했으나, 움직임이 너무 뻣뻣했기에 더 부드러운 모션을 추가하면 좋겠다는 생각을 하게 되었습니다.
-
-많은 고민 끝에 회전 운동처럼 별을 향해 회전하고 직선 운동처럼 별에 다가가도록 하여 '포물선 운동'을 만들어 냈습니다.
-`포물선 운동`은 회전 운동의 장점인 자연스러운 움직임과 직선 운동의 장점인 직관적인 움직임을 모두 가졌습니다.
-이러한 이유로 저희는 `포물선 운동`을 적용하게 되었습니다.
-
-- 직선 운동하는 카메라
-
-  <img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/f03af4c1-41c5-4af8-ae56-5271e065a9bc" height="200" alt="직선 운동하는 카메라 이미지">
-
-- 포물선 운동하는 카메라
-
-  <img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/bab2271b-9bdc-42b6-bc8c-76ec2109d478" height="200" alt="포물선 운동하는 카메라 이미지">
-
-하지만 아직 멀리 있는 별이 너무 작게 보이는 문제가 남아있었습니다.
-어찌보면 당연한 이야기일 수 있지만, 서비스 특성상 사용자 입장에서 불편한 요소였고 시각적으로 좋지 않았습니다.
-그래서 거리에 비해서 물체가 커 보이게 처리해 멀리 있는 별이 너무 작아보이지 않도록 했습니다.
-
-그랬더니 거리가 먼 별이 겉보기보다 멀리 위치하게 되는 문제가 발생했습니다.
-사용자가 그 별로 이동하는데 예상하는 것보다 많은 시간이 소요되었습니다.
-이 문제를 해결하기 위해 멀리 이동할 때는 좀 더 빠르게, 가까이 이동할 때는 좀 더 느리게 이동하도록 처리했습니다.
 
 <br />
 
@@ -264,86 +215,63 @@ pnpm dev
 
 ### FSD 아키텍처
 
-프로젝트를 진행함에 따라 파일들이 점점 많아졌고, 파일 분리와 폴더 구조에 대한 명확한 원칙이 필요해졌습니다.
-그래서 팀원들이 함께 여러 폴더 구조와 아키텍쳐들에 대해 조사해보았고, 결과적으로 [FSD(Feature-Sliced Design)](https://feature-sliced.design/) 아키텍처를 적용하게 되었습니다.
+그동안 개발을 하면서 점점 서비스가 확장되면서 폴더들이 복잡해지고 찾기가 어려워져서 나누는게 낫다고 판단하여 마이그레이션 했습니다.
+여러 폴더 구조와 아키텍쳐들에 대해 조사해보았고, 결과적으로 [FSD(Feature-Sliced Design)](https://feature-sliced.design/) 아키텍처를 적용하게 되었습니다.
 
-저희 프로젝트는 상대적으로 규모가 작은 편인데, FSD 방식은 폴더를 세세하게 나누는 만큼 규모가 큰 프로젝트에 적합하다는 생각도 했습니다.
-하지만 프로젝트를 분할하여 정복하는 해당 방식의 장점이 매력적으로 다가오기도 했고, 이 프로젝트는 학습의 목적이 크기 때문에 팀원들 모두 새로운 폴더구조를 적용해보고 싶어했습니다.
+프로젝트의 규모가 커지면서 코드의 복잡성을 관리하기 위해 FSD 방식은 폴더를 세세하게 나누는 구조로 대규모 프로젝트에 적합하다고 판단했습니다. 또한 프로젝트를 분할하여 정복하는 이 방식의 장점이 매력적으로 느껴졌고, 학습 목적이 강한 이 프로젝트에서 새로운 폴더구조를 적용해보고 싶었습니다.
 
 <img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/f12852bd-5f09-4526-a404-ebf442c57f8d">_출처: https://feature-sliced.design/_
 
 FSD 아키텍처는 app, pages, widgets, features, entities, shared라는 6개의 `Layer`로 이루어져있습니다. 그리고 각각의 `Layer`는 `Slice`들로 이루어져있고, 그 `Slice`는 `Segment`로 이루어져있습니다. 하위요소들을 조합하여 상위 요소를 구성하는 방식으로, 이 매커니즘이 저희에게 굉장히 매력적으로 다가왔습니다.
 이렇게 각자의 역할이 분명한 폴더구조를 적용해봄으로써 모듈을 만들 때 각 모듈의 역할을 명확히 정의하게 되었습니다. 또한 하위 요소들이 모두 개별적으로 기능할 수 있기 때문에 훨씬 유지보수성이 높은 코드를 작성할 수 있게 되었습니다.
 
-아래는 저희 프로젝트의 폴더구조입니다.
+아래는 Reflective 프로젝트의 폴더구조입니다.
 
 ```
 📦src
  ┣ 📂app
+ ┃ ┣ 📜App.css
  ┃ ┣ 📜App.tsx
- ┃ ┣ 📜Router.tsx
- ┃ ┗ 📜global.css
- ┣ 📂assets
- ┃ ┣ 📂fonts
- ┃ ┣ 📂icons
- ┃ ┣ 📂logos
- ┃ ┗ 📂musics
+ ┃ ┗ 📜error
+ ┃ ┗ 📜errorboundary
+ ┃ ┗ 📜provider
+ ┃ ┗ 📜routes
  ┣ 📂entities
- ┃ ┣ 📂like
- ┃ ┣ 📂posts
- ┃ ┗ 📜index.ts
+ ┃ ┣ 📂BlockEditor
+ ┃ ┣ 📂Comments
+ ┃ ┃ ┗ 📂model
+ ┃ ┗ 📂Notification
  ┣ 📂features
- ┃ ┣ 📂audio
- ┃ ┣ 📂backgroundStars
- ┃ ┣ 📂coachMarker
- ┃ ┣ 📂controls
- ┃ ┣ 📂star
- ┃ ┗ 📜index.ts
+ ┃ ┣ 📂auth
+ ┃ ┣ 📂Comments
+ ┃ ┣ 📂favorite
+ ┃ ┣ 📂MyPage
+ ┃ ┣ 📂Notification
+ ┃ ┣ 📂Post
+ ┃ ┣ 📂Search
+ ┃ ┣ 📂Setting
+ ┃ ┗ 📂Write
  ┣ 📂pages
  ┃ ┣ 📂Home
- ┃ ┣ 📂Landing
- ┃ ┗ 📜index.ts
+ ┃ ┣ 📂Mypage
+ ┃ ┣ 📂Post
+ ┃ ┣ 📂Setting
+ ┃ ┣ 📜SearchPage.tsx
+ ┃ ┣ 📜SignUpPage.tsx
+ ┃ ┣ 📜StartPage.tsx
+ ┃ ┗ 📜WritePage.tsx
  ┣ 📂shared
- ┃ ┣ 📂apis
- ┃ ┣ 📂hooks
- ┃ ┣ 📂lib
- ┃ ┃ ┣ 📂constants
- ┃ ┃ ┣ 📂types
- ┃ ┃ ┗ 📜index.ts
- ┃ ┣ 📂routes
- ┃ ┣ 📂store
+ ┃ ┣ 📂api
+ ┃ ┣ 📂BlockView
+ ┃ ┣ 📂CircleImage
+ ┃ ┣ 📂constants
+ ┃ ┣ 📂Header
  ┃ ┣ 📂styles
- ┃ ┣ 📂ui
- ┃ ┃ ┣ 📂alert
- ┃ ┃ ┣ 📂alertDialog
- ┃ ┃ ┣ 📂audioButton
- ┃ ┃ ┣ 📂buttons
- ┃ ┃ ┣ 📂inputBar
- ┃ ┃ ┣ 📂modal
- ┃ ┃ ┣ 📂search
- ┃ ┃ ┣ 📂slider
- ┃ ┃ ┣ 📂textArea
- ┃ ┃ ┣ 📂toast
- ┃ ┃ ┗ 📜index.ts
- ┃ ┗ 📂utils
- ┣ 📂widgets
- ┃ ┣ 📂error
- ┃ ┣ 📂galaxy
- ┃ ┣ 📂galaxyCustomModal
- ┃ ┣ 📂landingScreen
- ┃ ┣ 📂loginModal
- ┃ ┣ 📂logoAndStart
- ┃ ┣ 📂nickNameSetModal
- ┃ ┣ 📂postModal
- ┃ ┣ 📂screen
- ┃ ┣ 📂shareModal
- ┃ ┣ 📂signupModal
- ┃ ┣ 📂starCustomModal
- ┃ ┣ 📂underBar
- ┃ ┣ 📂upperBar
- ┃ ┣ 📂warpScreen
- ┃ ┣ 📂writingModal
- ┗ 📜vite-env.d.ts
+ ┃ ┣ 📂Toast
+ ┃ ┣ 📜Search.tsx
+ ┃ ┣ 📜ts.useApiError.ts
+ ┃ ┣ 📜useInfinitePostsQuery.ts
+ ┃ ┗ 📜useVirtualScroll.ts
 ```
 
 <br />
@@ -354,85 +282,8 @@ FSD 아키텍처는 app, pages, widgets, features, entities, shared라는 6개�
 
 ### TDD, e2e 및 유닛 테스트
 
-하나의 API를 구현하기 전에 여러 케이스에 대하여 먼저 테스트코드를 작성하는 TDD(Test Driven Development)를 해보았습니다.  
-그 과정에서 어색함도 많이 느꼈고, 완벽하게 했다고도 하지 못하지만 TDD의 방법과 장점 등에 대해 알 수 있었습니다.
-
-기능 구현 이후에도, 코드 커버리지를 높이기 위해 e2e 테스트 코드 개선과, mocking을 활용한 유닛 테스트 등을 학습하고 적용해 보았습니다.
-
-#### 학습 및 개발 기록
-
-- [테스트 코드를 작성해야 하는 이유](https://www.notion.so/b091dfc8229e4943af4acef50a7a5b75)
-- [NetsJS + Jest 환경 설정](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1114(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
-- [NestJS, TDD로 개발하기](https://velog.io/@qkrwogk/NestJS-TDD%EB%A1%9C-%EA%B0%9C%EB%B0%9C%ED%95%98%EA%B8%B0-cx211d14)
-- [2주차 멘토링 일지(BE) - TDD 관련](https://github.com/boostcampwm2023/web16-B1G1/wiki/2%EC%A3%BC%EC%B0%A8-%EB%A9%98%ED%86%A0%EB%A7%81-%EC%9D%BC%EC%A7%80#be)
-- [TDD 기록 1](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1115(%EC%88%98)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
-- [TDD 기록 2](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1116(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
-- [TDD 기록 3](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1116(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
-- [NestJS e2e 테스트 (jest, supertest)](https://velog.io/@qkrwogk/NestJS-e2e-%ED%85%8C%EC%8A%A4%ED%8A%B8-jest-supertest)
-- [NestJS, 유닛 테스트 각종 mocking, e2e 테스트 폼데이터 및 파일첨부](https://velog.io/@qkrwogk/NestJS-%EC%9C%A0%EB%8B%9B-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EA%B0%81%EC%A2%85-mocking-e2e-%ED%85%8C%EC%8A%A4%ED%8A%B8-%ED%8F%BC%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B0%8F-%ED%8C%8C%EC%9D%BC%EC%B2%A8%EB%B6%80)
-
-<br />
-
-### 인증/인가
-
-인증/인가에 대해 고민도 많이 하였습니다.  
-Session vs JWT, Authorization Bearer vs Cookie, RefreshToken  
-특히 보안과 성능 및 편의성 사이의 트레이드오프에 대해 고민하고 학습을 하였습니다.
-
-#### 학습 및 개발 기록
-
-- [Redis 연결](https://velog.io/@songjseop/nestjs-redis)
-- [RefreshToken 발급 및 Redis 저장](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1121(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D-%E2%80%90-%08SignIn%EC%8B%9C-RefreshToken-%EB%B0%9C%EA%B8%89-%EB%B0%8F-Redis%EC%97%90-%EC%A0%80%EC%9E%A5>)
-- [커스텀 AuthGuard 작성](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1121(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D-%E2%80%90-%EC%BB%A4%EC%8A%A4%ED%85%80-AuthGuard-%EC%9E%91%EC%84%B1>)
-- [OAuth(깃헙 로그인)](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1122(%EC%88%98)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D-%E2%80%90-%EA%B9%83%ED%97%99-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84>)
-
-<br />
-
-### 트랜잭션 제어, 쿼리 최적화
-
-TypeORM 쿼리 로그를 통해 하나의 비즈니스 로직에서 복수개의 테이블을 수정하는 경우, 트랜잭션을 직접 제어할 필요가 있었습니다. 저희는 TypeORM의 queryRunner와 transaction 메소드, NestJS의 Interceptor 등을 활용하여 여러 차례 트랜잭션 제어 로직을 개선하였고, 각 구현방식의 장단점에 대해서도 학습할 수 있었습니다.
-
-또한 쿼리 로그와 MySQL 쿼리 플랜 기능을 활용해 기존 TypeORM 메소드의 쿼리를 분석하고, 자주 사용되는 일부 메소드에 대해 이를 개선하여 queryBuilder로 개선된 쿼리를 요청하는 쿼리 최적화 과정도 수행해 보았습니다.
-
-#### 학습 및 개발 기록
-
-- [Transaction(트랜잭션)](https://velog.io/@qkrwogk/Transaction-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98)
-- [TypeORM 트랜잭션(Transaction) 제어 with Query Runner 1](https://velog.io/@qkrwogk/TypeORM-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98Transaction-%EC%A0%9C%EC%96%B4-with-Query-Runner-1%EC%9D%BC%EC%B0%A8)
-- [TypeORM 트랜잭션(Transaction) 제어 with Query Runner 2](https://velog.io/@qkrwogk/TypeORM-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98Transaction-%EC%A0%9C%EC%96%B4-with-Query-Runner-2%EC%9D%BC%EC%B0%A8)
-- [NestJS Interceptor와 로거 - Transaction Interceptor](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1130(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C-%EA%B8%B0%EB%A1%9D-%E2%80%90-NestJS-Interceptor%EC%99%80-%EB%A1%9C%EA%B1%B0#transaction-interceptor>)
-- [transaction 제어 인터셉터 방식 -> 메소드 내부에서 수행하는 방식으로 변경](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1207(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D#transaction-%EC%A0%9C%EC%96%B4-%EC%9D%B8%ED%84%B0%EC%85%89%ED%84%B0-%EB%B0%A9%EC%8B%9D---%EB%A9%94%EC%86%8C%EB%93%9C-%EB%82%B4%EB%B6%80%EC%97%90%EC%84%9C-%EC%88%98%ED%96%89%ED%95%98%EB%8A%94-%EB%B0%A9%EC%8B%9D%EC%9C%BC%EB%A1%9C-%EB%B3%80%EA%B2%BD>)
-- [TypeORM 쿼리 로그, MySQL 쿼리 플랜, Query Builder을 이용한 쿼리 최적화 with NestJS](https://velog.io/@qkrwogk/TypeORM-%EC%BF%BC%EB%A6%AC-%EB%A1%9C%EA%B7%B8-MySQL-%EC%BF%BC%EB%A6%AC-%ED%94%8C%EB%9E%9C-Query-Builder%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%BF%BC%EB%A6%AC-%EC%B5%9C%EC%A0%81%ED%99%94-with-NestJS)
-
-<br />
-
-### NestJS Enhancers
-
-NetsJS 자체에 대한 학습을 위해 NestJS의 Lifecycle과 각 Enhancer들에 대해서도 학습을 해보았습니다.  
-Interceptor, Exception Filter 등 학습을 하고 백엔드 코드에 적용을 해보았습니다.
-
-#### 학습 및 개발 기록
-
-- [NestJS Interceptor와 로거 -> Log Interceptor](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1130(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C-%EA%B8%B0%EB%A1%9D-%E2%80%90-NestJS-Interceptor%EC%99%80-%EB%A1%9C%EA%B1%B0>)
-- [Exception Filter](https://www.notion.so/NestJS-Exception-Filter-13906c848dfb45ffb2829e81e470c619?pvs=4)
-
 <br />
 
 ### 배포 및 자동화
 
 클라우드 배포 경험이 많지 않아 이번 프로젝트를 통해 많은 성장을 할 수 있었습니다. AWS 및 NCP에서 제공하는 서버, VPC, NAT Gateway 등 주요 서비스에 대해 학습하여 배포 환경을 구성하고, Nginx, Docker 및 Docker Compose, GitHub Actions 등을 학습하여 main 브랜치에 push되면 자동으로 배포되도록 설정했습니다.
-
-#### 학습 및 개발 기록
-
-- [GitHub Actions을 이용한 자동 배포](https://velog.io/@qkrwogk/GitHub-Actions%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%9E%90%EB%8F%99-%EB%B0%B0%ED%8F%AC)
-- [AWS와 NCP의 주요 서비스](https://velog.io/@qkrwogk/AWS%EC%99%80-NCP-%EC%84%9C%EB%B9%84%EC%8A%A4-%EB%B9%84%EA%B5%90)
-- [NGINX 설정](https://www.notion.so/NGINX-b03d0811b0884ca3b7f61ca35f2d7779?pvs=4)
-- [SSH 보안: Key Forwarding, Tunneling, 포트 변경](https://velog.io/@qkrwogk/SSH-%EB%B3%B4%EC%95%88-SSH-Key-Forwarding-SSH-Tunneling%EC%9D%84-%ED%86%B5%ED%95%B4-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C%EC%9D%98-private-instance%EC%97%90-%EC%A0%91%EA%B7%BC%ED%95%98%EB%8A%94-%EB%B2%95-SSH-%ED%8F%AC%ED%8A%B8-%EB%B3%80%EA%B2%BD)
-- [Kubernetes 기초(minikube), docker image 최적화(멀티스테이징)](https://velog.io/@qkrwogk/Kubernetes-%EA%B8%B0%EC%B4%88minikube-docker-image-%EC%B5%9C%EC%A0%81%ED%99%94%EB%A9%80%ED%8B%B0%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%95-AWS-IAM-EC2)
-- [NCP VPC&인스턴스 구성, MySQL, nginx, docker, docker-compose](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1119(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
-- [Redis 연결 후 RedisRepository 작성](https://velog.io/@songjseop/nestjs-redis)
-- [NCP Object Storage, HTTPS, GitHub Actions](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1123(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
-- [NAT Gateway, MongoDB](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1126(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D#%EB%B0%B0%ED%8F%AC%EC%9A%A9-db-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4%EC%97%90-mongodb-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%99%B8%EB%B6%80%EC%97%B0%EB%8F%99>)
-- [플랫폼 종속성 문제 해결(Sharp), 쿼리 최적화](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1128(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
-- [docker 이미지 최적화](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1203(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
-
-<br /
