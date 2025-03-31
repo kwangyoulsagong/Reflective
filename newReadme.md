@@ -108,13 +108,10 @@
 - 글은 블록 타입 형식으로 적용된 글을 볼 수 있습니다.
 - 헤딩(Heading) 내비게이션을 통해 해당 헤딩으로 라우팅 지원합니다.
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/fcbeba63-2189-4bdf-b8f6-79bfc076c8bd" alt="글 커스텀 이미지">
+<img src="https://github.com/kwangyoulsagong/Reflective/blob/feat13/usingLinksPostDetail/readmeAssets/%EB%8C%93%EA%B8%80%20%EB%8C%80%EB%8C%93%EA%B8%80.gif" alt="글 커스텀 이미지">
 
-- 글 작성하고 다음 버튼을 누르면 별을 커스텀할 수 있습니다.
-- 별의 양 옆에 있는 화살표 버튼을 통해 별의 모양을 변경할 수 있습니다.
-- 색상, 크기, 밝기를 조절할 수 있습니다.
-- 색상 추천 버튼을 누르면, CLOVA Sentiment api를 통해 글의 감정을 분석해 색상을 추천해줍니다.
-- 글이 생성될 때와 삭제될 때 별에서 애니메이션이 발생합니다.
+- 해당 게시물에 댓글을 달 수 있습니다.
+- 답글도 지원해서 커뮤니티 활성화를 할 수 있습니다.
 
 ### [ 은하 수정 ]
 
