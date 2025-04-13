@@ -162,9 +162,7 @@ pnpm dev
 
 ### 성능 최적화
 
-- [React: Runtime 88% 줄인 블록 에디터 렌더링 개선]([https://velog.io/@tkrhdrhkdduf/%EB%B8%94%EB%A1%9D-%EC%97%90%EB%94%94%ED%84%B0-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0](https://velog.io/@tkrhdrhkdduf/React-Runtime-88-%EC%A4%84%EC%9D%B8-%EB%B8%94%EB%A1%9D-%EC%97%90%EB%94%94%ED%84%B0-%EB%A0%8C%EB%8D%94%EB%A7%81-%EA%B0%9C%EC%84%A0)
-
-
+- [React: Runtime 88% 줄인 블록 에디터 렌더링 개선](https://velog.io/@tkrhdrhkdduf/React-Runtime-88-%EC%A4%84%EC%9D%B8-%EB%B8%94%EB%A1%9D-%EC%97%90%EB%94%94%ED%84%B0-%EB%A0%8C%EB%8D%94%EB%A7%81-%EA%B0%9C%EC%84%A0)
 # React 블록 에디터 성능 최적화 회고
 
 저는 최근에 React로 제작한 블록 기반 에디터에서 심각한 성능 저하 문제를 경험했습니다. 블록이 100개 이상 쌓이게 되면 입력 지연이나 마우스 반응이 매우 느려졌고, 일반적인 타이핑조차 버벅이는 상황이 발생했습니다. 이러한 문제를 해결하고자 저는 성능 병목 지점을 정밀하게 분석하고, 다양한 최적화 기법을 적용하는 과정을 거쳤습니다.
