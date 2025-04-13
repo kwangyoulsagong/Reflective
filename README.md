@@ -162,7 +162,7 @@ pnpm dev
 
 ### 성능 최적화
 
-- [React: Runtime 88% 줄인 블록 에디터 렌더링 개선]([https://velog.io/@tkrhdrhkdduf/%EB%B8%94%EB%A1%9D-%EC%97%90%EB%94%94%ED%84%B0-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0](https://velog.io/@tkrhdrhkdduf/React-Runtime-88-%EC%A4%84%EC%9D%B8-%EB%B8%94%EB%A1%9D-%EC%97%90%EB%94%94%ED%84%B0-%EB%A0%8C%EB%8D%94%EB%A7%81-%EA%B0%9C%EC%84%A0))
+- [React: Runtime 88% 줄인 블록 에디터 렌더링 개선]([https://velog.io/@tkrhdrhkdduf/%EB%B8%94%EB%A1%9D-%EC%97%90%EB%94%94%ED%84%B0-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0](https://velog.io/@tkrhdrhkdduf/React-Runtime-88-%EC%A4%84%EC%9D%B8-%EB%B8%94%EB%A1%9D-%EC%97%90%EB%94%94%ED%84%B0-%EB%A0%8C%EB%8D%94%EB%A7%81-%EA%B0%9C%EC%84%A0)
 
 
 # React 블록 에디터 성능 최적화 회고
