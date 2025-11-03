@@ -273,3 +273,7 @@ FSD 아키텍처는 app, pages, widgets, features, entities, shared라는 6개�
 ```
 
 <br />
+## BE
+### 데이터 베이스 설계
+<img width="1137" height="842" alt="Untitled" src="https://github.com/user-attachments/assets/e3cf7e38-7af7-4066-af97-b3088931a229" />
+
