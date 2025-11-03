@@ -281,6 +281,6 @@ FSD 아키텍처는 app, pages, widgets, features, entities, shared라는 6개�
 <br />
 
 ### 데이터 베이스 설계
-![Reflective DB 설계 과정]('https://velog.io/@tkrhdrhkdduf/Reflective-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B2%A0%EC%9D%B4%EC%8A%A4-%EC%84%A4%EA%B3%84')
+[Reflective DB 설계 과정](https://velog.io/@tkrhdrhkdduf/Reflective-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B2%A0%EC%9D%B4%EC%8A%A4-%EC%84%A4%EA%B3%84)
 <img width="1137" height="842" alt="Untitled" src="https://github.com/user-attachments/assets/e3cf7e38-7af7-4066-af97-b3088931a229" />
 
